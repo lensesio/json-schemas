@@ -217,7 +217,7 @@
               "type": "object",
               "properties": {
                 "provisioning": {
-                  "$ref": "provisioning.schema.json"
+                  "$ref": "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/agent/provisioning.schema.json"
                 }
               }
             },

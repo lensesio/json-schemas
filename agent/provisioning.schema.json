@@ -2080,7 +2080,7 @@
       }
     },
     {
-      "label": "Kafka, IBM Event streams",
+      "label": "Kafka, IBM Event Streams",
       "body": {
         "kafka": {
           "name": "my-kafka",
