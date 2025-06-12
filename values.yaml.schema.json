@@ -1,0 +1,314 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lenses Agent Helm Values",
+  "type": "object",
+  "properties": {
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the name of the chart.",
+      "default": ""
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the full name of the chart.",
+      "default": ""
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image settings.",
+      "properties": {
+        "repository": { "type": "string", "description": "Image repository.", "default": "lensesio/lenses-agent" },
+        "tag": { "type": "string", "description": "Image tag.", "default": "6.0.0" },
+        "pullPolicy": { "type": "string", "description": "Image pull policy.", "default": "IfNotPresent" }
+      }
+    },
+    "annotations": {
+      "type": "object",
+      "description": "Custom deployment annotations.",
+      "additionalProperties": { "type": "string" }
+    },
+    "podTemplateAnnotations": {
+      "type": "object",
+      "description": "Annotations for the PodTemplateSpec.",
+      "additionalProperties": { "type": "string" }
+    },
+    "labels": {
+      "type": "object",
+      "description": "Deployment labels.",
+      "additionalProperties": { "type": "string" }
+    },
+    "strategy": {
+      "type": "object",
+      "description": "Deployment strategy.",
+      "additionalProperties": true
+    },
+    "nodeSelector": {
+      "type": "object",
+      "description": "Node selector for pod assignment.",
+      "additionalProperties": { "type": "string" }
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for pod assignment.",
+      "items": { "type": "object" }
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for pod assignment.",
+      "additionalProperties": true
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Deployment security context.",
+      "additionalProperties": true
+    },
+    "dnsPolicy": {
+      "type": "string",
+      "description": "Optional dnsPolicy for the PodTemplateSpec.",
+      "default": "None"
+    },
+    "dnsConfig": {
+      "type": "object",
+      "description": "Optional dnsConfig for the PodTemplateSpec.",
+      "properties": {
+        "nameservers": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "containerSecurityContext": {
+      "type": "object",
+      "description": "Optional security context for the container.",
+      "properties": {
+        "readOnlyRootFilesystem": { "type": "boolean", "default": false }
+      }
+    },
+    "monitoring": {
+      "type": "object",
+      "description": "Monitoring configuration.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "port": { "type": "integer", "default": 9102 }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "description": "Resource requests and limits.",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": "string" },
+            "memory": { "type": "string" }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": "string" },
+            "memory": { "type": "string" }
+          }
+        }
+      }
+    },
+    "rbacEnable": {
+      "type": "boolean",
+      "description": "Enable RBAC for the service account.",
+      "default": true
+    },
+    "namespaceScope": {
+      "type": "boolean",
+      "description": "Enable namespace scope for RBAC.",
+      "default": true
+    },
+    "restPort": {
+      "type": "integer",
+      "description": "Lenses Agent container port.",
+      "default": 3030
+    },
+    "servicePortName": {
+      "type": "string",
+      "description": "Lenses Agent service port name.",
+      "default": "lenses-agent"
+    },
+    "serviceAccount": {
+      "type": "object",
+      "description": "Service account configuration.",
+      "properties": {
+        "create": { "type": "boolean", "default": false },
+        "name": { "type": "string", "default": "default" },
+        "annotations": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "description": "Persistence configuration.",
+      "properties": {
+        "log": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "annotations": { "type": "object", "additionalProperties": { "type": "string" } },
+            "accessModes": { "type": "array", "items": { "type": "string" } },
+            "size": { "type": "string", "default": "5Gi" }
+          }
+        }
+      }
+    },
+    "additionalVolumeMounts": {
+      "type": "array",
+      "description": "Additional volume mounts for the deployment.",
+      "items": { "type": "object" }
+    },
+    "additionalVolumes": {
+      "type": "array",
+      "description": "Additional volumes for the deployment.",
+      "items": { "type": "object" }
+    },
+    "service": {
+      "type": "object",
+      "description": "Service configuration.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "annotations": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "lensesAgent": {
+      "type": "object",
+      "description": "Lenses Agent configuration.",
+      "properties": {
+        "hq": {
+          "type": "object",
+          "properties": {
+            "agentKey": {
+              "type": "object",
+              "properties": {
+                "secret": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string" },
+                    "key": { "type": "string" },
+                    "name": { "type": "string" },
+                    "externalSecret": {
+                      "type": "object",
+                      "properties": {
+                        "additionalSpecs": { "type": "object" },
+                        "secretStoreRef": {
+                          "type": "object",
+                          "properties": {
+                            "type": { "type": "string" },
+                            "name": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "provision": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string", "default": "/mnt/provision-secrets" },
+            "connections": {
+              "type": "object",
+              "properties": {
+                "provisioning": {
+                  "$ref": "provisioning.schema.json"
+                }
+              }
+            },
+            "secrets": { "type": "object" }
+          }
+        },
+        "lensesOpts": { "type": "string" },
+        "append": {
+          "type": "object",
+          "properties": {
+            "conf": { "type": "string" }
+          }
+        },
+        "jvm": {
+          "type": "object",
+          "properties": {
+            "heapOpts": { "type": "string" },
+            "logBackOpts": { "type": "string" },
+            "performanceOpts": { "type": "string" }
+          }
+        },
+        "opts": {
+          "type": "object",
+          "properties": {
+            "trustStoreFileData": { "type": "string" },
+            "trustStorePassword": { "type": "string" }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "postgres": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean", "default": false },
+                "host": { "type": "string" },
+                "port": { "type": "integer", "default": 5432 },
+                "username": { "type": "string" },
+                "password": { "type": "string" },
+                "database": { "type": "string" },
+                "schema": { "type": "string", "default": "public" }
+              }
+            }
+          }
+        },
+        "sql": {
+          "type": "object",
+          "properties": {
+            "mode": { "type": "string", "default": "IN_PROC" },
+            "heap": { "type": "string", "default": "1024M" },
+            "minHeap": { "type": "string", "default": "128M" },
+            "memLimit": { "type": "string", "default": "1152M" },
+            "memRequest": { "type": "string", "default": "128M" },
+            "livenessInitialDelay": { "type": "string", "default": "60 seconds" }
+          }
+        },
+        "grafanaUrl": { "type": "string" },
+        "topics": {
+          "type": "object",
+          "properties": {
+            "suffix": { "type": "string" }
+          }
+        },
+        "additionalEnv": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "livenessProbe": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true }
+          }
+        },
+        "pauseExec": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false }
+          }
+        }
+      }
+    },
+    "sidecarContainers": {
+      "type": "array",
+      "description": "Sidecar container enablement.",
+      "items": { "type": "object" }
+    },
+    "initContainers": {
+      "type": "array",
+      "description": "Init containers for the deployment.",
+      "items": { "type": "object" }
+    }
+  },
+  "required": ["connections"]
+} 
