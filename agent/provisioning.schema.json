@@ -1310,7 +1310,7 @@
         ]
       }
     },
-    "dataDog": {
+    "datadog": {
       "type": "array",
       "description": "DataDog integration for alerts and audits.",
       "default": [],
@@ -1388,7 +1388,7 @@
         ]
       }
     },
-    "pagerDuty": {
+    "pagerduty": {
       "type": "array",
       "description": "PagerDuty integration for alerts and audits.",
       "default": [],
@@ -2512,7 +2512,7 @@
     {
       "label": "Alerts, DataDog",
       "body": {
-        "dataDog": [
+        "datadog": [
           {
             "name": "datadog",
             "version": "1",
@@ -2535,7 +2535,7 @@
     {
       "label": "Alerts, PagerDuty",
       "body": {
-        "pagerDuty": [
+        "pagerduty": [
           {
             "name": "pagerduty",
             "version": "1",
@@ -2598,7 +2598,7 @@
     {
       "label": "Alerts, Alert Manager",
       "body": {
-        "alertManager": [
+        "alertmanager": [
           {
             "name": "my-alertmanager-connection",
             "version": 1,
