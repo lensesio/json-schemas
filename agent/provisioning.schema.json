@@ -423,7 +423,7 @@
       ]
     },
     "zookeeper": {
-      "type": "array",
+      "type": "object",
       "description": "Zookeeper clusters.",
       "default": [],
       "items": {
