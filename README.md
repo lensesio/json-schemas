@@ -1,4 +1,4 @@
-# Lenses Agent Helm Chart Values Schema
+# Lenses JSON Schemas
 
 This repository contains the JSON Schema for validating `yaml` files used with in Lenses Agent.
 
