@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lenses SQL Processor Schema",
+  "description": "Schema for defining a Lenses SQL Processor as per the Lenses API spec.",
+  "type": "object",
+  "required": [
+    "name",
+    "sql",
+    "deployment"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The name of the SQL processor."
+    },
+    "processorId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional processor ID for the SQL processor."
+    },
+    "sql": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The SQL statement to be executed by the processor."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the SQL processor."
+    },
+    "deployment": {
+      "type": "object",
+      "required": [
+        "details"
+      ],
+      "properties": {
+        "details": {
+          "type": "object",
+          "required": [
+            "runners",
+            "cluster",
+            "namespace"
+          ],
+          "properties": {
+            "runners": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of runners (replicas) for the processor."
+            },
+            "cluster": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The cluster where the processor will be deployed."
+            },
+            "namespace": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The namespace within the cluster."
+            },
+            "requestedCpu": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Requested CPU for the processor (optional)."
+            },
+            "limitCpu": {
+              "type": "number",
+              "minimum": 0,
+              "description": "CPU limit for the processor (optional)."
+            },
+            "requestedMemory": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Requested memory for the processor (optional)."
+            },
+            "limitMemory": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Memory limit for the processor (optional)."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "description": "Deployment configuration for the SQL processor."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags to associate with the SQL processor."
+    }
+  },
+  "defaultSnippets": [
+    {
+      "label": "Basic SQL Processor",
+      "description": "A SQL processor that joins two streams and writes to output topics, using WITH statements as per Lenses best practices.",
+      "body": {
+        "name": "join-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\nSET commit.interval.ms='1000';\nSET enable.auto.commit=false;\nSET auto.offset.reset='earliest';\n\nWITH countriesStream AS (\n  SELECT STREAM *\n  FROM ${countries_topic}\n);\n\nWITH merchantsStream AS (\n  SELECT STREAM *\n  FROM ${merchants_topic}\n);\n\nWITH merchantsWithCountryInfoStream AS (\n  SELECT STREAM\n    m._key AS l_key,\n    CONCAT(surname, ', ', name) AS fullname,\n    address.country,\n    language,\n    platform\n  FROM merchantsStream AS m\n    JOIN countriesStream AS c\n      ON m.address.country = c._key\n  WITHIN 1h\n);\n\nWITH merchantsCorrectKey AS (\n  SELECT STREAM\n    l_key AS _key,\n    fullname,\n    country,\n    language,\n    platform\n  FROM merchantsWithCountryInfoStream\n);\n\nINSERT INTO ${current_merchants_topic}\nSELECT STREAM *\nFROM merchantsCorrectKey;\n\nINSERT INTO ${merchants_per_platform_topic}\nSELECT TABLE\n  COUNT(*) AS merchants\nFROM merchantsCorrectKey\nGROUP BY platform;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "join",
+          "with",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Change topic format from JSON to Avro",
+      "description": "A SQL processor that reads from a JSON topic and writes to a new topic in Avro format by reshaping fields.",
+      "body": {
+        "name": "json-to-avro-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\n\nINSERT INTO ${output_topic}\nSELECT STREAM a as x.a, b as x.y.b, c as x.y.c\nFROM ${input_topic};",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "format",
+          "json",
+          "avro",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Filter data",
+      "description": "Filtering messages and copying them to a topic using the WHERE clause.",
+      "body": {
+        "name": "filter-payments-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\n\nINSERT INTO ${output_topic}\nSELECT STREAM *\nFROM ${input_topic}\nWHERE amount >= 5000;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "filter",
+          "where",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Control event time",
+      "description": "A SQL processor that uses a field in the record as the event timestamp for time-dependent operations like aggregations and joins.",
+      "body": {
+        "name": "events-avg-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\n\nINSERT INTO ${output_topic}\nSELECT STREAM\n  customer_id,\n  AVG(kW) as kW\nFROM ${input_topic}\nEVENTTIME BY event_time\nWINDOW BY HOP 10s,5s\nGROUP BY customer_id;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "eventtime",
+          "window",
+          "aggregation",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Time window aggregations",
+      "description": "A SQL processor that performs continuous aggregation over a time window using GROUP BY and emits results downstream.",
+      "body": {
+        "name": "user-every-10s-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\nSET commit.interval.ms='2000'; -- this controls how often results are emitted\n\nINSERT INTO ${output_topic}\nSELECT STREAM\n  COUNT(*) as occurrences,\n  MAXX_UNIQUE(points,3) as maxpoints,\n  AVG(points) as avgpoints\nFROM ${input_topic}\nEVENTTIME BY startedAt\nWINDOW BY TUMBLE 10s\nGROUP BY _key;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "window",
+          "aggregation",
+          "group by",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Filtering aggregated data",
+      "description": "Filter the aggregation results themselves, so that those aggregated records which meet some specified condition are not emitted at all using the HAVING clause.",
+      "body": {
+        "name": "groupby-language-filtered-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\nSET commit.interval.ms='1000';\n\nINSERT INTO ${output_topic}\nSELECT STREAM\n  COUNT(*) AS gamesPlayed,\n  MAXX(points,3) as maxpoints,\n  AVG(points) as avgpoints\nFROM ${input_topic}\nWHERE _key.name != 'Dave'\n  OR sessionMetadata.country != 'Spain'\nGROUP BY sessionMetadata.language\nHAVING gamesPlayed < 9;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "having",
+          "aggregation",
+          "filter",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Explode arrays",
+      "description": "Create messages by exploding arrays.",
+      "body": {
+        "name": "explode-readings-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\n\nINSERT INTO ${output_topic}\nSELECT STREAM\n  meter_id,\n  reading\nFROM ${input_topic}\nLATERAL readings as reading;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "explode",
+          "array",
+          "lateral",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Re-keying",
+      "description": "Sometimes you have a topic that is almost exactly what you need, except that the key of the record requires a bit of massaging.",
+      "body": {
+        "name": "events-by-sensor-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\n\nINSERT INTO ${output_topic}\nSELECT STREAM sensor_id as _key\nFROM ${input_topic};",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "rekey",
+          "key",
+          "example"
+        ]
+      }
+    },
+    {
+      "label": "Join 2 streams",
+      "description": "Combine the data from orders and shipments if the orders are processed within 24 hours. Resulting records contain the order and shipment identifier, and the time between the order was registered to the time it was shipped.",
+      "body": {
+        "name": "orders-and-shipment-join-processor",
+        "sql": "|\n\nSET defaults.topic.autocreate=true;\nSET auto.offset.reset = 'earliest';\n\nWITH o as (\n  SELECT STREAM *\n  FROM ${orders_topic}\n  EVENTTIME BY orderTimestamp\n);\n\nWITH s as (\n  SELECT STREAM *\n  FROM ${shipments_topic}\n  EVENTTIME BY timestamp\n);\n\nINSERT INTO ${output_topic}\nSELECT STREAM\n    o._key AS orderId \n    , s._key AS shipmentId\n    , DATE_TO_STR(TO_TIMESTAMP(s.timestamp - o.orderTimestamp), 'HH:mm:ss') AS time_difference\nFROM  o INNER JOIN s\n    ON o._key = s.orderId\nWITHIN 24h;",
+        "deployment": {
+          "details": {
+            "runners": 1,
+            "cluster": "k8s-cluster",
+            "namespace": "lenses-processors"
+          }
+        },
+        "tags": [
+          "join",
+          "streams",
+          "window",
+          "example"
+        ]
+      }
+    }
+  ]
+}

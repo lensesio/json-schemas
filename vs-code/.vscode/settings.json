@@ -1,0 +1,5 @@
+{
+  "yaml.format.enable": true,
+  "yaml.validate": true,
+  "yaml.schemaStore.enable": false
+} 

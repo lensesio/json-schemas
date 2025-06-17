@@ -1,0 +1,14 @@
+name: 
+description: 
+display_name: 
+groups:
+ - blue-tenant
+ - cobrick-poc-read-only
+
+members:
+  - 
+
+roles:
+ - Administrator
+ - andrew
+ - crew-scheduling-public-data-explorer

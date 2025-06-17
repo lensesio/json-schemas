@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kafka Topic Wrapper",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "default": "kafka.lenses.io/v1"
+    },
+    "kind": {
+      "type": "string",
+      "default": "KafkaTopic"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "environment": { "type": "string" },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "description": { "type": "string" },
+        "format": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "object",
+              "properties": {
+                "format": { "type": "string" },
+                "schema": { "type": "string" }
+              },
+              "required": ["format", "schema"]
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "format": { "type": "string" },
+                "schema": { "type": "string" }
+              },
+              "required": ["format", "schema"]
+            }
+          },
+          "required": ["key", "value"]
+        }
+      },
+      "required": ["name"]
+    },
+    "spec": {
+      "$ref": "../kafka/kafka-topic.schema.json"
+    }
+  },
+  "required": ["apiVersion", "kind", "metadata", "spec"]
+}

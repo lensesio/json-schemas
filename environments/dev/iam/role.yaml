@@ -1,0 +1,4 @@
+# yaml-language-server: $schema=./../../../iam/role.schema.json
+
+role:
+

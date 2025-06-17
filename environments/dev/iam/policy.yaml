@@ -1,0 +1,12 @@
+Version: 2023-01-01
+Statement:
+  - Effect: Allow
+    Action:
+      - kafka:ReadTopicData
+    Resource:
+      - kafka:topic:prod/kafka/my-topic
+    Condition:
+      StringEquals:
+        lenses:Environment:
+          - production
+

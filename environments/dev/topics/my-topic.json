@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: KafkaQuota
+metadata:
+  name: my-topic-quota
+  namespace: dev
+spec:
+  entityType: user
+  entityName: my-topic-user
+  producerByteRate: 1000000
+  consumerByteRate: 1000000
+  requestPercentage: 50.0              
