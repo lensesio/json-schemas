@@ -1,5 +1,0 @@
-{
-    "yaml.schemas": {
-        "/schemas/iam/policy.schema.json": "file:///home/andrew/json_schemas/environments/dev/k2k/lenses/environments/dev/iam/policy.yaml"
-    }
-}
