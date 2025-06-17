@@ -175,14 +175,6 @@
               "pattern": "^(administration:(connection|license|lenses-logs|lenses-configuration|setting|agent)|applications:(external-application)|alerts:(alert|rule|alert-event|alert-channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment)|governance:(request|rule)|iam:(user|group|role|service-account)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group)|kubernetes:(cluster|namespace)|registry:(registry)|schemas:(schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+)$",
               "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed in the resource-id part or as a complete resource-id. Environment names can be any valid string."
             }
-          },
-          "conditions": {
-            "type": "object",
-            "description": "Conditions that must be met for the policy to take effect",
-            "additionalProperties": {
-              "type": "string",
-              "description": "Condition value"
-            }
           }
         }
       }
@@ -200,12 +192,7 @@
           ],
           "resource": [
             "arn:lenses:kafka:cluster1:topic/*"
-          ],
-          "conditions": {
-            "StringEquals": {
-              "lenses:Environment": ["production", "staging"]
-            }
-          }
+          ]
         }
       ]
     }
@@ -267,12 +254,7 @@
             ],
             "Resource": [
               "kafka:topic:prod/kafka/my-topic"
-            ],
-            "Condition": {
-              "StringEquals": {
-                "lenses:Environment": ["production"]
-              }
-            }
+            ]
           }
         ]
       }
