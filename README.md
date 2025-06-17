@@ -31,8 +31,12 @@ To enable schema validation and autocompletion in VS Code for your `yaml` files:
 
     ```json
     "yaml.schemas": {
-    "./values.yaml.schema.json": "**/values.yaml"
-    }
+      "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/iam/policy.schema.json": ["**/policy.{yaml,yml}", "**/iam/**/policy.{yaml,yml}"],
+      "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/iam/role.schema.json": ["**/role.{yaml,yml}", "**/iam/**/role.{yaml,yml}"],
+      "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/iam/group.schema.json": ["**/group.{yaml,yml}", "**/iam/**/group.{yaml,yml}"],
+      "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/iam/user.schema.json": ["**/user.{yaml,yml}", "**/iam/**/user.{yaml,yml}"],
+      "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/iam/service-account.schema.json": ["**/service-account.{yaml,yml}", "**/iam/**/service-account.{yaml,yml}"]
+    },
     ```
 
     For JSON files, use the following in your VS Code settings to associate the schema with all `values.json` files:
