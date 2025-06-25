@@ -257,6 +257,7 @@
                   "type": "string",
                   "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
                   "enum": [
+                    "AWS_MSK_IAM",
                     "PLAIN",
                     "SCRAM-SHA-256",
                     "SCRAM-SHA-512"
