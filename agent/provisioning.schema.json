@@ -6,124 +6,120 @@
     "lensesHq": {
       "type": "object",
       "description": "Lenses HQ connection(s).",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Lenses HQ connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "lenses-hq",
-            "pattern": "^[a-zA-Z0-9-]+$"
-          },
-          "version": {
-            "type": "integer",
-            "description": "Lenses HQ connection version.",
-            "default": 1
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Tags for this Lenses HQ connection.",
-            "default": []
-          },
-          "configuration": {
-            "type": "object",
-            "description": "Lenses HQ connection configuration.",
-            "properties": {
-              "server": {
-                "type": "object",
-                "description": "Lenses HQ server address.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Server address."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "port": {
-                "type": "object",
-                "description": "Lenses HQ server port.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Server port."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "agentKey": {
-                "type": "object",
-                "description": "Agent key for authentication.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Agent key value."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "sslEnabled": {
-                "type": "object",
-                "description": "Enable SSL for HQ connection.",
-                "properties": {
-                  "value": {
-                    "type": "boolean",
-                    "description": "SSL enabled flag."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "sslTruststore": {
-                "type": "object",
-                "description": "Path to the truststore file.",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "description": "File path to truststore."
-                  }
-                },
-                "required": [
-                  "file"
-                ]
-              },
-              "sslTruststorePassword": {
-                "type": "object",
-                "description": "Truststore password.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Password for truststore."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              }
-            },
-            "required": [
-              "server",
-              "port",
-              "agentKey"
-            ]
-          }
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Lenses HQ connection name.",
+          "default": "lenses-hq"
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
-      }
+        "version": {
+          "type": "integer",
+          "description": "Lenses HQ connection version.",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags for this Lenses HQ connection.",
+          "default": []
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Lenses HQ connection configuration.",
+          "properties": {
+            "server": {
+              "type": "object",
+              "description": "Lenses HQ server address.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Server address."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "port": {
+              "type": "object",
+              "description": "Lenses HQ server port.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Server port."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "agentKey": {
+              "type": "object",
+              "description": "Agent key for authentication.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Agent key value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "sslEnabled": {
+              "type": "object",
+              "description": "Enable SSL for HQ connection.",
+              "properties": {
+                "value": {
+                  "type": "boolean",
+                  "description": "SSL enabled flag."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "sslTruststore": {
+              "type": "object",
+              "description": "Path to the truststore file.",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "description": "File path to truststore."
+                }
+              },
+              "required": [
+                "file"
+              ]
+            },
+            "sslTruststorePassword": {
+              "type": "object",
+              "description": "Truststore password.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Password for truststore."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            }
+          },
+          "required": [
+            "server",
+            "port",
+            "agentKey"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "configuration"
+      ]
     },
     "kafka": {
       "type": "object",
@@ -132,8 +128,10 @@
         "name": {
           "type": "string",
           "description": "Cluster name.",
-          "default": "kafka",
-          "enum": ["kafka"]
+          "enum": [
+            "kafka"
+          ],
+          "default": "kafka"
         },
         "version": {
           "type": "integer",
@@ -176,6 +174,7 @@
                   "type": "string",
                   "description": "Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
                   "enum": [
+                    "AWS_MSK_IAM",
                     "SASL_PLAINTEXT",
                     "SASL_SSL",
                     "PLAINTEXT"
@@ -257,13 +256,12 @@
               "properties": {
                 "value": {
                   "type": "string",
-                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
+                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
                   "enum": [
                     "AWS_MSK_IAM",
                     "PLAIN",
                     "SCRAM-SHA-256",
-                    "SCRAM-SHA-512",
-                    "AWS_MSK_IAM"
+                    "SCRAM-SHA-512"
                   ]
                 }
               },
@@ -282,7 +280,8 @@
               },
               "required": [
                 "value"
-              ]
+              ],
+              "multiline": true
             },
             "additionalProperties": {
               "type": "object",
@@ -427,434 +426,424 @@
     },
     "zookeeper": {
       "type": "object",
-      "description": "Zookeeper clusters.",
-      "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-            "name": {
-            "type": "string",
-            "description": "Zookeeper name.",
-            "default": "zookeeper",
-            "enum": ["zookeeper"]
-            },
-          "version": {
-            "type": "integer",
-            "description": "Zookeeper version.",
-            "default": 1
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Tags for this Zookeeper.",
-            "default": []
-          },
-          "configuration": {
-            "type": "object",
-            "description": "Zookeeper connection configuration.",
-            "properties": {
-              "zookeeperUrls": {
-                "type": "object",
-                "description": "Zookeeper connection URLs.",
-                "properties": {
-                  "value": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of Zookeeper URLs."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperChrootPath": {
-                "type": "object",
-                "description": "Optional suffix to Zookeeper's connection string.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Chroot path value."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperSessionTimeout": {
-                "type": "object",
-                "description": "Zookeeper session timeout in milliseconds.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Timeout value in milliseconds."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperConnectionTimeout": {
-                "type": "object",
-                "description": "Zookeeper connection timeout in milliseconds.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Timeout value in milliseconds."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsPort": {
-                "type": "object",
-                "description": "Port for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Port number."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsType": {
-                "type": "object",
-                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Metrics type value.",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX",
-                      "AWS"
-                    ]
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsSsl": {
-                "type": "object",
-                "description": "Enable SSL for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "boolean",
-                    "description": "SSL enabled flag."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              }
-            },
-            "required": [
-              "zookeeperUrls"
-            ]
-          }
+      "description": "Zookeeper cluster.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Zookeeper name.",
+          "enum": [
+            "zookeeper"
+          ],
+          "default": "zookeeper"
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
-      }
+        "version": {
+          "type": "integer",
+          "description": "Zookeeper version.",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags for this Zookeeper.",
+          "default": []
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Zookeeper connection configuration.",
+          "properties": {
+            "zookeeperUrls": {
+              "type": "object",
+              "description": "Zookeeper connection URLs.",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of Zookeeper URLs."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperChrootPath": {
+              "type": "object",
+              "description": "Optional suffix to Zookeeper's connection string.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Chroot path value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperSessionTimeout": {
+              "type": "object",
+              "description": "Zookeeper session timeout in milliseconds.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperConnectionTimeout": {
+              "type": "object",
+              "description": "Zookeeper connection timeout in milliseconds.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsPort": {
+              "type": "object",
+              "description": "Port for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Port number."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsType": {
+              "type": "object",
+              "description": "Type of metrics to collect.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Metrics type (e.g., 'JMX')."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsSsl": {
+              "type": "object",
+              "description": "Enable SSL for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "boolean",
+                  "description": "SSL enabled flag."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            }
+          },
+          "required": [
+            "zookeeperUrls"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "configuration"
+      ]
     },
     "confluentSchemaRegistry": {
       "type": "object",
       "description": "Confluent Schema Registry services.",
-      "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-            "name": {
-            "type": "string",
-            "description": "Schema Registry name.",
-            "default": "schema-registry",
-            "enum": ["schema-registry"]
-            },
-          "version": {
-            "type": "integer",
-            "description": "Schema Registry version.",
-            "default": 1
+      "default": {},
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Schema Registry name.",
+          "enum": [
+            "schema-registry"
+          ],
+          "default": "schema-registry"
+        },
+        "version": {
+          "type": "integer",
+          "description": "Schema Registry version.",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
           },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
+          "description": "Tags for this Schema Registry.",
+          "default": []
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Schema Registry connection configuration.",
+          "properties": {
+            "schemaRegistryUrls": {
+              "type": "object",
+              "description": "Schema Registry URLs.",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of Schema Registry URLs. Must include scheme (http/https)."
+                }
+              },
+              "required": [
+                "value"
+              ]
             },
-            "description": "Tags for this Schema Registry.",
-            "default": []
-          },
-          "configuration": {
-            "type": "object",
-            "description": "Schema Registry connection configuration.",
-            "properties": {
-              "schemaRegistryUrls": {
-                "type": "object",
-                "description": "Schema Registry URLs.",
-                "properties": {
-                  "value": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of Schema Registry URLs. Must include scheme (http/https)."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "username": {
-                "type": "object",
-                "description": "Username for Basic Auth.",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              },
-              "password": {
-                "type": "object",
-                "description": "Password for Basic Auth.",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              },
-              "sslTruststore": {
-                "type": "object",
-                "description": "Custom truststore for TLS.",
-                "properties": {
-                  "fileRef": {
-                    "type": "object",
-                    "properties": {
-                      "filePath": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "filePath"
-                    ]
-                  }
-                }
-              },
-              "sslTruststorePassword": {
-                "type": "object",
-                "description": "Password for truststore.",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              },
-              "sslKeystore": {
-                "type": "object",
-                "description": "Custom keystore for TLS client authentication.",
-                "properties": {
-                  "fileRef": {
-                    "type": "object",
-                    "properties": {
-                      "filePath": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "filePath"
-                    ]
-                  }
-                }
-              },
-              "sslKeystorePassword": {
-                "type": "object",
-                "description": "Password for keystore.",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              },
-              "hardDelete": {
-                "type": "object",
-                "description": "Enable hard delete (default true).",
-                "properties": {
-                  "value": {
-                    "type": "boolean"
-                  }
-                }
-              },
-              "metricsPort": {
-                "type": "object",
-                "description": "Port for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "metricsType": {
-                "type": "object",
-                "description": "Type of metrics to collect.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Metrics type value.",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX",
-                      "AWS"
-                    ]
-                  }
-                }
-              },
-              "metricsSsl": {
-                "type": "object",
-                "description": "Enable SSL for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "boolean"
-                  }
+            "username": {
+              "type": "object",
+              "description": "Username for Basic Auth.",
+              "properties": {
+                "value": {
+                  "type": "string"
                 }
               }
             },
-            "required": [
-              "schemaRegistryUrls"
-            ]
-          }
-        },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
-      }
+            "password": {
+              "type": "object",
+              "description": "Password for Basic Auth.",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "sslTruststore": {
+              "type": "object",
+              "description": "Custom truststore for TLS.",
+              "properties": {
+                "fileRef": {
+                  "type": "object",
+                  "properties": {
+                    "filePath": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "filePath"
+                  ]
+                }
+              }
+            },
+            "sslTruststorePassword": {
+              "type": "object",
+              "description": "Password for truststore.",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "sslKeystore": {
+              "type": "object",
+              "description": "Custom keystore for TLS client authentication.",
+              "properties": {
+                "fileRef": {
+                  "type": "object",
+                  "properties": {
+                    "filePath": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "filePath"
+                  ]
+                }
+              }
+            },
+            "sslKeystorePassword": {
+              "type": "object",
+              "description": "Password for keystore.",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "hardDelete": {
+              "type": "object",
+              "description": "Enable hard delete (default true).",
+              "properties": {
+                "value": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "metricsPort": {
+              "type": "object",
+              "description": "Port for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "integer"
+                }
+              }
+            },
+            "metricsType": {
+              "type": "object",
+              "description": "Type of metrics to collect.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Metrics type value.",
+                  "enum": [
+                    "JOLOKIAG",
+                    "JOLOKIAP",
+                    "JMX",
+                    "AWS"
+                  ]
+                }
+              }
+            },
+            "metricsSsl": {
+              "type": "object",
+              "description": "Enable SSL for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "required": [
+            "schemaRegistryUrls"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "configuration"
+      ]
     },
     "glueSchemaRegistry": {
       "type": "object",
       "description": "AWS Glue Schema Registry connections.",
-      "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-            "name": {
-            "type": "string",
-            "description": "Glue Schema Registry connection name.",
-            "default": "schema-registry",
-            "enum": ["schema-registry"]
-            },
-          "version": {
-            "type": "integer",
-            "description": "Glue Schema Registry version.",
-            "default": 1
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Tags for this Glue Schema Registry.",
-            "default": []
-          },
-          "configuration": {
-            "type": "object",
-            "description": "Glue Schema Registry connection configuration.",
-            "properties": {
-              "authMode": {
-                "type": "object",
-                "description": "Reference to AWS connection for auth mode.",
-                "properties": {
-                  "reference": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "reference"
-                ]
-              },
-              "accessKeyId": {
-                "type": "object",
-                "description": "Reference to AWS connection for access key.",
-                "properties": {
-                  "reference": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "reference"
-                ]
-              },
-              "secretAccessKey": {
-                "type": "object",
-                "description": "Reference to AWS connection for secret access key.",
-                "properties": {
-                  "reference": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "reference"
-                ]
-              },
-              "assumeRoleArn": {
-                "type": "object",
-                "description": "Reference to AWS connection for assume role ARN.",
-                "properties": {
-                  "reference": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "reference"
-                ]
-              },
-              "assumeRoleSessionName": {
-                "type": "object",
-                "description": "Reference to AWS connection for assume role session name.",
-                "properties": {
-                  "reference": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "reference"
-                ]
-              },
-              "glueRegistryArn": {
-                "type": "object",
-                "description": "Glue Registry ARN.",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              }
-            },
-            "required": [
-              "authMode",
-              "glueRegistryArn"
-            ]
-          }
+      "default": {},
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Glue Schema Registry connection name.",
+          "enum": [
+            "schema-registry"
+          ],
+          "default": "schema-registry"
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
-      }
+        "version": {
+          "type": "integer",
+          "description": "Glue Schema Registry version.",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags for this Glue Schema Registry.",
+          "default": []
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Glue Schema Registry connection configuration.",
+          "properties": {
+            "authMode": {
+              "type": "object",
+              "description": "Reference to AWS connection for auth mode.",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference"
+              ]
+            },
+            "accessKeyId": {
+              "type": "object",
+              "description": "Reference to AWS connection for access key.",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference"
+              ]
+            },
+            "secretAccessKey": {
+              "type": "object",
+              "description": "Reference to AWS connection for secret access key.",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference"
+              ]
+            },
+            "assumeRoleArn": {
+              "type": "object",
+              "description": "Reference to AWS connection for assume role ARN.",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference"
+              ]
+            },
+            "assumeRoleSessionName": {
+              "type": "object",
+              "description": "Reference to AWS connection for assume role session name.",
+              "properties": {
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference"
+              ]
+            },
+            "glueRegistryArn": {
+              "type": "object",
+              "description": "Glue Registry ARN.",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value"
+              ]
+            }
+          },
+          "required": [
+            "authMode",
+            "glueRegistryArn"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "configuration"
+      ]
     },
     "connect": {
       "type": "array",
@@ -866,8 +855,8 @@
           "name": {
             "type": "string",
             "description": "Connect cluster name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "connect",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "connect"
           },
           "version": {
             "type": "integer",
@@ -948,38 +937,6 @@
                   "value": {
                     "type": "string",
                     "description": "Password for keystore."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "saslMechanism": {
-                "type": "object",
-                "description": "SASL mechanism.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
-                    "enum": [
-                      "PLAIN",
-                      "SCRAM-SHA-256",
-                      "SCRAM-SHA-512",
-                      "AWS_MSK_IAM"
-                    ]
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "saslJaasConfig": {
-                "type": "object",
-                "description": "SASL JAAS config string.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "JAAS config string."
                   }
                 },
                 "required": [
@@ -1119,8 +1076,8 @@
           "name": {
             "type": "string",
             "description": "AWS connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "aws",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "aws"
           },
           "version": {
             "type": "integer",
@@ -1258,8 +1215,8 @@
           "name": {
             "type": "string",
             "description": "Webhook connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "webhook",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "webhook"
           },
           "version": {
             "type": "integer",
@@ -1357,8 +1314,8 @@
           "name": {
             "type": "string",
             "description": "DataDog connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "datadog",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "datadog"
           },
           "version": {
             "type": "integer",
@@ -1436,8 +1393,8 @@
           "name": {
             "type": "string",
             "description": "PagerDuty connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "pagerduty",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "pagerduty"
           },
           "version": {
             "type": "integer",
@@ -1489,8 +1446,8 @@
           "name": {
             "type": "string",
             "description": "Slack connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "slack",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "slack"
           },
           "version": {
             "type": "integer",
@@ -1545,8 +1502,8 @@
           "name": {
             "type": "string",
             "description": "Splunk connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "splunk",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "splunk"
           },
           "version": {
             "type": "integer",
@@ -1650,8 +1607,8 @@
           "name": {
             "type": "string",
             "description": "Alert Manager connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "my-alertmanager-connection",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "my-alertmanager-connection"
           },
           "version": {
             "type": "integer",
@@ -1710,7 +1667,7 @@
   "defaultSnippets": [
     {
       "label": "HQ Connection",
-      "body": {    
+      "body": {
         "lensesHq": {
           "name": "lenses-hq",
           "version": 1,
@@ -2213,47 +2170,36 @@
     {
       "label": "Zookeeper",
       "body": {
-        "zookeeper": [
-          {
-            "name": "zookeeper",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "zookeeperUrls": {
-                "value": [
-                  "localhost:2181"
-                ]
-              },
-              "zookeeperChrootPath": {
-                "value": "/mypath"
-              },
-              "zookeeperSessionTimeout": {
-                "value": 10000
-              },
-              "zookeeperConnectionTimeout": {
-                "value": 10000
-              },
-              "metricsPort": {
-                "value": 9581
-              },
-              "metricsType": {
-                "value": "JMX"
-              },
-              "metricsSsl": {
-                "value": true
-              },
-              "metricsUsername": {
-                "value": "jmxuser"
-              },
-              "metricsPassword": {
-                "value": "jmxpass"
-              },
-              "httpRequestTimeout": {
-                "value": 30000
-              }
+        "zookeeper": {
+          "name": "zookeeper",
+          "version": 1,
+          "tags": "[]",
+          "configuration": {
+            "zookeeperUrls": {
+              "value": [
+                "localhost:2181"
+              ]
+            },
+            "zookeeperChrootPath": {
+              "value": "/mypath"
+            },
+            "zookeeperSessionTimeout": {
+              "value": 10000
+            },
+            "zookeeperConnectionTimeout": {
+              "value": 10000
+            },
+            "metricsPort": {
+              "value": 9581
+            },
+            "metricsType": {
+              "value": "JMX"
+            },
+            "metricsSsl": {
+              "value": true
             }
           }
-        ]
+        }
       }
     },
     {
