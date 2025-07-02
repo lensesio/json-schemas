@@ -11,8 +11,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Lenses HQ connection name.",
-            "default": "lenses-hq"
+            "description": "Lenses HQ connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "lenses-hq",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -131,7 +132,8 @@
         "name": {
           "type": "string",
           "description": "Cluster name.",
-          "default": "my-kafka"
+          "default": "kafka",
+          "enum": ["kafka"]
         },
         "version": {
           "type": "integer",
@@ -255,11 +257,12 @@
               "properties": {
                 "value": {
                   "type": "string",
-                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
+                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
                   "enum": [
                     "PLAIN",
                     "SCRAM-SHA-256",
-                    "SCRAM-SHA-512"
+                    "SCRAM-SHA-512",
+                    "AWS_MSK_IAM"
                   ]
                 }
               },
@@ -278,8 +281,7 @@
               },
               "required": [
                 "value"
-              ],
-              "multiline": true
+              ]
             },
             "additionalProperties": {
               "type": "object",
@@ -429,11 +431,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {
+            "name": {
             "type": "string",
             "description": "Zookeeper name.",
-            "default": "zookeeper"
-          },
+            "default": "zookeeper",
+            "enum": ["zookeeper"]
+            },
           "version": {
             "type": "integer",
             "description": "Zookeeper version.",
@@ -521,11 +524,17 @@
               },
               "metricsType": {
                 "type": "object",
-                "description": "Type of metrics to collect.",
+                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Metrics type (e.g., 'JMX')."
+                    "description": "Metrics type value.",
+                    "enum": [
+                      "JOLOKIAG",
+                      "JOLOKIAP",
+                      "JMX",
+                      "AWS"
+                    ]
                   }
                 },
                 "required": [
@@ -565,11 +574,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {
+            "name": {
             "type": "string",
             "description": "Schema Registry name.",
-            "default": "schema-registry"
-          },
+            "default": "schema-registry",
+            "enum": ["schema-registry"]
+            },
           "version": {
             "type": "integer",
             "description": "Schema Registry version.",
@@ -736,11 +746,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": {
+            "name": {
             "type": "string",
             "description": "Glue Schema Registry connection name.",
-            "default": "schema-registry"
-          },
+            "default": "schema-registry",
+            "enum": ["schema-registry"]
+            },
           "version": {
             "type": "integer",
             "description": "Glue Schema Registry version.",
@@ -853,8 +864,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Connect cluster name.",
-            "default": "connect"
+            "description": "Connect cluster name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "connect",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -942,14 +954,36 @@
                 ]
               },
               "saslMechanism": {
-                "type": "string",
-                "description": "SASL mechanism (e.g. PLAIN, SCRAM-SHA-256, etc.).",
-                "default": "PLAIN"
+                "type": "object",
+                "description": "SASL mechanism.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
+                    "enum": [
+                      "PLAIN",
+                      "SCRAM-SHA-256",
+                      "SCRAM-SHA-512",
+                      "AWS_MSK_IAM"
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ]
               },
               "saslJaasConfig": {
-                "type": "string",
+                "type": "object",
                 "description": "SASL JAAS config string.",
-                "default": ""
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "JAAS config string."
+                  }
+                },
+                "required": [
+                  "value"
+                ]
               },
               "metricsPort": {
                 "type": "object",
@@ -1083,8 +1117,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "AWS connection name.",
-            "default": "aws"
+            "description": "AWS connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "aws",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1221,8 +1256,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Webhook connection name.",
-            "default": "webhook"
+            "description": "Webhook connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "webhook",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1319,8 +1355,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "DataDog connection name.",
-            "default": "datadog"
+            "description": "DataDog connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "datadog",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1397,8 +1434,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "PagerDuty connection name.",
-            "default": "pagerduty"
+            "description": "PagerDuty connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "pagerduty",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1449,8 +1487,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Slack connection name.",
-            "default": "slack"
+            "description": "Slack connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "slack",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1504,8 +1543,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Splunk connection name.",
-            "default": "splunk"
+            "description": "Splunk connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "splunk",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1608,8 +1648,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Alert Manager connection name.",
-            "default": "my-alertmanager-connection"
+            "description": "Alert Manager connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "default": "my-alertmanager-connection",
+            "pattern": "^[a-zA-Z0-9-]+$"
           },
           "version": {
             "type": "integer",
@@ -1702,7 +1743,7 @@
       "label": "Kafka, Azure Eventhubs",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1729,7 +1770,7 @@
       "label": "Kafka, PLAINTEXT",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1768,7 +1809,7 @@
       "label": "Kafka, SASL_PLAINTEXT, PLAIN",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1813,7 +1854,7 @@
       "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1858,7 +1899,7 @@
       "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1903,7 +1944,7 @@
       "label": "Kafka & Confluent Cloud, SASL_SSL, PLAIN",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -1963,7 +2004,7 @@
       "label": "Kafka, SASL_SSL, SCRAM-SHA-256",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2023,7 +2064,7 @@
       "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2083,7 +2124,7 @@
       "label": "Kafka, IBM Event Streams",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2110,7 +2151,7 @@
       "label": "Kafka, AWS MSK",
       "body": {
         "kafka": {
-          "name": "my-kafka",
+          "name": "kafka",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2328,7 +2369,7 @@
           }
         ],
         "glueSchemaRegistry": {
-          "name": "glue-schema-registry",
+          "name": "schema-registry",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2367,7 +2408,7 @@
           }
         ],
         "glueSchemaRegistry": {
-          "name": "glue-schema-registry",
+          "name": "schema-registry",
           "version": 1,
           "tags": "[]",
           "configuration": {
@@ -2406,7 +2447,7 @@
           }
         ],
         "glueSchemaRegistry": {
-          "name": "glue-schema-registry",
+          "name": "schema-registry",
           "version": 1,
           "tags": "[]",
           "configuration": {
