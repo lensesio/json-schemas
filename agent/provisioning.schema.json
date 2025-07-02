@@ -11,9 +11,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Lenses HQ connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "lenses-hq",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Lenses HQ connection name.",
+            "default": "lenses-hq"
           },
           "version": {
             "type": "integer",
@@ -132,8 +131,10 @@
         "name": {
           "type": "string",
           "description": "Cluster name.",
-          "default": "kafka",
-          "enum": ["kafka"]
+          "enum": [
+            "kafka"
+          ],
+          "default": "kafka"
         },
         "version": {
           "type": "integer",
@@ -176,6 +177,7 @@
                   "type": "string",
                   "description": "Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
                   "enum": [
+                    "AWS_MSK_IAM",
                     "SASL_PLAINTEXT",
                     "SASL_SSL",
                     "PLAINTEXT"
@@ -257,12 +259,12 @@
               "properties": {
                 "value": {
                   "type": "string",
-                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
+                  "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
                   "enum": [
+                    "AWS_MSK_IAM",
                     "PLAIN",
                     "SCRAM-SHA-256",
-                    "SCRAM-SHA-512",
-                    "AWS_MSK_IAM"
+                    "SCRAM-SHA-512"
                   ]
                 }
               },
@@ -281,7 +283,8 @@
               },
               "required": [
                 "value"
-              ]
+              ],
+              "multiline": true
             },
             "additionalProperties": {
               "type": "object",
@@ -426,146 +429,138 @@
     },
     "zookeeper": {
       "type": "object",
-      "description": "Zookeeper clusters.",
-      "default": [],
-      "items": {
-        "type": "object",
-        "properties": {
-            "name": {
-            "type": "string",
-            "description": "Zookeeper name.",
-            "default": "zookeeper",
-            "enum": ["zookeeper"]
-            },
-          "version": {
-            "type": "integer",
-            "description": "Zookeeper version.",
-            "default": 1
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Tags for this Zookeeper.",
-            "default": []
-          },
-          "configuration": {
-            "type": "object",
-            "description": "Zookeeper connection configuration.",
-            "properties": {
-              "zookeeperUrls": {
-                "type": "object",
-                "description": "Zookeeper connection URLs.",
-                "properties": {
-                  "value": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "List of Zookeeper URLs."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperChrootPath": {
-                "type": "object",
-                "description": "Optional suffix to Zookeeper's connection string.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Chroot path value."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperSessionTimeout": {
-                "type": "object",
-                "description": "Zookeeper session timeout in milliseconds.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Timeout value in milliseconds."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "zookeeperConnectionTimeout": {
-                "type": "object",
-                "description": "Zookeeper connection timeout in milliseconds.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Timeout value in milliseconds."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsPort": {
-                "type": "object",
-                "description": "Port for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "integer",
-                    "description": "Port number."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsType": {
-                "type": "object",
-                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Metrics type value.",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX",
-                      "AWS"
-                    ]
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "metricsSsl": {
-                "type": "object",
-                "description": "Enable SSL for metrics collection.",
-                "properties": {
-                  "value": {
-                    "type": "boolean",
-                    "description": "SSL enabled flag."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              }
-            },
-            "required": [
-              "zookeeperUrls"
-            ]
-          }
+      "description": "Zookeeper cluster.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Zookeeper name.",
+          "enum": [
+            "zookeeper"
+          ],
+          "default": "zookeeper"
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
-      }
+        "version": {
+          "type": "integer",
+          "description": "Zookeeper version.",
+          "default": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags for this Zookeeper.",
+          "default": []
+        },
+        "configuration": {
+          "type": "object",
+          "description": "Zookeeper connection configuration.",
+          "properties": {
+            "zookeeperUrls": {
+              "type": "object",
+              "description": "Zookeeper connection URLs.",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of Zookeeper URLs."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperChrootPath": {
+              "type": "object",
+              "description": "Optional suffix to Zookeeper's connection string.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Chroot path value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperSessionTimeout": {
+              "type": "object",
+              "description": "Zookeeper session timeout in milliseconds.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "zookeeperConnectionTimeout": {
+              "type": "object",
+              "description": "Zookeeper connection timeout in milliseconds.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsPort": {
+              "type": "object",
+              "description": "Port for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Port number."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsType": {
+              "type": "object",
+              "description": "Type of metrics to collect.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Metrics type (e.g., 'JMX')."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsSsl": {
+              "type": "object",
+              "description": "Enable SSL for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "boolean",
+                  "description": "SSL enabled flag."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            }
+          },
+          "required": [
+            "zookeeperUrls"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "configuration"
+      ]
     },
     "confluentSchemaRegistry": {
       "type": "object",
@@ -574,12 +569,14 @@
       "items": {
         "type": "object",
         "properties": {
-            "name": {
+          "name": {
             "type": "string",
             "description": "Schema Registry name.",
-            "default": "schema-registry",
-            "enum": ["schema-registry"]
-            },
+            "enum": [
+              "schema-registry"
+            ],
+            "default": "schema-registry"
+          },
           "version": {
             "type": "integer",
             "description": "Schema Registry version.",
@@ -746,12 +743,14 @@
       "items": {
         "type": "object",
         "properties": {
-            "name": {
+          "name": {
             "type": "string",
             "description": "Glue Schema Registry connection name.",
-            "default": "schema-registry",
-            "enum": ["schema-registry"]
-            },
+            "enum": [
+              "schema-registry"
+            ],
+            "default": "schema-registry"
+          },
           "version": {
             "type": "integer",
             "description": "Glue Schema Registry version.",
@@ -864,9 +863,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Connect cluster name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "connect",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Connect cluster name.",
+            "default": "connect"
           },
           "version": {
             "type": "integer",
@@ -947,38 +945,6 @@
                   "value": {
                     "type": "string",
                     "description": "Password for keystore."
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "saslMechanism": {
-                "type": "object",
-                "description": "SASL mechanism.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, AWS_MSK_IAM).",
-                    "enum": [
-                      "PLAIN",
-                      "SCRAM-SHA-256",
-                      "SCRAM-SHA-512",
-                      "AWS_MSK_IAM"
-                    ]
-                  }
-                },
-                "required": [
-                  "value"
-                ]
-              },
-              "saslJaasConfig": {
-                "type": "object",
-                "description": "SASL JAAS config string.",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "JAAS config string."
                   }
                 },
                 "required": [
@@ -1117,9 +1083,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "AWS connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "aws",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "AWS connection name.",
+            "default": "aws"
           },
           "version": {
             "type": "integer",
@@ -1256,9 +1221,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Webhook connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "webhook",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Webhook connection name.",
+            "default": "webhook"
           },
           "version": {
             "type": "integer",
@@ -1355,9 +1319,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "DataDog connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "datadog",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "DataDog connection name.",
+            "default": "datadog"
           },
           "version": {
             "type": "integer",
@@ -1434,9 +1397,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "PagerDuty connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "pagerduty",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "PagerDuty connection name.",
+            "default": "pagerduty"
           },
           "version": {
             "type": "integer",
@@ -1487,9 +1449,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Slack connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "slack",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Slack connection name.",
+            "default": "slack"
           },
           "version": {
             "type": "integer",
@@ -1543,9 +1504,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Splunk connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "splunk",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Splunk connection name.",
+            "default": "splunk"
           },
           "version": {
             "type": "integer",
@@ -1648,9 +1608,8 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Alert Manager connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
-            "default": "my-alertmanager-connection",
-            "pattern": "^[a-zA-Z0-9-]+$"
+            "description": "Alert Manager connection name.",
+            "default": "my-alertmanager-connection"
           },
           "version": {
             "type": "integer",
@@ -1709,7 +1668,7 @@
   "defaultSnippets": [
     {
       "label": "HQ Connection",
-      "body": {    
+      "body": {
         "lensesHq": {
           "name": "lenses-hq",
           "version": 1,
@@ -2212,47 +2171,36 @@
     {
       "label": "Zookeeper",
       "body": {
-        "zookeeper": [
-          {
-            "name": "zookeeper",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "zookeeperUrls": {
-                "value": [
-                  "localhost:2181"
-                ]
-              },
-              "zookeeperChrootPath": {
-                "value": "/mypath"
-              },
-              "zookeeperSessionTimeout": {
-                "value": 10000
-              },
-              "zookeeperConnectionTimeout": {
-                "value": 10000
-              },
-              "metricsPort": {
-                "value": 9581
-              },
-              "metricsType": {
-                "value": "JMX"
-              },
-              "metricsSsl": {
-                "value": true
-              },
-              "metricsUsername": {
-                "value": "jmxuser"
-              },
-              "metricsPassword": {
-                "value": "jmxpass"
-              },
-              "httpRequestTimeout": {
-                "value": 30000
-              }
+        "zookeeper": {
+          "name": "zookeeper",
+          "version": 1,
+          "tags": "[]",
+          "configuration": {
+            "zookeeperUrls": {
+              "value": [
+                "localhost:2181"
+              ]
+            },
+            "zookeeperChrootPath": {
+              "value": "/mypath"
+            },
+            "zookeeperSessionTimeout": {
+              "value": 10000
+            },
+            "zookeeperConnectionTimeout": {
+              "value": 10000
+            },
+            "metricsPort": {
+              "value": 9581
+            },
+            "metricsType": {
+              "value": "JMX"
+            },
+            "metricsSsl": {
+              "value": true
             }
           }
-        ]
+        }
       }
     },
     {
@@ -2447,7 +2395,7 @@
           }
         ],
         "glueSchemaRegistry": {
-          "name": "schema-registry",
+          "name": "glue-schema-registry",
           "version": 1,
           "tags": "[]",
           "configuration": {
