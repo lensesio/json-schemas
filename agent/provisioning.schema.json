@@ -386,7 +386,7 @@
                 "value"
               ]
             },
-            "httpRequestTimeout": {
+            "metricsHttpTimeout": {
               "type": "object",
               "description": "HTTP request timeout in milliseconds for metrics collection.",
               "properties": {
@@ -549,6 +549,48 @@
               "required": [
                 "value"
               ]
+            },
+            "metricsHttpSuffix": {
+              "type": "object",
+              "description": "Custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "HTTP suffix value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsHttpTimeout": {
+              "type": "object",
+              "description": "HTTP request timeout in milliseconds for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsCustomUrlMappings": {
+              "type": "object",
+              "description": "Custom URL mappings for metrics collection per broker/node/worker.",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "Map of custom URL mappings.",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "value"
+              ]
             }
           },
           "required": [
@@ -678,6 +720,29 @@
                 }
               }
             },
+            "basicAuthCredentialsSource": {
+              "type": "object",
+              "description": "Source for the basic auth credentials.",
+              "properties": {
+              "value": {
+                "type": "string",
+                "enum": [
+                "URL",
+                "USER_INFO",
+                "SASL_INHERIT"
+                ]
+              }
+              }
+            },
+            "basicAuthUserInfo": {
+              "type": "object",
+              "description": "Basic auth user information.",
+              "properties": {
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
             "hardDelete": {
               "type": "object",
               "description": "Enable hard delete (default true).",
@@ -692,13 +757,17 @@
               "description": "Port for metrics collection.",
               "properties": {
                 "value": {
-                  "type": "integer"
+                  "type": "integer",
+                  "description": "Port number for metrics collection."
                 }
-              }
+              },
+              "required": [
+                "value"
+              ]
             },
             "metricsType": {
               "type": "object",
-              "description": "Type of metrics to collect.",
+              "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
               "properties": {
                 "value": {
                   "type": "string",
@@ -710,21 +779,127 @@
                     "AWS"
                   ]
                 }
-              }
+              },
+              "required": [
+                "value"
+              ]
             },
             "metricsSsl": {
               "type": "object",
               "description": "Enable SSL for metrics collection.",
               "properties": {
                 "value": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "SSL enabled flag."
                 }
-              }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsUsername": {
+              "type": "object",
+              "description": "Username for metrics authentication.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Username value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsPassword": {
+              "type": "object",
+              "description": "Password for metrics authentication.",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Password value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsHttpSuffix": {
+              "type": "object",
+              "description": "Custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "HTTP suffix value."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsHttpTimeout": {
+              "type": "object",
+              "description": "HTTP request timeout in milliseconds for metrics collection.",
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "description": "Timeout value in milliseconds."
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "metricsCustomUrlMappings": {
+              "type": "object",
+              "description": "Custom URL mappings for metrics collection per broker/node/worker.",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "Map of custom URL mappings.",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "value"
+              ]
+            },
+            "additionalProperties": {
+              "type": "object",
+              "description": "Additional configuration properties for Schema registry client.",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "description": "Arbitrary key-value pairs for additional Schema registry properties.",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "value"
+              ]
             }
           },
           "required": [
             "schemaRegistryUrls"
-          ]
+          ],
+          "if": {
+            "properties": {
+              "basicAuthCredentialsSource": {
+                "properties": {
+                  "value": {
+                    "enum": ["USER_INFO", "URL"]
+                  }
+                }
+              }
+            },
+            "required": ["basicAuthCredentialsSource"]
+          },
+          "then": {
+            "required": ["basicAuthUserInfo"]
+          }
         }
       },
       "required": [
@@ -1030,7 +1205,7 @@
                   "value"
                 ]
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "type": "object",
                 "description": "HTTP request timeout in milliseconds for metrics collection.",
                 "properties": {
@@ -1055,6 +1230,19 @@
                     }
                   }
                 },
+                "required": [
+                  "value"
+                ]
+              },
+              "sslAlgorthrim": {
+                "type": "object",
+                "description": "Name of the SSL algorthrim.",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "default": "X509",
                 "required": [
                   "value"
                 ]
@@ -1779,9 +1967,6 @@
             },
             "metricsPassword": {
               "value": "jmxpass"
-            },
-            "httpRequestTimeout": {
-              "value": 30000
             }
           }
         }
@@ -2088,9 +2273,6 @@
             },
             "metricsPassword": {
               "value": "jmxpass"
-            },
-            "httpRequestTimeout": {
-              "value": 30000
             }
           }
         }
