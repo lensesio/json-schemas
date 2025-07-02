@@ -1708,8 +1708,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1735,8 +1735,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "PLAINTEXT://your.kafka.broker.0:9092",
-                "PLAINTEXT://your.kafka.broker.1:9092"
+                "PLAINTEXT://demo-kafka-1:9092",
+                "PLAINTEXT://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1774,8 +1774,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_PLAINTEXT://your.kafka.broker.0:9092",
-                "SASL_PLAINTEXT://your.kafka.broker.1:9092"
+                "SASL_PLAINTEXT://demo-kafka-1:9092",
+                "SASL_PLAINTEXT://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1819,8 +1819,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_PLAINTEXT://your.kafka.broker.0:9092",
-                "SASL_PLAINTEXT://your.kafka.broker.1:9092"
+                "SASL_PLAINTEXT://demo-kafka-1:9092",
+                "SASL_PLAINTEXT://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1864,8 +1864,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_PLAINTEXT://your.kafka.broker.0:9092",
-                "SASL_PLAINTEXT://your.kafka.broker.1:9092"
+                "SASL_PLAINTEXT://demo-kafka-1:9092",
+                "SASL_PLAINTEXT://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1909,8 +1909,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -1969,8 +1969,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -2029,8 +2029,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -2089,8 +2089,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
@@ -2116,8 +2116,8 @@
           "configuration": {
             "kafkaBootstrapServers": {
               "value": [
-                "SASL_SSL://your.kafka.broker.0:9092",
-                "SASL_SSL://your.kafka.broker.1:9092"
+                "SASL_SSL://demo-kafka-1:9092",
+                "SASL_SSL://demo-kafka-2:9092"
               ]
             },
             "protocol": {
