@@ -187,7 +187,8 @@
                       "AWS_MSK_IAM",
                       "SASL_PLAINTEXT",
                       "SASL_SSL",
-                      "PLAINTEXT"
+                      "PLAINTEXT",
+                      "SSL"
                     ]
                   }
                 },
@@ -2038,7 +2039,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2084,7 +2085,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2130,7 +2131,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2156,13 +2157,13 @@
                 "value": "SASL_SSL"
               },
               "sslTruststore": {
-                "file": "/path/to/truststore.jks"
+                "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
               "sslKeystore": {
-                "file": "/path/to/keystore.jks"
+                "file": "keystore.jks"
               },
               "sslKeyPassword": {
                 "value": "key-password"
@@ -2191,7 +2192,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2223,13 +2224,13 @@
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
               "sslTruststore": {
-                "file": "/path/to/truststore.jks"
+                "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
               "sslKeystore": {
-                "file": "/path/to/keystore.jks"
+                "file": "keystore.jks"
               },
               "sslKeyPassword": {
                 "value": "key-password"
@@ -2252,7 +2253,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2284,13 +2285,13 @@
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
               "sslTruststore": {
-                "file": "/path/to/truststore.jks"
+                "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
               "sslKeystore": {
-                "file": "/path/to/keystore.jks"
+                "file": "keystore.jks"
               },
               "sslKeyPassword": {
                 "value": "key-password"
@@ -2364,13 +2365,13 @@
                 "value": "SASL_SSL"
               },
               "sslTruststore": {
-                "file": "/path/to/truststore.jks"
+                "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
               "sslKeystore": {
-                "file": "/path/to/keystore.jks"
+                "file": "keystore.jks"
               },
               "sslKeyPassword": {
                 "value": "key-password"
@@ -2388,6 +2389,58 @@
                 "value": {
                   "sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
                 }
+              },
+              "metricsPort": {
+                "value": 9581
+              },
+              "metricsType": {
+                "value": "JMX"
+              },
+              "metricsSsl": {
+                "value": true
+              },
+              "metricsUsername": {
+                "value": "jmxuser"
+              },
+              "metricsPassword": {
+                "value": "jmxpass"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SSL",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "SSL://demo-kafka:9093"
+                ]
+              },
+              "protocol": {
+                "value": "SSL"
+              },
+              "sslTruststore": {
+                "file": "truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": "truststore-password"
+              },
+              "sslKeystore": {
+                "file": "keystore.jks"
+              },
+              "sslKeyPassword": {
+                "value": "key-password"
+              },
+              "sslKeystorePassword": {
+                "value": "keystore-password"
               },
               "metricsPort": {
                 "value": 9581
@@ -2467,7 +2520,7 @@
                 "value": "pass"
               },
               "sslKeystore": {
-                "file": "/path/to/keystore.jks"
+                "file": "keystore.jks"
               },
               "sslKeystorePassword": {
                 "value": "password"
@@ -2487,7 +2540,7 @@
               "metricsPassword": {
                 "value": "jmxpass"
               },
-              "httpRequestTimeout": {
+              "metricsHttpTimeout": {
                 "value": 30000
               }
             }
@@ -2518,7 +2571,7 @@
               },
               "sslTruststore": {
                 "fileRef": {
-                  "filePath": "/path/to/my/truststore.jks"
+                  "filePath": "truststore.jks"
                 }
               },
               "sslTruststorePassword": {
@@ -2526,7 +2579,7 @@
               },
               "sslKeystore": {
                 "fileRef": {
-                  "filePath": "/path/to/my/keystore.jks"
+                  "filePath": "keystore.jks"
                 }
               },
               "sslKeystorePassword": {
