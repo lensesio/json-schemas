@@ -45,6 +45,7 @@ jobs:
           fi
         done
         
+    - name: Validate YAML examples against schemas
       run: |
         # Install yaml to json converter
         npm install -g js-yaml
