@@ -2871,7 +2871,7 @@
       "body": {
         "confluentSchemaRegistry": [
           {
-            "name": "ibm-event-streams-schema-registry",
+            "name": "schema-registry",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2890,7 +2890,7 @@
       "body": {
         "confluentSchemaRegistry": [
           {
-            "name": "apicurio-schema-registry",
+            "name": "schema-registry",
             "version": 1,
             "tags": "[]",
             "configuration": {
