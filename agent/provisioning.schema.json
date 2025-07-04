@@ -686,20 +686,16 @@
               },
               "sslTruststore": {
                 "type": "object",
-                "description": "Custom truststore for TLS.",
+                "description": "Path to the truststore file.",
                 "properties": {
-                  "fileRef": {
-                    "type": "object",
-                    "properties": {
-                      "filePath": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "filePath"
-                    ]
+                  "file": {
+                    "type": "string",
+                    "description": "File path to truststore."
                   }
-                }
+                },
+                "required": [
+                  "file"
+                ]
               },
               "sslTruststorePassword": {
                 "type": "object",
@@ -712,20 +708,16 @@
               },
               "sslKeystore": {
                 "type": "object",
-                "description": "Custom keystore for TLS client authentication.",
+                "description": "Path to the keystore file.",
                 "properties": {
-                  "fileRef": {
-                    "type": "object",
-                    "properties": {
-                      "filePath": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "filePath"
-                    ]
+                  "file": {
+                    "type": "string",
+                    "description": "File path to keystore."
                   }
-                }
+                },
+                "required": [
+                  "file"
+                ]
               },
               "sslKeystorePassword": {
                 "type": "object",
@@ -740,14 +732,14 @@
                 "type": "object",
                 "description": "Source for the basic auth credentials.",
                 "properties": {
-                "value": {
-                  "type": "string",
-                  "enum": [
-                  "URL",
-                  "USER_INFO",
-                  "SASL_INHERIT"
-                  ]
-                }
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "URL",
+                      "USER_INFO",
+                      "SASL_INHERIT"
+                    ]
+                  }
                 }
               },
               "basicAuthUserInfo": {
@@ -906,15 +898,22 @@
                 "basicAuthCredentialsSource": {
                   "properties": {
                     "value": {
-                      "enum": ["USER_INFO", "URL"]
+                      "enum": [
+                        "USER_INFO",
+                        "URL"
+                      ]
                     }
                   }
                 }
               },
-              "required": ["basicAuthCredentialsSource"]
+              "required": [
+                "basicAuthCredentialsSource"
+              ]
             },
             "then": {
-              "required": ["basicAuthUserInfo"]
+              "required": [
+                "basicAuthUserInfo"
+              ]
             }
           }
         },
@@ -1926,10 +1925,10 @@
                 "value": true
               },
               "sslTruststore": {
-                "file": "/mnt/provision-secrets/grpc/truststore.jks"
+                "file": "/mnt/provision-secrets/hq-truststore.jks"
               },
               "sslTruststorePassword": {
-                "value": "<LENSES_HQ_AGENT_TRUSTSTORE_PWD>"
+                "value": "truststore-password"
               }
             }
           }
@@ -1981,20 +1980,21 @@
               "protocol": {
                 "value": "PLAINTEXT"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": false
+              "# metricsSsl": {
+                "# value": false
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               }
             }
           }
@@ -2024,23 +2024,24 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": false
+              "# metricsSsl": {
+                "# value": false
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2070,23 +2071,24 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": false
+              "# metricsSsl": {
+                "# value": false
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2116,23 +2118,24 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": false
+              "# metricsSsl": {
+                "# value": false
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2156,20 +2159,19 @@
               "protocol": {
                 "value": "SASL_SSL"
               },
+              "# Optional: TLS/SSL": "Uncomment the properties below",
               "sslTruststore": {
                 "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "sslKeystore": {
-                "file": "keystore.jks"
+              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "keystore.jks"
               },
-              "sslKeyPassword": {
-                "value": "key-password"
-              },
-              "sslKeystorePassword": {
-                "value": "keystore-password"
+              "# sslKeystorePassword": {
+                "# value": "password"
               },
               "saslMechanism": {
                 "value": "PLAIN"
@@ -2177,23 +2179,24 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": true
+              "# metricsSsl": {
+                "# value": true
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2223,38 +2226,38 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
+              "# Optional: TLS/SSL": "Uncomment the properties below",
               "sslTruststore": {
                 "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "sslKeystore": {
-                "file": "keystore.jks"
+              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "keystore.jks"
               },
-              "sslKeyPassword": {
-                "value": "key-password"
+              "# sslKeystorePassword": {
+                "# value": "password"
               },
-              "sslKeystorePassword": {
-                "value": "keystore-password"
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsPort": {
-                "value": 9581
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsSsl": {
+                "# value": true
               },
-              "metricsSsl": {
-                "value": true
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
-              },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2284,35 +2287,35 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
               },
+              "# Optional: TLS/SSL": "Uncomment the properties below",
               "sslTruststore": {
                 "file": "truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "sslKeystore": {
-                "file": "keystore.jks"
+              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "keystore.jks"
               },
-              "sslKeyPassword": {
-                "value": "key-password"
+              "# sslKeystorePassword": {
+                "# value": "password"
               },
-              "sslKeystorePassword": {
-                "value": "keystore-password"
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsPort": {
-                "value": 9581
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsSsl": {
+                "# value": true
               },
-              "metricsSsl": {
-                "value": true
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsUsername": {
-                "value": "jmxuser"
-              },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               }
             }
           }
@@ -2341,6 +2344,22 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"token\" password=\"<API Key>\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": "JMX"
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": "jmxuser"
+              },
+              "# metricsPassword": {
+                "# value": "jmxpass"
               }
             }
           }
@@ -2348,7 +2367,7 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK",
+      "label": "Kafka, AWS MSK (TLS/SSL)",
       "body": {
         "kafka": [
           {
@@ -2358,11 +2377,46 @@
             "configuration": {
               "kafkaBootstrapServers": {
                 "value": [
-                  "SASL_SSL://demo-kafka:9092"
+                  "SSL://demo-kafka:9092"
                 ]
               },
               "protocol": {
-                "value": "SASL_SSL"
+                "value": "SSL"
+              },
+              "sslTruststore": {
+                "file": "truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": "truststore-password"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsType": {
+                "# value": "AWS"
+              },
+              "# metricsHttpTimeout": {
+                "# value": 60000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, AWS MSK (mutal TLS/SSL)",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "SSL://demo-kafka:9092"
+                ]
+              },
+              "protocol": {
+                "value": "SSL"
               },
               "sslTruststore": {
                 "file": "truststore.jks"
@@ -2379,6 +2433,35 @@
               "sslKeystorePassword": {
                 "value": "keystore-password"
               },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsType": {
+                "# value": "AWS"
+              },
+              "# metricsHttpTimeout": {
+                "# value": 60000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, AWS MSK (IAM)",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "SAS_SSL://demo-kafka:9092"
+                ]
+              },
+              "protocol": {
+                "value": "SAS_SSL"
+              },
               "saslMechanism": {
                 "value": "AWS_MSK_IAM"
               },
@@ -2390,20 +2473,12 @@
                   "sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
                 }
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsType": {
+                "# value": "AWS"
               },
-              "metricsType": {
-                "value": "JMX"
-              },
-              "metricsSsl": {
-                "value": true
-              },
-              "metricsUsername": {
-                "value": "jmxuser"
-              },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsHttpTimeout": {
+                "# value": 60000
               }
             }
           }
@@ -2412,6 +2487,50 @@
     },
     {
       "label": "Kafka, SSL",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "SSL://demo-kafka:9093"
+                ]
+              },
+              "protocol": {
+                "value": "SSL"
+              },
+              "sslTruststore": {
+                "file": "truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": "truststore-password"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": "JMX"
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": "jmxuser"
+              },
+              "# metricsPassword": {
+                "# value": "jmxpass"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, mutal SSL/TLS",
       "body": {
         "kafka": [
           {
@@ -2442,20 +2561,21 @@
               "sslKeystorePassword": {
                 "value": "keystore-password"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": true
+              "# metricsSsl": {
+                "# value": true
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsUsername": {
+                "# value": "jmxuser"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsPassword": {
+                "# value": "jmxpass"
               }
             }
           }
@@ -2476,8 +2596,8 @@
                   "localhost:2181"
                 ]
               },
-              "zookeeperChrootPath": {
-                "value": "/mypath"
+              "# zookeeperChrootPath": {
+                "# value": "/mypath"
               },
               "zookeeperSessionTimeout": {
                 "value": 10000
@@ -2485,14 +2605,15 @@
               "zookeeperConnectionTimeout": {
                 "value": 10000
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsType": {
-                "value": "JMX"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsSsl": {
-                "value": true
+              "# metricsSsl": {
+                "# value": true
               }
             }
           }
@@ -2519,29 +2640,38 @@
               "password": {
                 "value": "pass"
               },
-              "sslKeystore": {
-                "file": "keystore.jks"
+              "# Optional: TLS/SSL": "Uncomment the properties below",
+              "sslTruststore": {
+                "file": "truststore.jks"
               },
-              "sslKeystorePassword": {
-                "value": "password"
+              "sslTruststorePassword": {
+                "value": "truststore-password"
               },
-              "metricsPort": {
-                "value": 9581
+              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "keystore.jks"
               },
-              "metricsType": {
-                "value": "JMX"
+              "# sslKeystorePassword": {
+                "# value": "password"
               },
-              "metricsSsl": {
-                "value": true
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "metricsUsername": {
-                "value": "jmxuser"
+              "# metricsType": {
+                "# value": "JMX"
               },
-              "metricsPassword": {
-                "value": "jmxpass"
+              "# metricsSsl": {
+                "# value": true
               },
-              "metricsHttpTimeout": {
-                "value": 30000
+              "# metricsUsername": {
+                "# value": "jmxuser"
+              },
+              "# metricsPassword": {
+                "# value": "jmxpass"
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
@@ -2569,21 +2699,38 @@
               "password": {
                 "value": "my-password"
               },
-              "sslTruststore": {
-                "fileRef": {
-                  "filePath": "truststore.jks"
-                }
+              "# Optional: TLS/SSL": "Uncomment the properties below",
+              "# sslTruststore": {
+                "# file": "truststore.jks"
               },
-              "sslTruststorePassword": {
-                "value": "myPassword"
+              "# sslTruststorePassword": {
+                "# value": "truststore-password"
               },
-              "sslKeystore": {
-                "fileRef": {
-                  "filePath": "keystore.jks"
-                }
+              "# Optional: Uncomment below to enable mutal SSL/TLS": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "keystore.jks"
               },
-              "sslKeystorePassword": {
-                "value": "myPassword"
+              "# sslKeystorePassword": {
+                "# value": "myPassword"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": "JMX"
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": "jmxuser"
+              },
+              "# metricsPassword": {
+                "# value": "jmxpass"
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
               }
             }
           }
