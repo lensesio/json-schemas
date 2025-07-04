@@ -1,0 +1,26 @@
+{
+  "name": "lenses-json-schemas",
+  "version": "1.0.0",
+  "description": "JSON Schemas for Lenses Agent Provisioning Configuration",
+  "scripts": {
+    "validate": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --verbose",
+    "validate-all": "find . -name '*.schema.json' -exec ajv compile -s {} --spec=draft7 --verbose \\;",
+    "validate-yaml": "js-yaml provisioning.yaml | ajv validate -s agent/provisioning.schema.json --spec=draft7",
+    "format-check": "find . -name '*.schema.json' -exec python3 -m json.tool {} \\; > /dev/null",
+    "test": "npm run validate-all && npm run format-check"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^2.1.1",
+    "js-yaml": "^4.1.0"
+  },
+  "keywords": [
+    "json-schema",
+    "lenses",
+    "kafka",
+    "provisioning",
+    "validation"
+  ],
+  "author": "Lenses",
+  "license": "Apache-2.0"
+}

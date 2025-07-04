@@ -2456,11 +2456,11 @@
             "configuration": {
               "kafkaBootstrapServers": {
                 "value": [
-                  "SAS_SSL://demo-kafka:9092"
+                  "SASL_SSL://demo-kafka:9092"
                 ]
               },
               "protocol": {
-                "value": "SAS_SSL"
+                "value": "SASL_SSL"
               },
               "saslMechanism": {
                 "value": "AWS_MSK_IAM"
