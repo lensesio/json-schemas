@@ -1,0 +1,147 @@
+name: Validate JSON Schemas
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**/*.schema.json'
+      - '**/*.json'
+      - '.github/workflows/validate-schemas.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - '**/*.schema.json'
+      - '**/*.json'
+      - '.github/workflows/validate-schemas.yml'
+
+jobs:
+  validate-schemas:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g ajv-cli@5 ajv-formats@2
+        
+    - name: Validate JSON Schema syntax
+      run: |
+        echo "Validating JSON Schema files..."
+        find . -name "*.schema.json" -type f | while read -r schema; do
+          echo "Validating schema: $schema"
+          if ! ajv compile -s "$schema" --spec=draft7 --verbose; then
+            echo "❌ Schema validation failed for: $schema"
+            exit 1
+          else
+            echo "✅ Schema is valid: $schema"
+          fi
+        done
+        
+      run: |
+        # Install yaml to json converter
+        npm install -g js-yaml
+        
+        echo "Validating YAML examples against schemas..."
+        
+        # Check if provisioning.yaml exists and validate against schema
+        if [ -f "provisioning.yaml" ]; then
+          echo "Converting provisioning.yaml to JSON for validation..."
+          js-yaml provisioning.yaml > provisioning.json
+          
+          if [ -f "agent/provisioning.schema.json" ]; then
+            echo "Validating provisioning.yaml against provisioning.schema.json..."
+            if ! ajv validate -s "agent/provisioning.schema.json" -d "provisioning.json" --spec=draft7; then
+              echo "❌ YAML validation failed for: provisioning.yaml"
+              exit 1
+            else
+              echo "✅ YAML is valid: provisioning.yaml"
+            fi
+          fi
+          
+          # Clean up temporary file
+          rm -f provisioning.json
+        fi
+        
+        # Check if example.provisioning.yaml exists and validate against schema
+        if [ -f "example.provisioning.yaml" ]; then
+          echo "Converting example.provisioning.yaml to JSON for validation..."
+          js-yaml example.provisioning.yaml > example.provisioning.json
+          
+          if [ -f "agent/provisioning.schema.json" ]; then
+            echo "Validating example.provisioning.yaml against provisioning.schema.json..."
+            if ! ajv validate -s "agent/provisioning.schema.json" -d "example.provisioning.json" --spec=draft7 --verbose; then
+              echo "❌ YAML validation failed for: example.provisioning.yaml"
+              exit 1
+            else
+              echo "✅ YAML is valid: example.provisioning.yaml"
+            fi
+          fi
+          
+          # Clean up temporary file
+          rm -f example.provisioning.json
+        fi
+        
+    - name: Validate Helm values schema
+      run: |
+        if [ -f "helm/values.yaml.schema.json" ]; then
+          echo "Validating Helm values schema..."
+          if ! ajv compile -s "helm/values.yaml.schema.json" --spec=draft7 --verbose; then
+            echo "❌ Helm schema validation failed"
+            exit 1
+          else
+            echo "✅ Helm schema is valid"
+          fi
+        fi
+        
+    - name: Validate IAM schemas
+      run: |
+        echo "Validating IAM schemas..."
+        for schema in iam/*.schema.json; do
+          if [ -f "$schema" ]; then
+            echo "Validating IAM schema: $schema"
+            if ! ajv compile -s "$schema" --spec=draft7 --verbose; then
+              echo "❌ IAM schema validation failed for: $schema"
+              exit 1
+            else
+              echo "✅ IAM schema is valid: $schema"
+            fi
+          fi
+        done
+        
+    - name: Check for schema format consistency
+      run: |
+        echo "Checking schema format consistency..."
+        
+        # Check that all schema files use consistent formatting
+        find . -name "*.schema.json" -type f | while read -r schema; do
+          echo "Checking format consistency for: $schema"
+          
+          # Check if file is properly formatted JSON
+          if ! python3 -m json.tool "$schema" > /dev/null; then
+            echo "❌ JSON format error in: $schema"
+            exit 1
+          fi
+          
+          # Check for consistent indentation (2 spaces)
+          if grep -q $'\t' "$schema"; then
+            echo "❌ Found tabs instead of spaces in: $schema"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All schemas have consistent formatting"
+        
+    - name: Summary
+      run: |
+        echo "🎉 All JSON Schema validation checks passed!"
+        echo "📋 Validation summary:"
+        echo "  - Schema syntax validation: ✅"
+        echo "  - Format consistency: ✅"
