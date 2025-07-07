@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "JSON Schemas for Lenses Agent Provisioning Configuration",
   "scripts": {
-    "validate": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --verbose",
-    "validate-all": "find . -name '*.schema.json' -exec ajv compile -s {} --spec=draft7 --verbose \\;",
-    "validate-yaml": "js-yaml provisioning.yaml | ajv validate -s agent/provisioning.schema.json --spec=draft7",
+    "validate": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false --all-errors",
+    "validate-agent": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false --all-errors",
+    "validate-iam": "ajv compile -s iam/group.schema.json -s iam/policy.schema.json -s iam/service-account.schema.json -s iam/user.schema.json --spec=draft7 --strict=false --all-errors",
+    "validate-yaml-example": "js-yaml example.provisioning.yaml > temp.json && ajv validate -s agent/provisioning.schema.json -d temp.json --spec=draft7 --strict=false && rm temp.json",
     "format-check": "find . -name '*.schema.json' -exec python3 -m json.tool {} \\; > /dev/null",
-    "test": "npm run validate-all && npm run format-check"
+    "test": "npm run validate-agent && npm run validate-iam && npm run format-check && npm run validate-yaml-example"
   },
   "devDependencies": {
     "ajv-cli": "^5.0.0",

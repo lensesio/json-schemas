@@ -1888,7 +1888,7 @@
             ],
             "configuration": {
               "server": {
-                "value": "<YOUR LENSES HQ SERVER URL>"
+                "value": "<YOUR_LENSES_HQ_SERVER_URL>"
               },
               "port": {
                 "value": 10000
