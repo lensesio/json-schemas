@@ -129,14 +129,14 @@ npm install
 #### Validate All Schemas
 
 ```bash
-# Validate all schema files
-npm run validate-all
+# Validate main provisioning schema
+npm run validate-agent
 
-# Validate main provisioning schema only
-npm run validate
+# Validate IAM schemas
+npm run validate-iam
 
 # Validate YAML examples against schema
-npm run validate-yaml
+npm run validate-yaml-example
 
 # Check JSON formatting
 npm run format-check
@@ -149,10 +149,10 @@ npm test
 
 ```bash
 # Validate specific schema
-npx ajv compile -s agent/provisioning.schema.json --spec=draft7 --verbose
+npx ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false --all-errors
 
-# Validate YAML against schema
-npx js-yaml provisioning.yaml | npx ajv validate -s agent/provisioning.schema.json --spec=draft7
+# Validate YAML against schema (convert first then validate)
+npx js-yaml example.provisioning.yaml > temp.json && npx ajv validate -s agent/provisioning.schema.json -d temp.json --spec=draft7 --strict=false && rm temp.json
 ```
 
 ### Badge Status

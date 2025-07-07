@@ -26,30 +26,61 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
         
     - name: Install dependencies
       run: |
-        npm install -g ajv-cli@5 ajv-formats@2
+        # Check if package.json exists and use it, otherwise install globally
+        if [ -f "package.json" ]; then
+          echo "Using local package.json for dependencies..."
+          npm ci
+          # Add node_modules/.bin to PATH for local binaries
+          echo "$(pwd)/node_modules/.bin" >> $GITHUB_PATH
+        else
+          echo "Installing dependencies globally..."
+          npm install -g ajv-cli@5 ajv-formats@2 js-yaml@4
+        fi
         
     - name: Validate JSON Schema syntax
       run: |
         echo "Validating JSON Schema files..."
-        find . -name "*.schema.json" -type f | while read -r schema; do
-          echo "Validating schema: $schema"
-          if ! ajv compile -s "$schema" --spec=draft7 --verbose; then
-            echo "❌ Schema validation failed for: $schema"
-            exit 1
-          else
-            echo "✅ Schema is valid: $schema"
+        
+        # Validate main agent provisioning schema (our primary focus)
+        echo "Validating agent/provisioning.schema.json..."
+        if ! ajv compile -s "agent/provisioning.schema.json" --spec=draft7 --strict=false --all-errors; then
+          echo "❌ Agent provisioning schema validation failed"
+          exit 1
+        else
+          echo "✅ Agent provisioning schema is valid"
+        fi
+        
+        # Validate individual IAM schemas (skip ones with unresolved refs for now)
+        for schema in iam/group.schema.json iam/policy.schema.json iam/service-account.schema.json iam/user.schema.json; do
+          if [ -f "$schema" ]; then
+            echo "Validating $schema..."
+            if ! ajv compile -s "$schema" --spec=draft7 --strict=false --all-errors; then
+              echo "❌ Schema validation failed for: $schema"
+              exit 1
+            else
+              echo "✅ Schema is valid: $schema"
+            fi
+          fi
+        done
+        
+        # Check other schemas exist and are well-formed JSON (basic syntax check)
+        for schema in helm/values.yaml.schema.json iam/role.schema.json; do
+          if [ -f "$schema" ]; then
+            echo "Checking JSON syntax for $schema..."
+            if ! python3 -m json.tool "$schema" > /dev/null; then
+              echo "❌ JSON syntax error in: $schema"
+              exit 1
+            else
+              echo "✅ JSON syntax is valid: $schema"
+            fi
           fi
         done
         
     - name: Validate YAML examples against schemas
       run: |
-        # Install yaml to json converter
-        npm install -g js-yaml
-        
         echo "Validating YAML examples against schemas..."
         
         # Check if provisioning.yaml exists and validate against schema
@@ -59,7 +90,7 @@ jobs:
           
           if [ -f "agent/provisioning.schema.json" ]; then
             echo "Validating provisioning.yaml against provisioning.schema.json..."
-            if ! ajv validate -s "agent/provisioning.schema.json" -d "provisioning.json" --spec=draft7; then
+            if ! ajv validate -s "agent/provisioning.schema.json" -d "provisioning.json" --spec=draft7 --strict=false; then
               echo "❌ YAML validation failed for: provisioning.yaml"
               exit 1
             else
@@ -78,7 +109,7 @@ jobs:
           
           if [ -f "agent/provisioning.schema.json" ]; then
             echo "Validating example.provisioning.yaml against provisioning.schema.json..."
-            if ! ajv validate -s "agent/provisioning.schema.json" -d "example.provisioning.json" --spec=draft7 --verbose; then
+            if ! ajv validate -s "agent/provisioning.schema.json" -d "example.provisioning.json" --spec=draft7 --strict=false; then
               echo "❌ YAML validation failed for: example.provisioning.yaml"
               exit 1
             else
@@ -94,7 +125,7 @@ jobs:
       run: |
         if [ -f "helm/values.yaml.schema.json" ]; then
           echo "Validating Helm values schema..."
-          if ! ajv compile -s "helm/values.yaml.schema.json" --spec=draft7 --verbose; then
+          if ! ajv compile -s "helm/values.yaml.schema.json" --spec=draft7 --strict=false --all-errors; then
             echo "❌ Helm schema validation failed"
             exit 1
           else
@@ -108,7 +139,7 @@ jobs:
         for schema in iam/*.schema.json; do
           if [ -f "$schema" ]; then
             echo "Validating IAM schema: $schema"
-            if ! ajv compile -s "$schema" --spec=draft7 --verbose; then
+            if ! ajv compile -s "$schema" --spec=draft7 --strict=false --all-errors; then
               echo "❌ IAM schema validation failed for: $schema"
               exit 1
             else

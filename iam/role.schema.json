@@ -21,7 +21,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "./policy.schema.json"
+        "$ref": "policy.schema.json"
       },
       "description": "List of permission statements for this role."
     },
