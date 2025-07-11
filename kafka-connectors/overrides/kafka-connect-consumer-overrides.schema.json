@@ -1,0 +1,85 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Kafka Connector Consumer Overrides",
+    "type": "object",
+    "properties": {
+      "consumer.override.security.protocol": {
+        "type": "string",
+        "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
+        "description": "Kafka client security protocol"
+      },
+      "consumer.override.sasl.mechanism": {
+        "type": "string",
+        "enum": ["PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512", "GSSAPI", "OAUTHBEARER"],
+        "description": "SASL authentication mechanism"
+      },
+      "consumer.override.sasl.jaas.config": {
+        "type": "string",
+        "description": "JAAS configuration string for SASL authentication"
+      },
+      "consumer.override.ssl.truststore.location": {
+        "type": "string",
+        "description": "Path to the truststore file"
+      },
+      "consumer.override.ssl.truststore.password": {
+        "type": "string",
+        "description": "Password for the truststore file"
+      },
+      "consumer.override.ssl.keystore.location": {
+        "type": "string",
+        "description": "Path to the keystore file"
+      },
+      "consumer.override.ssl.keystore.password": {
+        "type": "string",
+        "description": "Password for the keystore"
+      },
+      "consumer.override.ssl.key.password": {
+        "type": "string",
+        "description": "Password for the private key in the keystore"
+      }
+    },
+    "additionalProperties": true,
+  
+    "defaultSnippets": [
+      {
+        "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
+        "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+        "body": {
+          "consumer.override.security.protocol": "SASL_SSL",
+          "consumer.override.sasl.mechanism": "PLAIN",
+          "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+        }
+      },
+      {
+        "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+        "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+        "body": {
+          "consumer.override.security.protocol": "SASL_SSL",
+          "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
+          "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+        }
+      },
+      {
+        "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+        "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+        "body": {
+          "consumer.override.security.protocol": "SASL_PLAINTEXT",
+          "consumer.override.sasl.mechanism": "GSSAPI",
+          "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+        }
+      },
+      {
+        "label": "Consumer Overrides: SSL Only",
+        "description": "SSL encryption without SASL authentication",
+        "body": {
+          "consumer.override.security.protocol": "SSL",
+          "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+          "consumer.override.ssl.truststore.password": "changeit",
+          "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+          "consumer.override.ssl.keystore.password": "changeit",
+          "consumer.override.ssl.key.password": "changeit"
+        }
+      }
+    ]
+  }
+  

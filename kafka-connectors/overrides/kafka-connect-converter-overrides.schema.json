@@ -1,0 +1,138 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Kafka Connector Converter Overrides with Schema Converter Options",
+    "type": "object",
+    "properties": {
+      "key.converter": {
+        "type": "string",
+        "description": "Fully qualified class name of the key converter"
+      },
+      "value.converter": {
+        "type": "string",
+        "description": "Fully qualified class name of the value converter"
+      },
+      "header.converter": {
+        "type": "string",
+        "description": "Fully qualified class name of the header converter"
+      },
+      "key.converter.schemas.enable": {
+        "type": "boolean",
+        "description": "Enable schemas in the key converter"
+      },
+      "value.converter.schemas.enable": {
+        "type": "boolean",
+        "description": "Enable schemas in the value converter"
+      },
+      "header.converter.schemas.enable": {
+        "type": "boolean",
+        "description": "Enable schemas in the header converter"
+      },
+  
+      "key.converter.schema.registry.url": {
+        "type": "string",
+        "description": "Schema Registry URL used by the key converter"
+      },
+      "value.converter.schema.registry.url": {
+        "type": "string",
+        "description": "Schema Registry URL used by the value converter"
+      },
+      "header.converter.schema.registry.url": {
+        "type": "string",
+        "description": "Schema Registry URL used by the header converter"
+      },
+  
+      "key.converter.basic.auth.credentials.source": {
+        "type": "string",
+        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
+        "description": "Auth credentials source for the key converter"
+      },
+      "value.converter.basic.auth.credentials.source": {
+        "type": "string",
+        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
+        "description": "Auth credentials source for the value converter"
+      },
+      "header.converter.basic.auth.credentials.source": {
+        "type": "string",
+        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
+        "description": "Auth credentials source for the header converter"
+      },
+  
+      "key.converter.schema.registry.basic.auth.user.info": {
+        "type": "string",
+        "description": "Username and password (user:pass) for schema registry used by key converter"
+      },
+      "value.converter.schema.registry.basic.auth.user.info": {
+        "type": "string",
+        "description": "Username and password (user:pass) for schema registry used by value converter"
+      },
+      "header.converter.schema.registry.basic.auth.user.info": {
+        "type": "string",
+        "description": "Username and password (user:pass) for schema registry used by header converter"
+      },
+  
+      "key.converter.use.latest.version": {
+        "type": "boolean",
+        "description": "If true, use latest schema version in schema registry (key converter)"
+      },
+      "value.converter.use.latest.version": {
+        "type": "boolean",
+        "description": "If true, use latest schema version in schema registry (value converter)"
+      },
+      "header.converter.use.latest.version": {
+        "type": "boolean",
+        "description": "If true, use latest schema version in schema registry (header converter)"
+      }
+    },
+    "additionalProperties": true,
+    "defaultSnippets": [
+      {
+        "label": "Converter Overrides: Avro with Schema Registry",
+        "description": "Configure Avro converters with Schema Registry integration",
+        "body": {
+          "key.converter": "io.confluent.connect.avro.AvroConverter",
+          "value.converter": "io.confluent.connect.avro.AvroConverter",
+          "key.converter.schema.registry.url": "http://localhost:8081",
+          "value.converter.schema.registry.url": "http://localhost:8081",
+          "key.converter.schemas.enable": true,
+          "value.converter.schemas.enable": true
+        }
+      },
+      {
+        "label": "Converter Overrides: JSON with Schema",
+        "description": "Configure JSON converters with schema support",
+        "body": {
+          "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+          "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+          "key.converter.schemas.enable": true,
+          "value.converter.schemas.enable": true
+        }
+      },
+      {
+        "label": "Converter Overrides: String",
+        "description": "Configure String converters without schema",
+        "body": {
+          "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+          "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+          "key.converter.schemas.enable": false,
+          "value.converter.schemas.enable": false
+        }
+      },
+      {
+        "label": "Converter Overrides: Avro with Schema Registry Auth",
+        "description": "Configure Avro converters with Schema Registry authentication",
+        "body": {
+          "key.converter": "io.confluent.connect.avro.AvroConverter",
+          "value.converter": "io.confluent.connect.avro.AvroConverter",
+          "key.converter.schema.registry.url": "http://localhost:8081",
+          "value.converter.schema.registry.url": "http://localhost:8081",
+          "key.converter.basic.auth.credentials.source": "USER_INFO",
+          "value.converter.basic.auth.credentials.source": "USER_INFO",
+          "key.converter.schema.registry.basic.auth.user.info": "user:pass",
+          "value.converter.schema.registry.basic.auth.user.info": "user:pass",
+          "key.converter.schemas.enable": true,
+          "value.converter.schemas.enable": true
+        }
+      }
+    ]
+  }
+  
