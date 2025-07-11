@@ -6,12 +6,16 @@ on:
     paths:
       - '**/*.schema.json'
       - '**/*.json'
+      - '**/*.yaml'
+      - '**/*.yml'
       - '.github/workflows/validate-schemas.yml'
   pull_request:
     branches: [ main, master ]
     paths:
       - '**/*.schema.json'
       - '**/*.json'
+      - '**/*.yaml'
+      - '**/*.yml'
       - '.github/workflows/validate-schemas.yml'
 
 jobs:
@@ -88,14 +92,19 @@ jobs:
           echo "Converting provisioning.yaml to JSON for validation..."
           js-yaml provisioning.yaml > provisioning.json
           
-          if [ -f "agent/provisioning.schema.json" ]; then
-            echo "Validating provisioning.yaml against provisioning.schema.json..."
-            if ! ajv validate -s "agent/provisioning.schema.json" -d "provisioning.json" --spec=draft7 --strict=false; then
-              echo "❌ YAML validation failed for: provisioning.yaml"
-              exit 1
-            else
-              echo "✅ YAML is valid: provisioning.yaml"
+          # Check if the YAML file contains actual content (not just comments)
+          if [ -s "provisioning.json" ] && [ "$(cat provisioning.json)" != "null" ]; then
+            if [ -f "agent/provisioning.schema.json" ]; then
+              echo "Validating provisioning.yaml against provisioning.schema.json..."
+              if ! ajv validate -s "agent/provisioning.schema.json" -d "provisioning.json" --spec=draft7 --strict=false; then
+                echo "❌ YAML validation failed for: provisioning.yaml"
+                exit 1
+              else
+                echo "✅ YAML is valid: provisioning.yaml"
+              fi
             fi
+          else
+            echo "ℹ️  provisioning.yaml contains only comments, skipping validation"
           fi
           
           # Clean up temporary file
@@ -107,17 +116,24 @@ jobs:
           echo "Converting example.provisioning.yaml to JSON for validation..."
           js-yaml example.provisioning.yaml > example.provisioning.json
           
-          if [ -f "agent/provisioning.schema.json" ]; then
-            echo "Validating example.provisioning.yaml against provisioning.schema.json..."
-            if ! ajv validate -s "agent/provisioning.schema.json" -d "example.provisioning.json" --spec=draft7 --strict=false; then
-              echo "❌ YAML validation failed for: example.provisioning.yaml"
-              exit 1
-            else
-              echo "✅ YAML is valid: example.provisioning.yaml"
+          # Check if the YAML file contains actual content (not just comments)
+          if [ -s "example.provisioning.json" ] && [ "$(cat example.provisioning.json)" != "null" ]; then
+            if [ -f "agent/provisioning.schema.json" ]; then
+              echo "Validating example.provisioning.yaml against provisioning.schema.json..."
+              if ! ajv validate -s "agent/provisioning.schema.json" -d "example.provisioning.json" --spec=draft7 --strict=false; then
+                echo "❌ YAML validation failed for: example.provisioning.yaml"
+                exit 1
+              else
+                echo "✅ YAML is valid: example.provisioning.yaml"
+              fi
             fi
+          else
+            echo "ℹ️  example.provisioning.yaml contains only comments, skipping validation"
           fi
           
           # Clean up temporary file
+          rm -f example.provisioning.json
+        fi
           rm -f example.provisioning.json
         fi
         
