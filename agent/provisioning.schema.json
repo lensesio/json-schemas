@@ -427,6 +427,128 @@
             },
             "required": [
               "kafkaBootstrapServers"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": { "const": "PLAINTEXT" }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": {
+                            "pattern": "^PLAINTEXT://.*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": { "const": "SSL" }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": {
+                            "pattern": "^SSL://.*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": { "const": "SASL_PLAINTEXT" }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": {
+                            "pattern": "^SASL_PLAINTEXT://.*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": { "const": "SASL_SSL" }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": {
+                            "pattern": "^SASL_SSL://.*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": { "const": "AWS_MSK_IAM" }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": {
+                            "pattern": "^AWS_MSK_IAM://.*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             ]
           }
         },
