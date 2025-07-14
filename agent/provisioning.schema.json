@@ -167,9 +167,11 @@
                   "value": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^(SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://.*",
+                      "description": "Bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092')"
                     },
-                    "description": "List of bootstrap servers."
+                    "description": "List of bootstrap servers with protocol prefixes."
                   }
                 },
                 "required": [
@@ -183,8 +185,7 @@
                   "value": {
                     "type": "string",
                     "description": "Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
-                    "enum": [
-                      "AWS_MSK_IAM",
+                    "enum": [                      
                       "SASL_PLAINTEXT",
                       "SASL_SSL",
                       "PLAINTEXT",
