@@ -103,47 +103,6 @@ Your editor (such as VS Code) will show relevant default snippets from the schem
 > **Note:**  
 > Both **Kafka** and **lensesHq** connections are required for a valid provisioning file. Make sure to include at least one of each in your configuration.
 
-## ✅ Validation & GitHub Actions
-
-### Automatic Validation
-
-All schemas are automatically validated using GitHub Actions on:
-- Push to main/master branches
-- Pull requests
-- Changes to any `.schema.json` files
-
-The validation workflow checks:
-- ✅ JSON Schema syntax validity
-- ✅ YAML example files against schemas
-- ✅ Format consistency (indentation, no tabs)
-- ✅ JSON structure validity
-
-### Manual Validation
-
-#### Prerequisites
-
-```bash
-npm install
-```
-
-#### Validate All Schemas
-
-```bash
-# Validate main provisioning schema
-npm run validate-agent
-
-# Validate IAM schemas
-npm run validate-iam
-
-# Validate YAML examples against schema
-npm run validate-yaml-example
-
-# Check JSON formatting
-npm run format-check
-
-# Run all validation checks
-npm test
-```
 
 #### Individual Schema Validation
 
@@ -153,14 +112,6 @@ npx ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false -
 
 # Validate YAML against schema (convert first then validate)
 npx js-yaml example.provisioning.yaml > temp.json && npx ajv validate -s agent/provisioning.schema.json -d temp.json --spec=draft7 --strict=false && rm temp.json
-```
-
-### Badge Status
-
-Add this badge to show validation status:
-
-```markdown
-![Schema Validation](https://github.com/lensesio/json-schemas/workflows/Validate%20JSON%20Schemas/badge.svg)
 ```
 
 ## Contributing
