@@ -1,0 +1,157 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/S3ConsumerGroupsSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "S3Consumer Groups Sink Configuration",
+  "description" : "Configuration schema for S3ConsumerGroupsSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.aws.s3.sink.S3ConsumerGroupsSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.s3.location" : {
+      "description" : "Specify the S3 bucket, and optionally, a prefix, where Kafka consumer group offsets will be stored.",
+      "type" : "string",
+      "title" : "connect.s3.location"
+    },
+    "connect.s3.aws.region" : {
+      "default" : "",
+      "description" : "AWS region",
+      "type" : "string",
+      "title" : "connect.s3.aws.region"
+    },
+    "connect.s3.aws.access.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS access key",
+      "type" : "string",
+      "title" : "connect.s3.aws.access.key"
+    },
+    "connect.s3.aws.secret.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS password key",
+      "type" : "string",
+      "title" : "connect.s3.aws.secret.key"
+    },
+    "connect.s3.aws.auth.mode" : {
+      "default" : "Default",
+      "description" : "Authenticate mode, 'credentials' or 'default'",
+      "type" : "string",
+      "title" : "connect.s3.aws.auth.mode"
+    },
+    "connect.s3.custom.endpoint" : {
+      "default" : "",
+      "description" : "Custom S3-compatible endpoint (usually for testing)",
+      "type" : "string",
+      "title" : "connect.s3.custom.endpoint"
+    },
+    "connect.s3.vhost.bucket" : {
+      "default" : false,
+      "description" : "Enable virtual host buckets",
+      "type" : "boolean",
+      "title" : "connect.s3.vhost.bucket"
+    },
+    "connect.s3.http.max.retries" : {
+      "default" : 5,
+      "description" : "Number of times to retry the http request, in the case of a resolvable error on the server side.",
+      "type" : "integer",
+      "title" : "connect.s3.http.max.retries"
+    },
+    "connect.s3.http.retry.interval" : {
+      "default" : 50,
+      "description" : "If greater than zero, used to determine the delay after which to retry the http request in milliseconds.  Based on an exponential backoff algorithm.",
+      "type" : "integer",
+      "title" : "connect.s3.http.retry.interval"
+    },
+    "connect.s3.http.socket.timeout" : {
+      "default" : 60000,
+      "description" : "Socket timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.socket.timeout"
+    },
+    "connect.s3.http.connection.timeout" : {
+      "default" : 60000,
+      "description" : "Connection timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.connection.timeout"
+    },
+    "connect.s3.pool.max.connections" : {
+      "default" : -1,
+      "description" : "Max connections in pool.  -1: Use default according to underlying client.",
+      "type" : "integer",
+      "title" : "connect.s3.pool.max.connections"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.s3.location", "connect.s3.aws.region", "connect.s3.aws.access.key", "connect.s3.aws.secret.key", "connect.s3.aws.auth.mode" ]
+}

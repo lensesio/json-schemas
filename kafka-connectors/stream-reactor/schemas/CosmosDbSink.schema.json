@@ -1,0 +1,207 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/CosmosDbSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Cosmos Db Sink Configuration",
+  "description" : "Configuration schema for CosmosDbSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.azure.cosmosdb.sink.CosmosDbSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.cosmosdb.endpoint" : {
+      "description" : "The Azure CosmosDB end point.",
+      "type" : "string",
+      "title" : "Connection endpoint."
+    },
+    "connect.cosmosdb.master.key" : {
+      "description" : "The connection master key",
+      "type" : "string",
+      "title" : "connect.cosmosdb.master.key"
+    },
+    "connect.cosmosdb.consistency.level" : {
+      "default" : "Session",
+      "description" : "Determines the write visibility. There are four possible values: Strong,BoundedStaleness,Session or Eventual",
+      "type" : "string",
+      "title" : "Writes consistency"
+    },
+    "connect.cosmosdb.db" : {
+      "description" : "The Azure CosmosDb target database.",
+      "type" : "string",
+      "title" : "connect.cosmosdb.db"
+    },
+    "connect.cosmosdb.db.create" : {
+      "default" : false,
+      "description" : "If set to true it will create the database if it doesn't exist. If this is set to default(false) an exception will be raised.",
+      "type" : "boolean",
+      "title" : "Auto-create database"
+    },
+    "connect.cosmosdb.key.source" : {
+      "default" : "Key",
+      "description" : "The source of the key.  There are 4 possible values: Key, Metadata, KeyPath or ValuePath",
+      "type" : "string",
+      "title" : "Key strategy"
+    },
+    "connect.cosmosdb.key.path" : {
+      "default" : "id",
+      "description" : "When used with connect.cosmosdb.key.source configurations of `KeyPath` or `ValuePath`, this is the path to the field in the object that will be used as the key. Defaults to 'id'.",
+      "type" : "string",
+      "title" : "Key path"
+    },
+    "connect.cosmosdb.bulk.enabled" : {
+      "default" : false,
+      "description" : "Enable bulk mode to reduce chatter",
+      "type" : "boolean",
+      "title" : "Bulk mode"
+    },
+    "connect.cosmosdb.proxy" : {
+      "description" : "Specifies the connection proxy details.",
+      "type" : "string",
+      "title" : "Proxy URI"
+    },
+    "connect.cosmosdb.error.policy" : {
+      "default" : "THROW",
+      "description" : "Specifies the action to be taken if an error occurs while inserting the data\nThere are two available options:\nNOOP - the error is swallowed\nTHROW - the error is allowed to propagate.\nRETRY - The exception causes the Connect framework to retry the message. The number of retries is based on\nThe error will be logged automatically",
+      "type" : "string",
+      "title" : "connect.cosmosdb.error.policy"
+    },
+    "connect.cosmosdb.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.max.retries"
+    },
+    "connect.cosmosdb.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.retry.interval"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "connect.cosmosdb.max.queue.size" : {
+      "default" : 1000000,
+      "description" : "\nThe maximum number of records to queue per topic before blocking. If the queue limit is reached the connector will throw RetriableException and the connector settings to handle retries will be used.\n",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.max.queue.size"
+    },
+    "connect.cosmosdb.max.queue.offer.timeout.ms" : {
+      "default" : 120000,
+      "description" : "\nThe maximum time in milliseconds to wait for the queue to accept a record. If the queue does not accept the record within this time, the connector will throw RetriableException and the connector settings to handle retries will be used.\n",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.max.queue.offer.timeout.ms"
+    },
+    "connect.cosmosdb.collection.throughput" : {
+      "default" : 400,
+      "description" : "The manual throughput to provision for new Cosmos DB collections (RU/s). The default is 400 RU/s, which is the minimum allowed by Azure Cosmos DB and is cost-effective for most workloads. See: https://learn.microsoft.com/en-us/azure/cosmos-db/provisioned-throughput",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.collection.throughput"
+    },
+    "connect.cosmosdb.executor.threads" : {
+      "default" : 1,
+      "description" : "\nThe number of threads to use for processing the records.\n",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.executor.threads"
+    },
+    "connect.cosmosdb.upload.sync.period" : {
+      "default" : 100,
+      "description" : "\nThe time in milliseconds to wait before sending the request.\n",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.upload.sync.period"
+    },
+    "connect.cosmosdb.error.threshold" : {
+      "default" : 5,
+      "description" : "\nThe number of errors to tolerate before failing the sink.\n",
+      "type" : "integer",
+      "title" : "connect.cosmosdb.error.threshold"
+    },
+    "connect.cosmosdb.flush.count.enable" : {
+      "default" : false,
+      "description" : "\nFlush on count can be disabled by setting this property to 'false'.\n",
+      "type" : "boolean",
+      "title" : "connect.cosmosdb.flush.count.enable"
+    },
+    "connect.cosmosdb.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.cosmosdb.kcql"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.cosmosdb.endpoint", "connect.cosmosdb.master.key", "connect.cosmosdb.consistency.level", "connect.cosmosdb.db", "connect.cosmosdb.error.policy", "connect.cosmosdb.kcql" ]
+}

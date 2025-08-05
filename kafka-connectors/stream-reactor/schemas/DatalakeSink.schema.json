@@ -1,0 +1,241 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/DatalakeSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Datalake Sink Configuration",
+  "description" : "Configuration schema for DatalakeSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.datalake.sink.DatalakeSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.datalake.endpoint" : {
+      "default" : "",
+      "description" : "Azure endpoint",
+      "type" : "string",
+      "title" : "connect.datalake.endpoint"
+    },
+    "connect.datalake.error.policy" : {
+      "default" : "THROW",
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.s3.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n    ",
+      "type" : "string",
+      "title" : "connect.datalake.error.policy"
+    },
+    "connect.datalake.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.datalake.max.retries"
+    },
+    "connect.datalake.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.datalake.retry.interval"
+    },
+    "connect.datalake.http.max.retries" : {
+      "default" : 5,
+      "description" : "Number of times to retry the http request, in the case of a resolvable error on the server side.",
+      "type" : "integer",
+      "title" : "connect.datalake.http.max.retries"
+    },
+    "connect.datalake.http.socket.timeout" : {
+      "default" : 60000,
+      "description" : "Socket timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.datalake.http.socket.timeout"
+    },
+    "connect.datalake.http.connection.timeout" : {
+      "default" : 60000,
+      "description" : "Connection timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.datalake.http.connection.timeout"
+    },
+    "connect.datalake.pool.max.connections" : {
+      "default" : -1,
+      "description" : "Max connections in pool.  -1: Use default according to underlying client.",
+      "type" : "integer",
+      "title" : "connect.datalake.pool.max.connections"
+    },
+    "connect.datalake.compression.codec" : {
+      "default" : "UNCOMPRESSED",
+      "description" : "Compression codec to use for Avro, Parquet or JSON.",
+      "type" : "string",
+      "title" : "connect.datalake.compression.codec"
+    },
+    "connect.datalake.compression.level" : {
+      "default" : -1,
+      "description" : "Certain compression codecs require a level specified.",
+      "type" : "integer",
+      "title" : "connect.datalake.compression.level"
+    },
+    "connect.datalake.azure.auth.mode" : {
+      "default" : "Default",
+      "description" : "Authenticate mode, 'credentials', 'connectionstring' or 'default'",
+      "type" : "string",
+      "title" : "connect.datalake.azure.auth.mode"
+    },
+    "connect.datalake.azure.account.name" : {
+      "default" : "",
+      "description" : "Azure Account Name",
+      "type" : "string",
+      "title" : "connect.datalake.azure.account.name"
+    },
+    "connect.datalake.azure.account.key" : {
+      "default" : "[hidden]",
+      "description" : "Azure Account Key",
+      "type" : "string",
+      "title" : "connect.datalake.azure.account.key"
+    },
+    "connect.datalake.azure.connection.string" : {
+      "default" : "[hidden]",
+      "description" : "Azure Account Key",
+      "type" : "string",
+      "title" : "connect.datalake.azure.connection.string"
+    },
+    "connect.datalake.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.datalake.kcql"
+    },
+    "connect.datalake.disable.flush.count" : {
+      "default" : false,
+      "description" : "Disable flush on reaching count",
+      "type" : "boolean",
+      "title" : "connect.datalake.disable.flush.count"
+    },
+    "connect.datalake.log.metrics" : {
+      "default" : false,
+      "description" : "If true, the connector will log metrics to the logger.  This is useful for debugging and performance tuning.",
+      "type" : "boolean",
+      "title" : "connect.datalake.log.metrics"
+    },
+    "connect.datalake.local.tmp.directory" : {
+      "default" : "",
+      "description" : "Local tmp directory for preparing the files",
+      "type" : "string",
+      "title" : "connect.datalake.local.tmp.directory"
+    },
+    "connect.datalake.padding.strategy" : {
+      "default" : "",
+      "description" : "Configure in order to pad the partition and offset on the sink output files. Options are `LeftPad`, `RightPad` or `NoOp`  (does not add padding). Defaults to `LeftPad`.",
+      "type" : "string",
+      "title" : "connect.datalake.padding.strategy"
+    },
+    "connect.datalake.padding.length" : {
+      "default" : -1,
+      "description" : "Length to pad the string up to if connect.datalake.padding.strategy is set.",
+      "type" : "integer",
+      "title" : "connect.datalake.padding.length"
+    },
+    "connect.datalake.seek.max.files" : {
+      "default" : 5,
+      "description" : "Maximum index files to allow per topic/partition.  Advisable to not raise this: if a large number of files build up this means there is a problem with file deletion.",
+      "type" : "integer",
+      "title" : "connect.datalake.seek.max.files"
+    },
+    "connect.datalake.indexes.name" : {
+      "default" : ".indexes",
+      "description" : "Name of the indexes directory",
+      "type" : "string",
+      "title" : "connect.datalake.indexes.name"
+    },
+    "connect.datalake.exactly.once.enable" : {
+      "default" : true,
+      "description" : "Exactly once is enabled by default.  It works by keeping an .indexes directory at the root of your bucket with subdirectories for indexes.  Exactly once support can be disabled and the default offset tracking from kafka can be used instead by setting this to false.",
+      "type" : "boolean",
+      "title" : "connect.datalake.exactly.once.enable"
+    },
+    "connect.datalake.schema.change.detector" : {
+      "default" : "default",
+      "description" : "Schema change detector.",
+      "type" : "string",
+      "title" : "connect.datalake.schema.change.detector"
+    },
+    "connect.datalake.skip.null.values" : {
+      "default" : false,
+      "description" : "Skip null values.",
+      "type" : "boolean",
+      "title" : "connect.datalake.skip.null.values"
+    },
+    "connect.datalake.latest.schema.optimization.enabled" : {
+      "default" : false,
+      "description" : "If true, adapt records to the latest known schema before writing. Improves write performance by preventing flushes caused by compatible schema variations. Only use it if your schema evolution ensures backwards compatibility.",
+      "type" : "boolean",
+      "title" : "connect.datalake.latest.schema.optimization.enabled"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.datalake.error.policy", "connect.datalake.azure.auth.mode", "connect.datalake.azure.account.name", "connect.datalake.azure.account.key", "connect.datalake.azure.connection.string", "connect.datalake.kcql" ]
+}

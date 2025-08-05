@@ -1,0 +1,148 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/InfluxSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Influx Sink Configuration",
+  "description" : "Configuration schema for InfluxSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.influx.InfluxSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.influx.url" : {
+      "description" : "The InfluxDB database url.",
+      "type" : "string",
+      "title" : "connect.influx.url"
+    },
+    "connect.influx.db" : {
+      "description" : "The database to store the values to.",
+      "type" : "string",
+      "title" : "connect.influx.db"
+    },
+    "connect.influx.username" : {
+      "description" : "The user to connect to the influx database",
+      "type" : "string",
+      "title" : "connect.influx.username"
+    },
+    "connect.influx.password" : {
+      "default" : "[hidden]",
+      "description" : "The password for the influxdb user.",
+      "type" : "string",
+      "title" : "connect.influx.password"
+    },
+    "connect.influx.kcql" : {
+      "description" : "KCQL expression describing field selection and target measurements.",
+      "type" : "string",
+      "title" : "Kafka Connect Query Language"
+    },
+    "connect.influx.error.policy" : {
+      "default" : "THROW",
+      "description" : "Specifies the action to be taken if an error occurs while inserting the data.\nThere are two available options:\nNOOP - the error is swallowed\nTHROW - the error is allowed to propagate.\nRETRY - The exception causes the Connect framework to retry the message. The number of retries is based on\nThe error will be logged automatically",
+      "type" : "string",
+      "title" : "connect.influx.error.policy"
+    },
+    "connect.influx.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.influx.retry.interval"
+    },
+    "connect.influx.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.influx.max.retries"
+    },
+    "connect.influx.retention.policy" : {
+      "default" : "autogen",
+      "description" : "\nDetermines how long InfluxDB keeps the data - the options for specifying the duration of the retention policy are listed below.\nNote that the minimum retention period is one hour.\nDURATION determines how long InfluxDB keeps the data - the options for specifying the duration of the retention policy are listed below. Note that the minimum retention period is one hour.\nm minutes\nh hours\nd days\nw weeks\nINF infinite\n\nDefault retention is `autogen` from 1.0 onwards or `default` for any previous version\n    ",
+      "type" : "string",
+      "title" : "\nDetermines how long InfluxDB keeps the data - the options for specifying the duration of the retention policy are listed below.\nNote that the minimum retention period is one hour.\nDURATION determines how long InfluxDB keeps the data - the options for specifying the duration of the retention policy are listed below. Note that the minimum retention period is one hour.\nm minutes\nh hours\nd days\nw weeks\nINF infinite\n\nDefault retention is `autogen` from 1.0 onwards or `default` for any previous version\n    "
+    },
+    "connect.influx.consistency.level" : {
+      "default" : "ALL",
+      "description" : "Specifies the write consistency. If any write operations do not meet the configured consistency guarantees, an error will occur and the data will not be indexed. The default consistency-level is ALL.",
+      "type" : "string",
+      "title" : "Consistency Level"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed by the connector",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.influx.url", "connect.influx.db", "connect.influx.username", "connect.influx.password", "connect.influx.kcql", "connect.influx.error.policy", "connect.influx.retention.policy" ]
+}

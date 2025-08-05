@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../schemas/HttpSink.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-converter-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-consumer-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-producer-overrides.schema.json"
+    }
+  ],
+  "required": [
+    "connector.class",
+    "name",
+    "tasks.max",
+    "topics",
+    "ssl.keystore.location",
+    "ssl.keystore.password",
+    "ssl.key.password",
+    "ssl.keystore.key",
+    "ssl.keystore.certificate.chain",
+    "ssl.truststore.certificates",
+    "ssl.truststore.location",
+    "ssl.truststore.password",
+    "connect.http.method",
+    "connect.http.endpoint",
+    "connect.http.request.content",
+    "connect.http.request.headers",
+    "connect.http.connection.timeout.ms",
+    "connect.http.retries.max.timeout.ms",
+    "connect.http.retries.max.retries",
+    "connect.http.retry.mode",
+    "connect.http.retries.on.status.codes",
+    "connect.http.retry.fixed.interval.ms",
+    "connect.http.batch.count",
+    "connect.http.batch.size",
+    "connect.http.time.interval",
+    "connect.http.authentication.type",
+    "connect.http.authentication.basic.username",
+    "connect.http.authentication.basic.password",
+    "connect.http.json.tidy",
+    "connect.http.null.payload.handler",
+    "connect.http.null.payload.handler.custom",
+    "connect.http.max.queue.size",
+    "connect.http.max.queue.offer.timeout.ms",
+    "connect.http.copy.message.headers",
+    "connect.http.authentication.oauth2.token.url",
+    "connect.http.authentication.oauth2.client.id",
+    "connect.http.authentication.oauth2.client.secret",
+    "connect.http.authentication.oauth2.token.property",
+    "connect.http.authentication.oauth2.client.scope",
+    "connect.http.authentication.oauth2.client.headers",
+    "connect.http.authentication.oauth2.client.headers.separator"
+  ],
+  "defaultSnippets": [
+    {
+      "label": "Connector: Http Sink - Minimal",
+      "description": "Minimal configuration with required fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.http.sink.HttpSinkConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "ssl.keystore.location": "",
+        "ssl.keystore.password": "",
+        "ssl.key.password": "",
+        "ssl.keystore.key": "",
+        "ssl.keystore.certificate.chain": "",
+        "ssl.truststore.certificates": "",
+        "ssl.truststore.location": "",
+        "ssl.truststore.password": "",
+        "connect.http.method": "POST",
+        "connect.http.endpoint": "",
+        "connect.http.request.content": "",
+        "connect.http.request.headers": [],
+        "connect.http.connection.timeout.ms": 10000,
+        "connect.http.retries.max.timeout.ms": 30000,
+        "connect.http.retries.max.retries": 5,
+        "connect.http.retry.mode": "exponential",
+        "connect.http.retries.on.status.codes": [
+          "408",
+          "429",
+          "502",
+          "504",
+          "500",
+          "503"
+        ],
+        "connect.http.retry.fixed.interval.ms": 10000,
+        "connect.http.batch.count": 1,
+        "connect.http.batch.size": 0,
+        "connect.http.time.interval": 0,
+        "connect.http.authentication.type": "none",
+        "connect.http.authentication.basic.username": "",
+        "connect.http.authentication.basic.password": "[hidden]",
+        "connect.http.json.tidy": false,
+        "connect.http.null.payload.handler": "error",
+        "connect.http.null.payload.handler.custom": "",
+        "connect.http.max.queue.size": 1000000,
+        "connect.http.max.queue.offer.timeout.ms": 120000,
+        "connect.http.copy.message.headers": false,
+        "connect.http.authentication.oauth2.token.url": "",
+        "connect.http.authentication.oauth2.client.id": "",
+        "connect.http.authentication.oauth2.client.secret": "[hidden]",
+        "connect.http.authentication.oauth2.token.property": "access_token",
+        "connect.http.authentication.oauth2.client.scope": "any",
+        "connect.http.authentication.oauth2.client.headers": [],
+        "connect.http.authentication.oauth2.client.headers.separator": ":"
+      }
+    },
+    {
+      "label": "Connector: Http Sink - Full",
+      "description": "Full configuration with all fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.http.sink.HttpSinkConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "topics.regex": "",
+        "ssl.protocol": "TLSv1.3",
+        "ssl.provider": "",
+        "ssl.cipher.suites": [],
+        "ssl.enabled.protocols": [
+          "TLSv1.2",
+          "TLSv1.3"
+        ],
+        "ssl.keystore.type": "JKS",
+        "ssl.keystore.location": "",
+        "ssl.keystore.password": "",
+        "ssl.key.password": "",
+        "ssl.keystore.key": "",
+        "ssl.keystore.certificate.chain": "",
+        "ssl.truststore.certificates": "",
+        "ssl.truststore.type": "JKS",
+        "ssl.truststore.location": "",
+        "ssl.truststore.password": "",
+        "ssl.keymanager.algorithm": "SunX509",
+        "ssl.trustmanager.algorithm": "PKIX",
+        "ssl.endpoint.identification.algorithm": "https",
+        "ssl.secure.random.implementation": "",
+        "ssl.engine.factory.class": "",
+        "connect.http.method": "POST",
+        "connect.http.endpoint": "",
+        "connect.http.request.content": "",
+        "connect.http.request.headers": [],
+        "connect.http.error.threshold": 5,
+        "connect.http.upload.sync.period": 100,
+        "connect.http.connection.timeout.ms": 10000,
+        "connect.http.retries.max.timeout.ms": 30000,
+        "connect.http.retries.max.retries": 5,
+        "connect.http.retry.mode": "exponential",
+        "connect.http.retries.on.status.codes": [
+          "408",
+          "429",
+          "502",
+          "504",
+          "500",
+          "503"
+        ],
+        "connect.http.retry.fixed.interval.ms": 10000,
+        "connect.http.batch.count": 1,
+        "connect.http.batch.size": 0,
+        "connect.http.time.interval": 0,
+        "connect.http.authentication.type": "none",
+        "connect.http.authentication.basic.username": "",
+        "connect.http.authentication.basic.password": "[hidden]",
+        "connect.http.json.tidy": false,
+        "connect.http.null.payload.handler": "error",
+        "connect.http.null.payload.handler.custom": "",
+        "connect.http.max.queue.size": 1000000,
+        "connect.http.max.queue.offer.timeout.ms": 120000,
+        "connect.http.copy.message.headers": false,
+        "connect.reporting.error.config.enabled": false,
+        "connect.reporting.error.config.topic": "",
+        "connect.reporting.error.config.bootstrap.servers": "",
+        "connect.reporting.error.config.sasl.jaas.config": "",
+        "connect.reporting.error.config.security.protocol": "",
+        "connect.reporting.error.config.sasl.mechanism": "",
+        "connect.reporting.error.config.partition": -1,
+        "connect.reporting.success.config.enabled": false,
+        "connect.reporting.success.config.topic": "",
+        "connect.reporting.success.config.bootstrap.servers": "",
+        "connect.reporting.success.config.sasl.jaas.config": "",
+        "connect.reporting.success.config.security.protocol": "",
+        "connect.reporting.success.config.sasl.mechanism": "",
+        "connect.reporting.success.config.partition": -1,
+        "connect.http.authentication.oauth2.token.url": "",
+        "connect.http.authentication.oauth2.client.id": "",
+        "connect.http.authentication.oauth2.client.secret": "[hidden]",
+        "connect.http.authentication.oauth2.token.property": "access_token",
+        "connect.http.authentication.oauth2.client.scope": "any",
+        "connect.http.authentication.oauth2.client.headers": [],
+        "connect.http.authentication.oauth2.client.headers.separator": ":",
+        "transforms": "",
+        "transforms.{name}.type": "",
+        "transforms.{name}.predicate": "",
+        "transforms.{name}.negate": false,
+        "predicates": "",
+        "predicates.{name}.type": "",
+        "predicates.{name}.field": "",
+        "config.providers": "",
+        "config.providers.{name}.type": ""
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry",
+      "description": "Configure Avro converters with Schema Registry integration",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: JSON with Schema",
+      "description": "Configure JSON converters with schema support",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: String",
+      "description": "Configure String converters without schema",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "key.converter.schemas.enable": false,
+        "value.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry Auth",
+      "description": "Configure Avro converters with Schema Registry authentication",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.basic.auth.credentials.source": "USER_INFO",
+        "value.converter.basic.auth.credentials.source": "USER_INFO",
+        "key.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "value.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "PLAIN",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "consumer.override.security.protocol": "SASL_PLAINTEXT",
+        "consumer.override.sasl.mechanism": "GSSAPI",
+        "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "consumer.override.security.protocol": "SSL",
+        "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "consumer.override.ssl.truststore.password": "changeit",
+        "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "consumer.override.ssl.keystore.password": "changeit",
+        "consumer.override.ssl.key.password": "changeit"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "PLAIN",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "producer.override.security.protocol": "SASL_PLAINTEXT",
+        "producer.override.sasl.mechanism": "GSSAPI",
+        "producer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "producer.override.security.protocol": "SSL",
+        "producer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "producer.override.ssl.truststore.password": "changeit",
+        "producer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "producer.override.ssl.keystore.password": "changeit",
+        "producer.override.ssl.key.password": "changeit"
+      }
+    }
+  ]
+}

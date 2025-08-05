@@ -1,0 +1,247 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/GCPStorageSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "GCPStorage Sink Configuration",
+  "description" : "Configuration schema for GCPStorageSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.gcp.storage.sink.GCPStorageSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.gcpstorage.error.policy" : {
+      "default" : "THROW",
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.gcp.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n    ",
+      "type" : "string",
+      "title" : "connect.gcpstorage.error.policy"
+    },
+    "connect.gcpstorage.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.max.retries"
+    },
+    "connect.gcpstorage.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.retry.interval"
+    },
+    "connect.gcpstorage.compression.codec" : {
+      "default" : "UNCOMPRESSED",
+      "description" : "Compression codec to use for Avro, Parquet or JSON.",
+      "type" : "string",
+      "title" : "connect.gcpstorage.compression.codec"
+    },
+    "connect.gcpstorage.compression.level" : {
+      "default" : -1,
+      "description" : "Certain compression codecs require a level specified.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.compression.level"
+    },
+    "connect.gcpstorage.gcp.project.id" : {
+      "default" : "",
+      "description" : "GCP Project ID",
+      "type" : "string",
+      "title" : "connect.gcpstorage.gcp.project.id"
+    },
+    "connect.gcpstorage.gcp.quota.project.id" : {
+      "default" : "",
+      "description" : "GCP Quota Project ID",
+      "type" : "string",
+      "title" : "connect.gcpstorage.gcp.quota.project.id"
+    },
+    "connect.gcpstorage.endpoint" : {
+      "default" : "",
+      "description" : "GCP Host",
+      "type" : "string",
+      "title" : "connect.gcpstorage.endpoint"
+    },
+    "connect.gcpstorage.http.max.retries" : {
+      "default" : 36,
+      "description" : "Number of times to retry the http request, in the case of a resolvable error on the server side.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.http.max.retries"
+    },
+    "connect.gcpstorage.http.retry.interval" : {
+      "default" : 500,
+      "description" : "If greater than zero, used to determine the delay after which to retry the http request in milliseconds.  Based on an exponential backoff algorithm.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.http.retry.interval"
+    },
+    "connect.gcpstorage.http.retry.timeout.multiplier" : {
+      "default" : 3.0,
+      "description" : "This controls the change in delay before the next retry or poll",
+      "type" : "number",
+      "title" : "connect.gcpstorage.http.retry.timeout.multiplier"
+    },
+    "connect.gcpstorage.gcp.auth.mode" : {
+      "default" : "DEFAULT",
+      "description" : "Authenticate mode, 'credentials', 'file', 'default' or 'none'",
+      "type" : "string",
+      "title" : "connect.gcpstorage.gcp.auth.mode"
+    },
+    "connect.gcpstorage.gcp.credentials" : {
+      "default" : "[hidden]",
+      "description" : "GCP Credentials if using 'credentials' auth mode.",
+      "type" : "string",
+      "title" : "connect.gcpstorage.gcp.credentials"
+    },
+    "connect.gcpstorage.gcp.file" : {
+      "default" : "",
+      "description" : "File containing GCP Credentials if using 'file' auth mode.  This can be relative from the current working directory of the java process or from the root.  Remember your path format is operating system dependent. (eg for unix-based /home/my/path/file)",
+      "type" : "string",
+      "title" : "connect.gcpstorage.gcp.file"
+    },
+    "connect.gcpstorage.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.gcpstorage.kcql"
+    },
+    "connect.gcpstorage.disable.flush.count" : {
+      "default" : false,
+      "description" : "Disable flush on reaching count",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.disable.flush.count"
+    },
+    "connect.gcpstorage.log.metrics" : {
+      "default" : false,
+      "description" : "Log metrics",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.log.metrics"
+    },
+    "connect.gcpstorage.local.tmp.directory" : {
+      "default" : "",
+      "description" : "Local tmp directory for preparing the files",
+      "type" : "string",
+      "title" : "connect.gcpstorage.local.tmp.directory"
+    },
+    "connect.gcpstorage.padding.strategy" : {
+      "default" : "",
+      "description" : "Configure in order to pad the partition and offset on the sink output files. Options are `LeftPad`, `RightPad` or `NoOp`  (does not add padding). Defaults to `LeftPad`.",
+      "type" : "string",
+      "title" : "connect.gcpstorage.padding.strategy"
+    },
+    "connect.gcpstorage.padding.length" : {
+      "default" : -1,
+      "description" : "Length to pad the string up to if connect.gcpstorage.padding.strategy is set.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.padding.length"
+    },
+    "connect.gcpstorage.avoid.resumable.upload" : {
+      "default" : false,
+      "description" : "Avoid resumable uploads. Resumable upload in Google Cloud Storage enables the seamless continuation of large file uploads, preventing the need to re-upload the entire file in case of interruptions. Disabling this feature may be preferred in stable network conditions or when dealing with small files, streamlining the upload process based on specific application requirements. Default: Resumable uploads allowed.",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.avoid.resumable.upload"
+    },
+    "connect.gcpstorage.seek.max.files" : {
+      "default" : 5,
+      "description" : "Maximum index files to allow per topic/partition.  Advisable to not raise this: if a large number of files build up this means there is a problem with file deletion.",
+      "type" : "integer",
+      "title" : "connect.gcpstorage.seek.max.files"
+    },
+    "connect.gcpstorage.indexes.name" : {
+      "default" : ".indexes",
+      "description" : "Name of the indexes directory",
+      "type" : "string",
+      "title" : "connect.gcpstorage.indexes.name"
+    },
+    "connect.gcpstorage.exactly.once.enable" : {
+      "default" : true,
+      "description" : "Exactly once is enabled by default.  It works by keeping an .indexes directory at the root of your bucket with subdirectories for indexes.  Exactly once support can be disabled and the default offset tracking from kafka can be used instead by setting this to false.",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.exactly.once.enable"
+    },
+    "connect.gcpstorage.schema.change.detector" : {
+      "default" : "default",
+      "description" : "Schema change detector.",
+      "type" : "string",
+      "title" : "connect.gcpstorage.schema.change.detector"
+    },
+    "connect.gcpstorage.skip.null.values" : {
+      "default" : false,
+      "description" : "Skip null values.",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.skip.null.values"
+    },
+    "connect.gcpstorage.latest.schema.optimization.enabled" : {
+      "default" : false,
+      "description" : "If true, adapt records to the latest known schema before writing. Improves write performance by preventing flushes caused by compatible schema variations. Only use it if your schema evolution ensures backwards compatibility.",
+      "type" : "boolean",
+      "title" : "connect.gcpstorage.latest.schema.optimization.enabled"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.gcpstorage.error.policy", "connect.gcpstorage.gcp.project.id", "connect.gcpstorage.gcp.quota.project.id", "connect.gcpstorage.gcp.auth.mode", "connect.gcpstorage.gcp.credentials", "connect.gcpstorage.gcp.file", "connect.gcpstorage.kcql", "connect.gcpstorage.avoid.resumable.upload" ]
+}

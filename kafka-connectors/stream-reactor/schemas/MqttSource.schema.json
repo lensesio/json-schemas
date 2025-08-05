@@ -1,0 +1,175 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/MqttSourceConnector/10.0.0",
+  "type" : "object",
+  "title" : "Mqtt Source Configuration",
+  "description" : "Configuration schema for MqttSourceConnector connector",
+  "version" : "10.0.0",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.mqtt.source.MqttSourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.mqtt.hosts" : {
+      "description" : "Contains the MQTT connection end points.",
+      "type" : "string",
+      "title" : "Mqtt connection endpoints"
+    },
+    "connect.mqtt.username" : {
+      "description" : "Contains the Mqtt connection user name",
+      "type" : "string",
+      "title" : "Username"
+    },
+    "connect.mqtt.password" : {
+      "description" : "Contains the Mqtt connection password",
+      "type" : "string",
+      "title" : "Password"
+    },
+    "connect.mqtt.service.quality" : {
+      "description" : "Specifies the Mqtt quality of service",
+      "type" : "integer",
+      "title" : "\nThe Quality of Service (QoS) level is an agreement between sender and receiver of a message\nregarding the guarantees of delivering a message. There are 3 QoS levels in MQTT: 0 = At most once;\n1 = At least once; 2 = Exactly once\n    "
+    },
+    "connect.mqtt.timeout" : {
+      "default" : 3000,
+      "description" : "Provides the time interval to establish the mqtt connection",
+      "type" : "integer",
+      "title" : "Connection timeout"
+    },
+    "connect.mqtt.clean" : {
+      "default" : true,
+      "description" : "connect.mqtt.clean",
+      "type" : "boolean",
+      "title" : "Clean session"
+    },
+    "connect.mqtt.keep.alive" : {
+      "default" : 5000,
+      "description" : "\n The keep alive functionality assures that the connection is still open and both broker and client are connected to\n the broker during the establishment of the connection. The interval is the longest possible period of time,\n which broker and client can endure without sending a message.\n    ",
+      "type" : "integer",
+      "title" : "Keep alive interval"
+    },
+    "connect.mqtt.client.id" : {
+      "description" : "Contains the Mqtt session client id",
+      "type" : "string",
+      "title" : "Client id"
+    },
+    "connect.mqtt.ssl.ca.cert" : {
+      "description" : "Provides the path to the CA certificate file to use with the Mqtt connection",
+      "type" : "string",
+      "title" : "CA certificate file path"
+    },
+    "connect.mqtt.ssl.cert" : {
+      "description" : "Provides the path to the certificate file to use with the Mqtt connection",
+      "type" : "string",
+      "title" : "Certificate key file path"
+    },
+    "connect.mqtt.ssl.key" : {
+      "description" : "Certificate private [config] key file path.",
+      "type" : "string",
+      "title" : "Certificate private [config] key file path"
+    },
+    "connect.mqtt.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing the sourced MQTT source and the target Kafka topics",
+      "type" : "string",
+      "title" : "KCQL commands"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "connect.mqtt.converter.throw.on.error" : {
+      "default" : false,
+      "description" : "\n If set to false the conversion exception will be swallowed and everything carries on BUT the message is lost!!;\n true will throw the exception.Default is false.\n    ",
+      "type" : "boolean",
+      "title" : "Throw error on conversion"
+    },
+    "connect.converter.avro.schemas" : {
+      "default" : "",
+      "description" : "If the AvroConverter is used you need to provide an avro Schema to be able to read and translate the raw bytes to an avro record. The format is $MQTT_TOPIC=$PATH_TO_AVRO_SCHEMA_FILE in case of source converter, or $KAFKA_TOPIC=PATH_TO_AVRO_SCHEMA in case of sink converter",
+      "type" : "string",
+      "title" : "connect.converter.avro.schemas"
+    },
+    "connect.mqtt.polling.timeout" : {
+      "default" : 1000,
+      "description" : "Provides the timeout to poll incoming messages",
+      "type" : "integer",
+      "title" : "Polling timeout"
+    },
+    "connect.mqtt.share.replicate" : {
+      "default" : false,
+      "description" : "Replicate the shared subscriptions to all tasks instead of distributing them",
+      "type" : "boolean",
+      "title" : "Activate shared subscriptions replication"
+    },
+    "connect.mqtt.log.message" : {
+      "default" : false,
+      "description" : "Logs received MQTT messages",
+      "type" : "boolean",
+      "title" : "Logs received MQTT messages"
+    },
+    "connect.mqtt.process.duplicates" : {
+      "default" : false,
+      "description" : "Process MQTT messages that are marked as duplicates",
+      "type" : "boolean",
+      "title" : "Process Duplicates"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.mqtt.hosts", "connect.mqtt.username", "connect.mqtt.password", "connect.mqtt.kcql", "connect.mqtt.converter.throw.on.error", "connect.converter.avro.schemas" ]
+}

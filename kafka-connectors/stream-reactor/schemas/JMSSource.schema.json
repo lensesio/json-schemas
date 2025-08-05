@@ -1,0 +1,205 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/JMSSourceConnector/10.0.0",
+  "type" : "object",
+  "title" : "JMSSource Configuration",
+  "description" : "Configuration schema for JMSSourceConnector connector",
+  "version" : "10.0.0",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.jms.source.JMSSourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.jms.url" : {
+      "description" : "Provides the JMS broker url",
+      "type" : "string",
+      "title" : "connect.jms.url"
+    },
+    "connect.jms.initial.context.factory" : {
+      "description" : "Initial Context Factory, e.g: org.apache.activemq.jndi.ActiveMQInitialContextFactory",
+      "type" : "string",
+      "title" : "connect.jms.initial.context.factory"
+    },
+    "connect.jms.connection.factory" : {
+      "default" : "ConnectionFactory",
+      "description" : "Provides the full class name for the ConnectionFactory compile to use, e.gorg.apache.activemq.ActiveMQConnectionFactory",
+      "type" : "string",
+      "title" : "connect.jms.connection.factory"
+    },
+    "connect.jms.kcql" : {
+      "description" : "connect.jms.kcql",
+      "type" : "string",
+      "title" : "connect.jms.kcql"
+    },
+    "connect.jms.subscription.name" : {
+      "description" : "subscription name to use when subscribing to a topic, specifying this makes a durable subscription for topics",
+      "type" : "string",
+      "title" : "connect.jms.subscription.name"
+    },
+    "connect.jms.password" : {
+      "description" : "Provides the password for the JMS connection",
+      "type" : "string",
+      "title" : "connect.jms.password"
+    },
+    "connect.jms.username" : {
+      "description" : "Provides the user for the JMS connection",
+      "type" : "string",
+      "title" : "connect.jms.username"
+    },
+    "connect.jms.error.policy" : {
+      "default" : "THROW",
+      "description" : "Specifies the action to be taken if an error occurs while inserting the data.\nThere are two available options:\nNOOP - the error is swallowed\nTHROW - the error is allowed to propagate.\nRETRY - The exception causes the Connect framework to retry the message. The number of retries is based on\nThe error will be logged automatically",
+      "type" : "string",
+      "title" : "connect.jms.error.policy"
+    },
+    "connect.jms.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.jms.retry.interval"
+    },
+    "connect.jms.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.jms.max.retries"
+    },
+    "connect.jms.destination.selector" : {
+      "default" : "CDI",
+      "description" : "Selector to use for destination lookup. Either CDI or JNDI.",
+      "type" : "string",
+      "title" : "connect.jms.destination.selector"
+    },
+    "connect.jms.initial.context.extra.params" : {
+      "default" : [ ],
+      "description" : "List (comma separated) of extra properties as key/value pairs with a colon delimiter to supply to the initial context e.g. SOLACE_JMS_VPN:my_solace_vp",
+      "type" : "array",
+      "title" : "connect.jms.initial.context.extra.params",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "connect.jms.batch.size" : {
+      "default" : 100,
+      "description" : "The number of records to poll for on the target JMS destination in each Connect poll.",
+      "type" : "integer",
+      "title" : "connect.jms.batch.size"
+    },
+    "connect.jms.polling.timeout" : {
+      "default" : 1000,
+      "description" : "Provides the timeout to poll incoming messages",
+      "type" : "integer",
+      "title" : "connect.jms.polling.timeout"
+    },
+    "connect.jms.source.default.converter" : {
+      "default" : "",
+      "description" : "\nContains a canonical class name for the default converter of a raw JMS message bytes to a SourceRecord.\nOverrides to the default can be done by using connect.jms.source.converters still.\ni.e. io.lenses.streamreactor.connect.source.converters.AvroConverter",
+      "type" : "string",
+      "title" : "Default Source Converter class"
+    },
+    "connect.jms.sink.default.converter" : {
+      "default" : "",
+      "description" : "\nContains a canonical class name for the default converter from a SinkRecord to a raw JMS message.\ni.e. io.lenses.streamreactor.connect.jms.sink.converters.AvroMessageConverter",
+      "type" : "string",
+      "title" : "Default Sink Converter class"
+    },
+    "connect.jms.converter.throw.on.error" : {
+      "default" : false,
+      "description" : "If set to false the conversion exception will be swallowed and everything carries on BUT the message is lost!!; true will throw the exception.Default is false.",
+      "type" : "boolean",
+      "title" : "Throw error on conversion"
+    },
+    "avro.schemas" : {
+      "default" : "",
+      "description" : "If the AvroConverter is used you need to provide an avro Schema to be able to read and translate the raw bytes to an avro record. The format is $MQTT_TOPIC=$PATH_TO_AVRO_SCHEMA_FILE",
+      "type" : "string",
+      "title" : "avro.schemas"
+    },
+    "connect.jms.headers" : {
+      "default" : "",
+      "description" : "\nContains collection of static JMS headers included in every SinkRecord\nThe format is connect.jms.headers=\"$MQTT_TOPIC=rmq.jms.message.type:TextMessage,rmq.jms.message.priority:2;$MQTT_TOPIC2=rmq.jms.message.type:JSONMessage\"",
+      "type" : "string",
+      "title" : "JMS static headers"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "connect.jms.evict.interval.minutes" : {
+      "default" : 10,
+      "description" : "Removes the uncommitted messages from the internal cache. Each JMS message is linked to the Kafka record to be published. Failure to publish a record to Kafka will mean the JMS message will not be acknowledged.",
+      "type" : "integer",
+      "title" : "Removes the uncommitted messages from the internal cache. Each JMS message is linked to the Kafka record to be published. Failure to publish a record to Kafka will mean the JMS message will not be acknowledged."
+    },
+    "connect.jms.evict.threshold.minutes" : {
+      "default" : 10,
+      "description" : "The number of minutes after which an uncommitted entry becomes evictable from the connector cache.",
+      "type" : "integer",
+      "title" : "The number of minutes after which an uncommitted entry becomes evictable from the connector cache."
+    },
+    "connect.jms.scale.type" : {
+      "default" : "kcql",
+      "description" : "How the connector tasks parallelization is decided. Available values are kcql and default. If kcql is provided it will be based on the number of KCQL statements written; otherwise it will be driven based on the connector tasks.max",
+      "type" : "string",
+      "title" : "How the connector tasks parallelization is decided. Available values are kcql and default. If kcql is provided it will be based on the number of KCQL statements written; otherwise it will be driven based on the connector tasks.max"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.jms.url", "connect.jms.initial.context.factory", "connect.jms.connection.factory", "connect.jms.kcql", "connect.jms.subscription.name", "connect.jms.password", "connect.jms.username", "connect.jms.error.policy", "connect.jms.source.default.converter", "connect.jms.sink.default.converter", "connect.jms.converter.throw.on.error", "avro.schemas" ]
+}

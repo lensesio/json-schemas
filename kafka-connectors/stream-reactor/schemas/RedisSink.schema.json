@@ -1,0 +1,250 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/RedisSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Redis Sink Configuration",
+  "description" : "Configuration schema for RedisSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.redis.sink.RedisSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.redis.host" : {
+      "description" : "\nSpecifies the redis server\n    ",
+      "type" : "string",
+      "title" : "connect.redis.host"
+    },
+    "connect.redis.port" : {
+      "description" : "\nSpecifies the redis connection port\n    ",
+      "type" : "integer",
+      "title" : "connect.redis.port"
+    },
+    "connect.redis.password" : {
+      "description" : "\nProvides the password for the redis connection.\n    ",
+      "type" : "string",
+      "title" : "connect.redis.password"
+    },
+    "connect.redis.ssl.enabled" : {
+      "default" : false,
+      "description" : "\nEnables ssl for the redis connection\n    ",
+      "type" : "boolean",
+      "title" : "connect.redis.ssl.enabled"
+    },
+    "connect.redis.kcql" : {
+      "description" : "KCQL expression describing field selection and routes.",
+      "type" : "string",
+      "title" : "connect.redis.kcql"
+    },
+    "connect.redis.error.policy" : {
+      "default" : "THROW",
+      "description" : "Specifies the action to be taken if an error occurs while inserting the data.\nThere are two available options:\nNOOP - the error is swallowed\nTHROW - the error is allowed to propagate.\nRETRY - The exception causes the Connect framework to retry the message. The number of retries is based on\nThe error will be logged automatically",
+      "type" : "string",
+      "title" : "connect.redis.error.policy"
+    },
+    "connect.redis.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.redis.retry.interval"
+    },
+    "connect.redis.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.redis.max.retries"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "connect.redis.pk.delimiter" : {
+      "default" : ".",
+      "description" : "\nSpecifies the redis primary key delimiter\n    ",
+      "type" : "string",
+      "title" : "connect.redis.pk.delimiter"
+    },
+    "ssl.protocol" : {
+      "default" : "TLSv1.3",
+      "description" : "The SSL protocol used to generate the SSLContext. The default is 'TLSv1.3' when running with Java 11 or newer, 'TLSv1.2' otherwise. This value should be fine for most use cases. Allowed values in recent JVMs are 'TLSv1.2' and 'TLSv1.3'. 'TLS', 'TLSv1.1', 'SSL', 'SSLv2' and 'SSLv3' may be supported in older JVMs, but their usage is discouraged due to known security vulnerabilities. With the default value for this config and 'ssl.enabled.protocols', clients will downgrade to 'TLSv1.2' if the server does not support 'TLSv1.3'. If this config is set to 'TLSv1.2', clients will not use 'TLSv1.3' even if it is one of the values in ssl.enabled.protocols and the server only supports 'TLSv1.3'.",
+      "type" : "string",
+      "title" : "ssl.protocol"
+    },
+    "ssl.provider" : {
+      "description" : "The name of the security provider used for SSL connections. Default value is the default security provider of the JVM.",
+      "type" : "string",
+      "title" : "ssl.provider"
+    },
+    "ssl.cipher.suites" : {
+      "description" : "A list of cipher suites. This is a named combination of authentication, encryption, MAC and key exchange algorithm used to negotiate the security settings for a network connection using TLS or SSL network protocol. By default all the available cipher suites are supported.",
+      "type" : "array",
+      "title" : "ssl.cipher.suites",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "ssl.enabled.protocols" : {
+      "default" : [ "TLSv1.2", "TLSv1.3" ],
+      "description" : "The list of protocols enabled for SSL connections. The default is 'TLSv1.2,TLSv1.3' when running with Java 11 or newer, 'TLSv1.2' otherwise. With the default value for Java 11, clients and servers will prefer TLSv1.3 if both support it and fallback to TLSv1.2 otherwise (assuming both support at least TLSv1.2). This default should be fine for most cases. Also see the config documentation for `ssl.protocol`.",
+      "type" : "array",
+      "title" : "ssl.enabled.protocols",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "ssl.keystore.type" : {
+      "default" : "JKS",
+      "description" : "The file format of the key store file. This is optional for client. The values currently supported by the default `ssl.engine.factory.class` are [JKS, PKCS12, PEM].",
+      "type" : "string",
+      "title" : "ssl.keystore.type"
+    },
+    "ssl.keystore.location" : {
+      "description" : "The location of the key store file. This is optional for client and can be used for two-way authentication for client.",
+      "type" : "string",
+      "title" : "ssl.keystore.location"
+    },
+    "ssl.keystore.password" : {
+      "description" : "The store password for the key store file. This is optional for client and only needed if 'ssl.keystore.location' is configured. Key store password is not supported for PEM format.",
+      "type" : "string",
+      "title" : "ssl.keystore.password"
+    },
+    "ssl.key.password" : {
+      "description" : "The password of the private key in the key store file or the PEM key specified in 'ssl.keystore.key'.",
+      "type" : "string",
+      "title" : "ssl.key.password"
+    },
+    "ssl.keystore.key" : {
+      "description" : "Private key in the format specified by 'ssl.keystore.type'. Default SSL engine factory supports only PEM format with PKCS#8 keys. If the key is encrypted, key password must be specified using 'ssl.key.password'",
+      "type" : "string",
+      "title" : "ssl.keystore.key"
+    },
+    "ssl.keystore.certificate.chain" : {
+      "description" : "Certificate chain in the format specified by 'ssl.keystore.type'. Default SSL engine factory supports only PEM format with a list of X.509 certificates",
+      "type" : "string",
+      "title" : "ssl.keystore.certificate.chain"
+    },
+    "ssl.truststore.certificates" : {
+      "description" : "Trusted certificates in the format specified by 'ssl.truststore.type'. Default SSL engine factory supports only PEM format with X.509 certificates.",
+      "type" : "string",
+      "title" : "ssl.truststore.certificates"
+    },
+    "ssl.truststore.type" : {
+      "default" : "JKS",
+      "description" : "The file format of the trust store file. The values currently supported by the default `ssl.engine.factory.class` are [JKS, PKCS12, PEM].",
+      "type" : "string",
+      "title" : "ssl.truststore.type"
+    },
+    "ssl.truststore.location" : {
+      "description" : "The location of the trust store file.",
+      "type" : "string",
+      "title" : "ssl.truststore.location"
+    },
+    "ssl.truststore.password" : {
+      "description" : "The password for the trust store file. If a password is not set, trust store file configured will still be used, but integrity checking is disabled. Trust store password is not supported for PEM format.",
+      "type" : "string",
+      "title" : "ssl.truststore.password"
+    },
+    "ssl.keymanager.algorithm" : {
+      "default" : "SunX509",
+      "description" : "The algorithm used by key manager factory for SSL connections. Default value is the key manager factory algorithm configured for the Java Virtual Machine.",
+      "type" : "string",
+      "title" : "ssl.keymanager.algorithm"
+    },
+    "ssl.trustmanager.algorithm" : {
+      "default" : "PKIX",
+      "description" : "The algorithm used by trust manager factory for SSL connections. Default value is the trust manager factory algorithm configured for the Java Virtual Machine.",
+      "type" : "string",
+      "title" : "ssl.trustmanager.algorithm"
+    },
+    "ssl.endpoint.identification.algorithm" : {
+      "default" : "https",
+      "description" : "The endpoint identification algorithm to validate server hostname using server certificate. ",
+      "type" : "string",
+      "title" : "ssl.endpoint.identification.algorithm"
+    },
+    "ssl.secure.random.implementation" : {
+      "description" : "The SecureRandom PRNG implementation to use for SSL cryptography operations. ",
+      "type" : "string",
+      "title" : "ssl.secure.random.implementation"
+    },
+    "ssl.engine.factory.class" : {
+      "description" : "The class of type org.apache.kafka.common.security.auth.SslEngineFactory to provide SSLEngine objects. Default value is org.apache.kafka.common.security.ssl.DefaultSslEngineFactory. Alternatively, setting this to org.apache.kafka.common.security.ssl.CommonNameLoggingSslEngineFactory will log the common name of expired SSL certificates used by clients to authenticate at any of the brokers with log level INFO. Note that this will cause a tiny delay during establishment of new connections from mTLS clients to brokers due to the extra code for examining the certificate chain provided by the client. Note further that the implementation uses a custom truststore based on the standard Java truststore and thus might be considered a security risk due to not being as mature as the standard one.",
+      "type" : "string",
+      "title" : "ssl.engine.factory.class"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.redis.host", "connect.redis.port", "connect.redis.kcql", "connect.redis.error.policy", "ssl.keystore.location", "ssl.keystore.password", "ssl.key.password", "ssl.keystore.key", "ssl.keystore.certificate.chain", "ssl.truststore.certificates", "ssl.truststore.location", "ssl.truststore.password" ]
+}

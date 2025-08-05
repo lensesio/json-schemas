@@ -1,0 +1,300 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/CassandraSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Cassandra Sink Configuration",
+  "description" : "Configuration schema for CassandraSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.cassandra.CassandraSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.cassandra.contact.points" : {
+      "default" : "localhost",
+      "description" : "A comma-separated list of host names or IP addresses.",
+      "type" : "string",
+      "title" : "connect.cassandra.contact.points"
+    },
+    "connect.cassandra.port" : {
+      "default" : 9042,
+      "validator" : {
+        "type" : "range",
+        "class" : "org.apache.kafka.common.config.ConfigDef$Range"
+      },
+      "description" : "Cassandra native port.",
+      "type" : "integer",
+      "title" : "connect.cassandra.port"
+    },
+    "connect.cassandra.max.concurrent.requests" : {
+      "default" : 100,
+      "validator" : {
+        "type" : "range",
+        "class" : "org.apache.kafka.common.config.ConfigDef$Range"
+      },
+      "description" : "Maximum number of concurrent requests sent to the database.",
+      "type" : "integer",
+      "title" : "connect.cassandra.max.concurrent.requests"
+    },
+    "connect.cassandra.connection.pool.size" : {
+      "default" : 2,
+      "validator" : {
+        "type" : "range",
+        "class" : "org.apache.kafka.common.config.ConfigDef$Range"
+      },
+      "description" : "Number of connections that driver maintains within a connection pool to each node in the local datacenter.",
+      "type" : "integer",
+      "title" : "connect.cassandra.connection.pool.size"
+    },
+    "connect.cassandra.compression" : {
+      "default" : "none",
+      "validator" : {
+        "class" : "org.apache.kafka.common.config.ConfigDef$CaseInsensitiveValidString"
+      },
+      "description" : "Compression algorithm to use for the connection. Defaults to None.",
+      "type" : "string",
+      "title" : "connect.cassandra.compression"
+    },
+    "connect.cassandra.query.timeout.ms" : {
+      "default" : 20000,
+      "validator" : {
+        "type" : "range",
+        "class" : "org.apache.kafka.common.config.ConfigDef$Range"
+      },
+      "description" : "The Cassandra driver query timeout in milliseconds.",
+      "type" : "integer",
+      "title" : "connect.cassandra.query.timeout.ms"
+    },
+    "connect.cassandra.max.batch.size" : {
+      "default" : 64,
+      "validator" : {
+        "type" : "range",
+        "class" : "org.apache.kafka.common.config.ConfigDef$Range"
+      },
+      "description" : "Number of records to include in a write request to the database table.",
+      "type" : "integer",
+      "title" : "connect.cassandra.max.batch.size"
+    },
+    "connect.cassandra.load.balancing.local.dc" : {
+      "default" : "",
+      "description" : "The local data center to use for load balancing. If not set, the driver will use the first data center in the list of available data centers.",
+      "type" : "string",
+      "title" : "connect.cassandra.load.balancing.local.dc"
+    },
+    "connect.cassandra.ssl.enabled" : {
+      "default" : false,
+      "description" : "Secure Cassandra driver connection via SSL.",
+      "type" : "boolean",
+      "title" : "connect.cassandra.ssl.enabled"
+    },
+    "connect.cassandra.ssl.truststore.path" : {
+      "default" : "",
+      "description" : "Path to the client Trust Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.truststore.path"
+    },
+    "connect.cassandra.ssl.truststore.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for the client Trust Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.truststore.password"
+    },
+    "connect.cassandra.ssl.keystore.path" : {
+      "default" : "",
+      "description" : "Path to the client Key Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.keystore.path"
+    },
+    "connect.cassandra.ssl.keystore.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for the client Key Store",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.keystore.password"
+    },
+    "connect.cassandra.ssl.provider" : {
+      "default" : "None",
+      "validator" : {
+        "class" : "org.apache.kafka.common.config.ConfigDef$CaseInsensitiveValidString"
+      },
+      "description" : "The SSL provider to use for the connection. Available values are None, JDK or OpenSSL. Defaults to None.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.provider"
+    },
+    "connect.cassandra.ssl.cipher.suites" : {
+      "default" : "",
+      "description" : "The SSL cipher suites to use for the connection.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.cipher.suites"
+    },
+    "connect.cassandra.ssl.hostname.verification" : {
+      "default" : true,
+      "description" : "Enable hostname verification for the connection.",
+      "type" : "boolean",
+      "title" : "connect.cassandra.ssl.hostname.verification"
+    },
+    "connect.cassandra.ssl.openssl.key.cert.chain" : {
+      "default" : "",
+      "description" : "Enable OpenSSL key certificate chain for the connection.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.openssl.key.cert.chain"
+    },
+    "connect.cassandra.ssl.openssl.private.key" : {
+      "default" : "",
+      "description" : "Enable OpenSSL private key for the connection.",
+      "type" : "string",
+      "title" : "connect.cassandra.ssl.openssl.private.key"
+    },
+    "connect.cassandra.auth.provider" : {
+      "default" : "None",
+      "validator" : {
+        "class" : "org.apache.kafka.common.config.ConfigDef$CaseInsensitiveValidString"
+      },
+      "description" : "Authentication provider",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.provider"
+    },
+    "connect.cassandra.auth.username" : {
+      "default" : "",
+      "description" : "Username for PLAIN (username/password) provider authentication",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.username"
+    },
+    "connect.cassandra.auth.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for PLAIN (username/password) provider authentication",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.password"
+    },
+    "connect.cassandra.auth.gssapi.keytab" : {
+      "default" : "",
+      "description" : "Kerberos keytab file for GSSAPI provider authentication",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.gssapi.keytab"
+    },
+    "connect.cassandra.auth.gssapi.principal" : {
+      "default" : "",
+      "description" : "Kerberos principal for GSSAPI provider authentication",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.gssapi.principal"
+    },
+    "connect.cassandra.auth.gssapi.service" : {
+      "default" : "dse",
+      "description" : "SASL service name to use for GSSAPI provider authentication",
+      "type" : "string",
+      "title" : "connect.cassandra.auth.gssapi.service"
+    },
+    "connect.cassandra.ignore.errors.mode" : {
+      "default" : "none",
+      "validator" : {
+        "class" : "org.apache.kafka.common.config.ConfigDef$CaseInsensitiveValidString"
+      },
+      "description" : "Can be one of 'none', 'all' or 'driver'",
+      "type" : "string",
+      "title" : "connect.cassandra.ignore.errors.mode"
+    },
+    "connect.cassandra.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.cassandra.max.retries"
+    },
+    "connect.cassandra.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.cassandra.retry.interval"
+    },
+    "connect.cassandra.kcql" : {
+      "description" : "KCQL expression describing field selection and routes.",
+      "type" : "string",
+      "title" : "connect.cassandra.kcql"
+    },
+    "connect.progress.enabled" : {
+      "default" : false,
+      "description" : "Enables the output for how many records have been processed",
+      "type" : "boolean",
+      "title" : "Enable progress counter"
+    },
+    "connect.cassandra.error.policy" : {
+      "default" : "THROW",
+      "validator" : {
+        "class" : "org.apache.kafka.common.config.ConfigDef$CaseInsensitiveValidString"
+      },
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.cassandra.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n    ",
+      "type" : "string",
+      "title" : "connect.cassandra.error.policy"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.cassandra.contact.points", "connect.cassandra.port", "connect.cassandra.auth.provider", "connect.cassandra.auth.username", "connect.cassandra.auth.password", "connect.cassandra.auth.gssapi.keytab", "connect.cassandra.auth.gssapi.principal", "connect.cassandra.auth.gssapi.service", "connect.cassandra.kcql", "connect.cassandra.error.policy" ]
+}
