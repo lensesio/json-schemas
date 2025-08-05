@@ -1,0 +1,471 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/HttpSinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "Http Sink Configuration",
+  "description" : "Configuration schema for HttpSinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.http.sink.HttpSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "ssl.protocol" : {
+      "default" : "TLSv1.3",
+      "description" : "The SSL protocol used to generate the SSLContext. The default is 'TLSv1.3' when running with Java 11 or newer, 'TLSv1.2' otherwise. This value should be fine for most use cases. Allowed values in recent JVMs are 'TLSv1.2' and 'TLSv1.3'. 'TLS', 'TLSv1.1', 'SSL', 'SSLv2' and 'SSLv3' may be supported in older JVMs, but their usage is discouraged due to known security vulnerabilities. With the default value for this config and 'ssl.enabled.protocols', clients will downgrade to 'TLSv1.2' if the server does not support 'TLSv1.3'. If this config is set to 'TLSv1.2', clients will not use 'TLSv1.3' even if it is one of the values in ssl.enabled.protocols and the server only supports 'TLSv1.3'.",
+      "type" : "string",
+      "title" : "ssl.protocol"
+    },
+    "ssl.provider" : {
+      "description" : "The name of the security provider used for SSL connections. Default value is the default security provider of the JVM.",
+      "type" : "string",
+      "title" : "ssl.provider"
+    },
+    "ssl.cipher.suites" : {
+      "description" : "A list of cipher suites. This is a named combination of authentication, encryption, MAC and key exchange algorithm used to negotiate the security settings for a network connection using TLS or SSL network protocol. By default all the available cipher suites are supported.",
+      "type" : "array",
+      "title" : "ssl.cipher.suites",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "ssl.enabled.protocols" : {
+      "default" : [ "TLSv1.2", "TLSv1.3" ],
+      "description" : "The list of protocols enabled for SSL connections. The default is 'TLSv1.2,TLSv1.3' when running with Java 11 or newer, 'TLSv1.2' otherwise. With the default value for Java 11, clients and servers will prefer TLSv1.3 if both support it and fallback to TLSv1.2 otherwise (assuming both support at least TLSv1.2). This default should be fine for most cases. Also see the config documentation for `ssl.protocol`.",
+      "type" : "array",
+      "title" : "ssl.enabled.protocols",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "ssl.keystore.type" : {
+      "default" : "JKS",
+      "description" : "The file format of the key store file. This is optional for client. The values currently supported by the default `ssl.engine.factory.class` are [JKS, PKCS12, PEM].",
+      "type" : "string",
+      "title" : "ssl.keystore.type"
+    },
+    "ssl.keystore.location" : {
+      "description" : "The location of the key store file. This is optional for client and can be used for two-way authentication for client.",
+      "type" : "string",
+      "title" : "ssl.keystore.location"
+    },
+    "ssl.keystore.password" : {
+      "description" : "The store password for the key store file. This is optional for client and only needed if 'ssl.keystore.location' is configured. Key store password is not supported for PEM format.",
+      "type" : "string",
+      "title" : "ssl.keystore.password"
+    },
+    "ssl.key.password" : {
+      "description" : "The password of the private key in the key store file or the PEM key specified in 'ssl.keystore.key'.",
+      "type" : "string",
+      "title" : "ssl.key.password"
+    },
+    "ssl.keystore.key" : {
+      "description" : "Private key in the format specified by 'ssl.keystore.type'. Default SSL engine factory supports only PEM format with PKCS#8 keys. If the key is encrypted, key password must be specified using 'ssl.key.password'",
+      "type" : "string",
+      "title" : "ssl.keystore.key"
+    },
+    "ssl.keystore.certificate.chain" : {
+      "description" : "Certificate chain in the format specified by 'ssl.keystore.type'. Default SSL engine factory supports only PEM format with a list of X.509 certificates",
+      "type" : "string",
+      "title" : "ssl.keystore.certificate.chain"
+    },
+    "ssl.truststore.certificates" : {
+      "description" : "Trusted certificates in the format specified by 'ssl.truststore.type'. Default SSL engine factory supports only PEM format with X.509 certificates.",
+      "type" : "string",
+      "title" : "ssl.truststore.certificates"
+    },
+    "ssl.truststore.type" : {
+      "default" : "JKS",
+      "description" : "The file format of the trust store file. The values currently supported by the default `ssl.engine.factory.class` are [JKS, PKCS12, PEM].",
+      "type" : "string",
+      "title" : "ssl.truststore.type"
+    },
+    "ssl.truststore.location" : {
+      "description" : "The location of the trust store file.",
+      "type" : "string",
+      "title" : "ssl.truststore.location"
+    },
+    "ssl.truststore.password" : {
+      "description" : "The password for the trust store file. If a password is not set, trust store file configured will still be used, but integrity checking is disabled. Trust store password is not supported for PEM format.",
+      "type" : "string",
+      "title" : "ssl.truststore.password"
+    },
+    "ssl.keymanager.algorithm" : {
+      "default" : "SunX509",
+      "description" : "The algorithm used by key manager factory for SSL connections. Default value is the key manager factory algorithm configured for the Java Virtual Machine.",
+      "type" : "string",
+      "title" : "ssl.keymanager.algorithm"
+    },
+    "ssl.trustmanager.algorithm" : {
+      "default" : "PKIX",
+      "description" : "The algorithm used by trust manager factory for SSL connections. Default value is the trust manager factory algorithm configured for the Java Virtual Machine.",
+      "type" : "string",
+      "title" : "ssl.trustmanager.algorithm"
+    },
+    "ssl.endpoint.identification.algorithm" : {
+      "default" : "https",
+      "description" : "The endpoint identification algorithm to validate server hostname using server certificate. ",
+      "type" : "string",
+      "title" : "ssl.endpoint.identification.algorithm"
+    },
+    "ssl.secure.random.implementation" : {
+      "description" : "The SecureRandom PRNG implementation to use for SSL cryptography operations. ",
+      "type" : "string",
+      "title" : "ssl.secure.random.implementation"
+    },
+    "ssl.engine.factory.class" : {
+      "description" : "The class of type org.apache.kafka.common.security.auth.SslEngineFactory to provide SSLEngine objects. Default value is org.apache.kafka.common.security.ssl.DefaultSslEngineFactory. Alternatively, setting this to org.apache.kafka.common.security.ssl.CommonNameLoggingSslEngineFactory will log the common name of expired SSL certificates used by clients to authenticate at any of the brokers with log level INFO. Note that this will cause a tiny delay during establishment of new connections from mTLS clients to brokers due to the extra code for examining the certificate chain provided by the client. Note further that the implementation uses a custom truststore based on the standard Java truststore and thus might be considered a security risk due to not being as mature as the standard one.",
+      "type" : "string",
+      "title" : "ssl.engine.factory.class"
+    },
+    "connect.http.method" : {
+      "default" : "POST",
+      "description" : "\nThe HTTP method to use.\n",
+      "type" : "string",
+      "title" : "connect.http.method"
+    },
+    "connect.http.endpoint" : {
+      "description" : "\nThe HTTP endpoint to send the request to.\n",
+      "type" : "string",
+      "title" : "connect.http.endpoint"
+    },
+    "connect.http.request.content" : {
+      "description" : "\nThe content of the HTTP request.\n",
+      "type" : "string",
+      "title" : "connect.http.request.content"
+    },
+    "connect.http.request.headers" : {
+      "default" : [ ],
+      "description" : "\nA list of headers to include in the HTTP request.\n",
+      "type" : "array",
+      "title" : "connect.http.request.headers",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "connect.http.error.threshold" : {
+      "default" : 5,
+      "description" : "\nThe number of errors to tolerate before failing the sink.\n",
+      "type" : "integer",
+      "title" : "connect.http.error.threshold"
+    },
+    "connect.http.upload.sync.period" : {
+      "default" : 100,
+      "description" : "\nThe time in milliseconds to wait before sending the request.\n",
+      "type" : "integer",
+      "title" : "connect.http.upload.sync.period"
+    },
+    "connect.http.connection.timeout.ms" : {
+      "default" : 10000,
+      "description" : "\nThe HTTP connection timeout in milliseconds.\n",
+      "type" : "integer",
+      "title" : "connect.http.connection.timeout.ms"
+    },
+    "connect.http.retries.max.timeout.ms" : {
+      "default" : 30000,
+      "description" : "\nThe maximum time in milliseconds to retry a request. Backoff is used to increase the time between retries, up to this maximum.\n",
+      "type" : "integer",
+      "title" : "connect.http.retries.max.timeout.ms"
+    },
+    "connect.http.retries.max.retries" : {
+      "default" : 5,
+      "description" : "\nThe maximum number of retries to attempt.\n",
+      "type" : "integer",
+      "title" : "connect.http.retries.max.retries"
+    },
+    "connect.http.retry.mode" : {
+      "default" : "exponential",
+      "description" : "The retry mode to use. Options are 'fixed' or 'exponential'.",
+      "type" : "string",
+      "title" : "connect.http.retry.mode"
+    },
+    "connect.http.retries.on.status.codes" : {
+      "default" : [ "408", "429", "502", "504", "500", "503" ],
+      "description" : "\nThe status codes to retry on.\n",
+      "type" : "array",
+      "title" : "connect.http.retries.on.status.codes",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "connect.http.retry.fixed.interval.ms" : {
+      "default" : 10000,
+      "description" : "The fixed interval in milliseconds to wait before retrying.",
+      "type" : "integer",
+      "title" : "connect.http.retry.fixed.interval.ms"
+    },
+    "connect.http.batch.count" : {
+      "default" : 1,
+      "description" : "\nThe number of records to batch before sending the request.\n",
+      "type" : "integer",
+      "title" : "connect.http.batch.count"
+    },
+    "connect.http.batch.size" : {
+      "default" : 0,
+      "description" : "\nThe size of the batch in bytes before sending the request.\n",
+      "type" : "integer",
+      "title" : "connect.http.batch.size"
+    },
+    "connect.http.time.interval" : {
+      "default" : 0,
+      "description" : "\nThe time interval in milliseconds to wait before sending the request.\n",
+      "type" : "integer",
+      "title" : "connect.http.time.interval"
+    },
+    "connect.http.authentication.type" : {
+      "default" : "none",
+      "description" : "\nThe type of authentication to use.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.type"
+    },
+    "connect.http.authentication.basic.username" : {
+      "default" : "",
+      "description" : "\nThe username for basic authentication.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.basic.username"
+    },
+    "connect.http.authentication.basic.password" : {
+      "default" : "[hidden]",
+      "description" : "\nThe password for basic authentication.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.basic.password"
+    },
+    "connect.http.json.tidy" : {
+      "default" : false,
+      "description" : "\nTidy the output json.\n",
+      "type" : "boolean",
+      "title" : "connect.http.json.tidy"
+    },
+    "connect.http.null.payload.handler" : {
+      "default" : "error",
+      "description" : "\nLiteral to output in templates in place of a null payload.  Values are `error` (raises an error), `empty` (empty string, eg \"\"), `null` (the literal 'null') or `custom` (a string of your choice, as defined by `connect.http.null.payload.handler.custom`). `Defaults to `error`.\n",
+      "type" : "string",
+      "title" : "connect.http.null.payload.handler"
+    },
+    "connect.http.null.payload.handler.custom" : {
+      "default" : "",
+      "description" : "\nCustom string to use in place of a null template.\n",
+      "type" : "string",
+      "title" : "connect.http.null.payload.handler.custom"
+    },
+    "connect.http.max.queue.size" : {
+      "default" : 1000000,
+      "description" : "\nThe maximum number of records to queue per topic before blocking. If the queue limit is reached the connector will throw RetriableException and the connector settings to handle retries will be used.\n",
+      "type" : "integer",
+      "title" : "connect.http.max.queue.size"
+    },
+    "connect.http.max.queue.offer.timeout.ms" : {
+      "default" : 120000,
+      "description" : "\nThe maximum time in milliseconds to wait for the queue to accept a record. If the queue does not accept the record within this time, the connector will throw RetriableException and the connector settings to handle retries will be used.\n",
+      "type" : "integer",
+      "title" : "connect.http.max.queue.offer.timeout.ms"
+    },
+    "connect.http.copy.message.headers" : {
+      "default" : false,
+      "description" : "\nWhether to copy Kafka message headers into the HTTP request. Default is false.\n",
+      "type" : "boolean",
+      "title" : "connect.http.copy.message.headers"
+    },
+    "connect.reporting.error.config.enabled" : {
+      "default" : false,
+      "description" : "Specifies whether Reporter is enabled",
+      "type" : "boolean",
+      "title" : "connect.reporting.error.config.enabled"
+    },
+    "connect.reporting.error.config.topic" : {
+      "default" : "",
+      "description" : "Specifies the topic for Reporter to write to",
+      "type" : "string",
+      "title" : "connect.reporting.error.config.topic"
+    },
+    "connect.reporting.error.config.bootstrap.servers" : {
+      "default" : "",
+      "description" : "A list of host/port pairs used to establish the initial connection to the Kafka cluster. Clients use this list to bootstrap and discover the full set of Kafka brokers. While the order of servers in the list does not matter, we recommend including more than one server to ensure resilience if any servers are down. This list does not need to contain the entire set of brokers, as Kafka clients automatically manage and update connections to the cluster efficiently. This list must be in the form <code>host1:port1,host2:port2,...</code>.",
+      "type" : "string",
+      "title" : "connect.reporting.error.config.bootstrap.servers"
+    },
+    "connect.reporting.error.config.sasl.jaas.config" : {
+      "default" : "",
+      "description" : "JAAS login context parameters for SASL connections in the format used by JAAS configuration files. JAAS configuration file format is described <a href=\"https://docs.oracle.com/javase/8/docs/technotes/guides/security/jgss/tutorials/LoginConfigFile.html\">here</a>. The format for the value is: <code>loginModuleClass controlFlag (optionName=optionValue)*;</code>. For brokers, the config must be prefixed with listener prefix and SASL mechanism name in lower-case. For example, listener.name.sasl_ssl.scram-sha-256.sasl.jaas.config=com.example.ScramLoginModule required;",
+      "type" : "string",
+      "title" : "connect.reporting.error.config.sasl.jaas.config"
+    },
+    "connect.reporting.error.config.security.protocol" : {
+      "default" : "",
+      "description" : "Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL.",
+      "type" : "string",
+      "title" : "connect.reporting.error.config.security.protocol"
+    },
+    "connect.reporting.error.config.sasl.mechanism" : {
+      "default" : "",
+      "description" : "SASL mechanism used for client connections. This may be any mechanism for which a security provider is available. GSSAPI is the default mechanism.",
+      "type" : "string",
+      "title" : "connect.reporting.error.config.sasl.mechanism"
+    },
+    "connect.reporting.error.config.partition" : {
+      "default" : -1,
+      "description" : "Specifies the topic topic for Reporter to write to",
+      "type" : "integer",
+      "title" : "connect.reporting.error.config.partition"
+    },
+    "connect.reporting.success.config.enabled" : {
+      "default" : false,
+      "description" : "Specifies whether Reporter is enabled",
+      "type" : "boolean",
+      "title" : "connect.reporting.success.config.enabled"
+    },
+    "connect.reporting.success.config.topic" : {
+      "default" : "",
+      "description" : "Specifies the topic for Reporter to write to",
+      "type" : "string",
+      "title" : "connect.reporting.success.config.topic"
+    },
+    "connect.reporting.success.config.bootstrap.servers" : {
+      "default" : "",
+      "description" : "A list of host/port pairs used to establish the initial connection to the Kafka cluster. Clients use this list to bootstrap and discover the full set of Kafka brokers. While the order of servers in the list does not matter, we recommend including more than one server to ensure resilience if any servers are down. This list does not need to contain the entire set of brokers, as Kafka clients automatically manage and update connections to the cluster efficiently. This list must be in the form <code>host1:port1,host2:port2,...</code>.",
+      "type" : "string",
+      "title" : "connect.reporting.success.config.bootstrap.servers"
+    },
+    "connect.reporting.success.config.sasl.jaas.config" : {
+      "default" : "",
+      "description" : "JAAS login context parameters for SASL connections in the format used by JAAS configuration files. JAAS configuration file format is described <a href=\"https://docs.oracle.com/javase/8/docs/technotes/guides/security/jgss/tutorials/LoginConfigFile.html\">here</a>. The format for the value is: <code>loginModuleClass controlFlag (optionName=optionValue)*;</code>. For brokers, the config must be prefixed with listener prefix and SASL mechanism name in lower-case. For example, listener.name.sasl_ssl.scram-sha-256.sasl.jaas.config=com.example.ScramLoginModule required;",
+      "type" : "string",
+      "title" : "connect.reporting.success.config.sasl.jaas.config"
+    },
+    "connect.reporting.success.config.security.protocol" : {
+      "default" : "",
+      "description" : "Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL.",
+      "type" : "string",
+      "title" : "connect.reporting.success.config.security.protocol"
+    },
+    "connect.reporting.success.config.sasl.mechanism" : {
+      "default" : "",
+      "description" : "SASL mechanism used for client connections. This may be any mechanism for which a security provider is available. GSSAPI is the default mechanism.",
+      "type" : "string",
+      "title" : "connect.reporting.success.config.sasl.mechanism"
+    },
+    "connect.reporting.success.config.partition" : {
+      "default" : -1,
+      "description" : "Specifies the topic topic for Reporter to write to",
+      "type" : "integer",
+      "title" : "connect.reporting.success.config.partition"
+    },
+    "connect.http.authentication.oauth2.token.url" : {
+      "default" : "",
+      "description" : "\nThe URL to request the OAuth2 token from.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.token.url"
+    },
+    "connect.http.authentication.oauth2.client.id" : {
+      "default" : "",
+      "description" : "\nThe client ID for OAuth2 authentication.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.client.id"
+    },
+    "connect.http.authentication.oauth2.client.secret" : {
+      "default" : "[hidden]",
+      "description" : "\nThe client secret for OAuth2 authentication.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.client.secret"
+    },
+    "connect.http.authentication.oauth2.token.property" : {
+      "default" : "access_token",
+      "description" : "\nThe field name for the access token in the OAuth2 response. Usually it is `access_token`.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.token.property"
+    },
+    "connect.http.authentication.oauth2.client.scope" : {
+      "default" : "any",
+      "description" : "\nThe scope for the OAuth2 client.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.client.scope"
+    },
+    "connect.http.authentication.oauth2.client.headers" : {
+      "default" : [ ],
+      "description" : "\nA list of headers to include in the OAuth2 request.\n",
+      "type" : "array",
+      "title" : "connect.http.authentication.oauth2.client.headers",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "connect.http.authentication.oauth2.client.headers.separator" : {
+      "default" : ":",
+      "description" : "\nThe separator to use when splitting the connect.http.authentication.oauth2.client.headers entries header-value pairs.\n",
+      "type" : "string",
+      "title" : "connect.http.authentication.oauth2.client.headers.separator"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "ssl.keystore.location", "ssl.keystore.password", "ssl.key.password", "ssl.keystore.key", "ssl.keystore.certificate.chain", "ssl.truststore.certificates", "ssl.truststore.location", "ssl.truststore.password", "connect.http.method", "connect.http.endpoint", "connect.http.request.content", "connect.http.request.headers", "connect.http.connection.timeout.ms", "connect.http.retries.max.timeout.ms", "connect.http.retries.max.retries", "connect.http.retry.mode", "connect.http.retries.on.status.codes", "connect.http.retry.fixed.interval.ms", "connect.http.batch.count", "connect.http.batch.size", "connect.http.time.interval", "connect.http.authentication.type", "connect.http.authentication.basic.username", "connect.http.authentication.basic.password", "connect.http.json.tidy", "connect.http.null.payload.handler", "connect.http.null.payload.handler.custom", "connect.http.max.queue.size", "connect.http.max.queue.offer.timeout.ms", "connect.http.copy.message.headers", "connect.http.authentication.oauth2.token.url", "connect.http.authentication.oauth2.client.id", "connect.http.authentication.oauth2.client.secret", "connect.http.authentication.oauth2.token.property", "connect.http.authentication.oauth2.client.scope", "connect.http.authentication.oauth2.client.headers", "connect.http.authentication.oauth2.client.headers.separator" ]
+}

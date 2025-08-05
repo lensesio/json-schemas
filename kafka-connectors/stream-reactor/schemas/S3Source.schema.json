@@ -1,0 +1,257 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/S3SourceConnector/10.0.0",
+  "type" : "object",
+  "title" : "S3Source Configuration",
+  "description" : "Configuration schema for S3SourceConnector connector",
+  "version" : "10.0.0",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.aws.s3.source.S3SourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.s3.aws.region" : {
+      "default" : "",
+      "description" : "AWS region",
+      "type" : "string",
+      "title" : "connect.s3.aws.region"
+    },
+    "connect.s3.aws.access.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS access key",
+      "type" : "string",
+      "title" : "connect.s3.aws.access.key"
+    },
+    "connect.s3.aws.secret.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS password key",
+      "type" : "string",
+      "title" : "connect.s3.aws.secret.key"
+    },
+    "connect.s3.aws.auth.mode" : {
+      "default" : "Default",
+      "description" : "Authenticate mode, 'credentials' or 'default'",
+      "type" : "string",
+      "title" : "connect.s3.aws.auth.mode"
+    },
+    "connect.s3.custom.endpoint" : {
+      "default" : "",
+      "description" : "Custom S3-compatible endpoint (usually for testing)",
+      "type" : "string",
+      "title" : "connect.s3.custom.endpoint"
+    },
+    "connect.s3.vhost.bucket" : {
+      "default" : false,
+      "description" : "Enable virtual host buckets",
+      "type" : "boolean",
+      "title" : "connect.s3.vhost.bucket"
+    },
+    "connect.s3.http.max.retries" : {
+      "default" : 5,
+      "description" : "Number of times to retry the http request, in the case of a resolvable error on the server side.",
+      "type" : "integer",
+      "title" : "connect.s3.http.max.retries"
+    },
+    "connect.s3.http.retry.interval" : {
+      "default" : 50,
+      "description" : "If greater than zero, used to determine the delay after which to retry the http request in milliseconds.  Based on an exponential backoff algorithm.",
+      "type" : "integer",
+      "title" : "connect.s3.http.retry.interval"
+    },
+    "connect.s3.http.socket.timeout" : {
+      "default" : 60000,
+      "description" : "Socket timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.socket.timeout"
+    },
+    "connect.s3.http.connection.timeout" : {
+      "default" : 60000,
+      "description" : "Connection timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.connection.timeout"
+    },
+    "connect.s3.pool.max.connections" : {
+      "default" : -1,
+      "description" : "Max connections in pool.  -1: Use default according to underlying client.",
+      "type" : "integer",
+      "title" : "connect.s3.pool.max.connections"
+    },
+    "connect.s3.compression.codec" : {
+      "default" : "UNCOMPRESSED",
+      "description" : "Compression codec to use for Avro, Parquet or JSON.",
+      "type" : "string",
+      "title" : "connect.s3.compression.codec"
+    },
+    "connect.s3.compression.level" : {
+      "default" : -1,
+      "description" : "Certain compression codecs require a level specified.",
+      "type" : "integer",
+      "title" : "connect.s3.compression.level"
+    },
+    "connect.s3.delete.mode" : {
+      "default" : "BatchDelete",
+      "description" : "Cleaning index files for GCP Cloud Storage via the compatible S3 APIs requires individual delete requests. Options are `BatchDelete` or `SeparateDelete`. Defaults to `BatchDelete`.",
+      "type" : "string",
+      "title" : "connect.s3.delete.mode"
+    },
+    "connect.s3.log.metrics" : {
+      "default" : false,
+      "description" : "If true, the connector will log metrics to the logger.  This is useful for debugging and performance tuning.",
+      "type" : "boolean",
+      "title" : "connect.s3.log.metrics"
+    },
+    "connect.s3.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.s3.max.retries"
+    },
+    "connect.s3.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.s3.retry.interval"
+    },
+    "connect.s3.error.policy" : {
+      "default" : "THROW",
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.s3.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n  ",
+      "type" : "string",
+      "title" : "connect.s3.error.policy"
+    },
+    "connect.s3.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.s3.kcql"
+    },
+    "connect.s3.ordering.type" : {
+      "default" : "AlphaNumeric",
+      "description" : "AlphaNumeric (the default)",
+      "type" : "string",
+      "title" : "connect.s3.ordering.type"
+    },
+    "connect.s3.source.partition.search.recurse.levels" : {
+      "default" : 0,
+      "description" : "When searching for new partitions on the S3 filesystem, how many levels deep to recurse.",
+      "type" : "integer",
+      "title" : "connect.s3.source.partition.search.recurse.levels"
+    },
+    "connect.s3.source.partition.search.continuous" : {
+      "default" : true,
+      "description" : "If set to true, it will be continuously search for new partitions. Otherwise it is a one-off operation. Defaults to true.",
+      "type" : "boolean",
+      "title" : "connect.s3.source.partition.search.continuous"
+    },
+    "connect.s3.source.partition.search.interval" : {
+      "default" : 300000,
+      "description" : "The interval in milliseconds between searching for new partitions.  Defaults to 5 minutes.",
+      "type" : "integer",
+      "title" : "connect.s3.source.partition.search.interval"
+    },
+    "connect.s3.source.partition.search.excludes" : {
+      "default" : ".indexes",
+      "description" : "Comma-separated list of directory prefixes to exclude from the partition search",
+      "type" : "string",
+      "title" : "connect.s3.source.partition.search.excludes"
+    },
+    "connect.s3.source.partition.extractor.type" : {
+      "description" : "If you want to read to specific partitions when running the source.  Options are 'hierarchical' (to match the sink's hierarchical file storage pattern) and 'regex' (supply a custom regex).  Any other value will ignore original partitions and they should be evenly distributed through available partitions (Kafka dependent).",
+      "type" : "string",
+      "title" : "connect.s3.source.partition.extractor.type"
+    },
+    "connect.s3.source.partition.extractor.regex" : {
+      "description" : "If reading filename from regex, supply the regex here.",
+      "type" : "string",
+      "title" : "connect.s3.source.partition.extractor.regex"
+    },
+    "connect.s3.source.extension.excludes" : {
+      "description" : "Comma-separated list of file extensions to exclude from the source file search. If not configured, no files will be excluded. When used in conjunction with 'source.extension.includes', files must match the includes list and not match the excludes list to be considered.",
+      "type" : "string",
+      "title" : "connect.s3.source.extension.excludes"
+    },
+    "connect.s3.source.extension.includes" : {
+      "description" : "Comma-separated list of file extensions to include in the source file search. If not configured, all files are considered. When used in conjunction with 'source.extension.excludes', files must match the includes list and not match the excludes list to be considered.",
+      "type" : "string",
+      "title" : "connect.s3.source.extension.includes"
+    },
+    "connect.s3.source.empty.results.backoff.initial.delay" : {
+      "default" : 1000,
+      "description" : "Initial delay in milliseconds before retrying when no results are found.",
+      "type" : "integer",
+      "title" : "connect.s3.source.empty.results.backoff.initial.delay"
+    },
+    "connect.s3.source.empty.results.backoff.max.delay" : {
+      "default" : 10000,
+      "description" : "Maximum delay in milliseconds before retrying when no results are found.",
+      "type" : "integer",
+      "title" : "connect.s3.source.empty.results.backoff.max.delay"
+    },
+    "connect.s3.source.empty.results.backoff.multiplier" : {
+      "default" : 2.0,
+      "description" : "Multiplier to apply to the delay when retrying when no results are found.",
+      "type" : "number",
+      "title" : "connect.s3.source.empty.results.backoff.multiplier"
+    },
+    "connect.s3.source.write.watermark.headers" : {
+      "default" : false,
+      "description" : "When outputting source records, include the watermark in the headers of the source record",
+      "type" : "boolean",
+      "title" : "connect.s3.source.write.watermark.headers"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.s3.aws.region", "connect.s3.aws.access.key", "connect.s3.aws.secret.key", "connect.s3.aws.auth.mode", "connect.s3.error.policy", "connect.s3.kcql" ]
+}

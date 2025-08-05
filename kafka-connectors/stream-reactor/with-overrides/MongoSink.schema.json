@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../schemas/MongoSink.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-converter-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-consumer-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-producer-overrides.schema.json"
+    }
+  ],
+  "required": [
+    "connector.class",
+    "name",
+    "tasks.max",
+    "topics",
+    "connect.mongo.connection",
+    "connect.mongo.db",
+    "connect.mongo.kcql",
+    "connect.mongo.error.policy",
+    "ssl.keystore.location",
+    "ssl.keystore.password",
+    "ssl.key.password",
+    "ssl.keystore.key",
+    "ssl.keystore.certificate.chain",
+    "ssl.truststore.certificates",
+    "ssl.truststore.location",
+    "ssl.truststore.password"
+  ],
+  "defaultSnippets": [
+    {
+      "label": "Connector: Mongo Sink - Minimal",
+      "description": "Minimal configuration with required fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.mongodb.sink.MongoSinkConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "connect.mongo.connection": "",
+        "connect.mongo.db": "",
+        "connect.mongo.kcql": "",
+        "connect.mongo.error.policy": "THROW",
+        "ssl.keystore.location": "",
+        "ssl.keystore.password": "",
+        "ssl.key.password": "",
+        "ssl.keystore.key": "",
+        "ssl.keystore.certificate.chain": "",
+        "ssl.truststore.certificates": "",
+        "ssl.truststore.location": "",
+        "ssl.truststore.password": ""
+      }
+    },
+    {
+      "label": "Connector: Mongo Sink - Full",
+      "description": "Full configuration with all fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.mongodb.sink.MongoSinkConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "topics.regex": "",
+        "connect.mongo.connection": "",
+        "connect.mongo.db": "",
+        "connect.mongo.username": "",
+        "connect.mongo.password": "[hidden]",
+        "connect.mongo.auth.mechanism": "SCRAM-SHA-1",
+        "connect.mongo.kcql": "",
+        "connect.mongo.json_datetime_fields": [],
+        "connect.mongo.error.policy": "THROW",
+        "connect.mongo.max.retries": 20,
+        "connect.mongo.retry.interval": 60000,
+        "connect.progress.enabled": false,
+        "ssl.protocol": "TLSv1.3",
+        "ssl.provider": "",
+        "ssl.cipher.suites": [],
+        "ssl.enabled.protocols": [
+          "TLSv1.2",
+          "TLSv1.3"
+        ],
+        "ssl.keystore.type": "JKS",
+        "ssl.keystore.location": "",
+        "ssl.keystore.password": "",
+        "ssl.key.password": "",
+        "ssl.keystore.key": "",
+        "ssl.keystore.certificate.chain": "",
+        "ssl.truststore.certificates": "",
+        "ssl.truststore.type": "JKS",
+        "ssl.truststore.location": "",
+        "ssl.truststore.password": "",
+        "ssl.keymanager.algorithm": "SunX509",
+        "ssl.trustmanager.algorithm": "PKIX",
+        "ssl.endpoint.identification.algorithm": "https",
+        "ssl.secure.random.implementation": "",
+        "ssl.engine.factory.class": "",
+        "transforms": "",
+        "transforms.{name}.type": "",
+        "transforms.{name}.predicate": "",
+        "transforms.{name}.negate": false,
+        "predicates": "",
+        "predicates.{name}.type": "",
+        "predicates.{name}.field": "",
+        "config.providers": "",
+        "config.providers.{name}.type": ""
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry",
+      "description": "Configure Avro converters with Schema Registry integration",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: JSON with Schema",
+      "description": "Configure JSON converters with schema support",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: String",
+      "description": "Configure String converters without schema",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "key.converter.schemas.enable": false,
+        "value.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry Auth",
+      "description": "Configure Avro converters with Schema Registry authentication",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.basic.auth.credentials.source": "USER_INFO",
+        "value.converter.basic.auth.credentials.source": "USER_INFO",
+        "key.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "value.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "PLAIN",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "consumer.override.security.protocol": "SASL_PLAINTEXT",
+        "consumer.override.sasl.mechanism": "GSSAPI",
+        "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "consumer.override.security.protocol": "SSL",
+        "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "consumer.override.ssl.truststore.password": "changeit",
+        "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "consumer.override.ssl.keystore.password": "changeit",
+        "consumer.override.ssl.key.password": "changeit"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "PLAIN",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "producer.override.security.protocol": "SASL_PLAINTEXT",
+        "producer.override.sasl.mechanism": "GSSAPI",
+        "producer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "producer.override.security.protocol": "SSL",
+        "producer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "producer.override.ssl.truststore.password": "changeit",
+        "producer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "producer.override.ssl.keystore.password": "changeit",
+        "producer.override.ssl.key.password": "changeit"
+      }
+    }
+  ]
+}

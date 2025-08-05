@@ -1,0 +1,104 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/GCPPubSubSourceConnector/9ece160",
+  "type" : "object",
+  "title" : "GCPPub Sub Source Configuration",
+  "description" : "Configuration schema for GCPPubSubSourceConnector connector",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.gcp.pubsub.source.GCPPubSubSourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.pubsub.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.pubsub.kcql"
+    },
+    "connect.pubsub.gcp.project.id" : {
+      "default" : "",
+      "description" : "GCP Project ID",
+      "type" : "string",
+      "title" : "connect.pubsub.gcp.project.id"
+    },
+    "connect.pubsub.output.mode" : {
+      "default" : "",
+      "description" : "Output Mode (options are DEFAULT or COMPATIBILITY)",
+      "type" : "string",
+      "title" : "connect.pubsub.output.mode"
+    },
+    "connect.pubsub.gcp.auth.mode" : {
+      "default" : "DEFAULT",
+      "description" : "Authenticate mode, 'credentials', 'file', 'default' or 'none'",
+      "type" : "string",
+      "title" : "connect.pubsub.gcp.auth.mode"
+    },
+    "connect.pubsub.gcp.credentials" : {
+      "default" : "[hidden]",
+      "description" : "GCP Credentials if using 'credentials' auth mode.",
+      "type" : "string",
+      "title" : "connect.pubsub.gcp.credentials"
+    },
+    "connect.pubsub.gcp.file" : {
+      "default" : "",
+      "description" : "File containing GCP Credentials if using 'file' auth mode.  This can be relative from the current working directory of the java process or from the root.  Remember your path format is operating system dependent. (eg for unix-based /home/my/path/file)",
+      "type" : "string",
+      "title" : "connect.pubsub.gcp.file"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.pubsub.kcql", "connect.pubsub.gcp.project.id", "connect.pubsub.output.mode", "connect.pubsub.gcp.auth.mode", "connect.pubsub.gcp.credentials", "connect.pubsub.gcp.file" ]
+}

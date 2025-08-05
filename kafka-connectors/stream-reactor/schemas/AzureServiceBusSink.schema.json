@@ -1,0 +1,107 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/AzureServiceBusSinkConnector/9ece160",
+  "type" : "object",
+  "title" : "Azure Service Bus Sink Configuration",
+  "description" : "Configuration schema for AzureServiceBusSinkConnector connector",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.azure.servicebus.sink.AzureServiceBusSinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.servicebus.connection.string" : {
+      "description" : "Azure ServiceBus Connection String",
+      "type" : "string",
+      "title" : "connect.servicebus.connection.string"
+    },
+    "connect.servicebus.sink.retries.max" : {
+      "default" : 3,
+      "description" : "Maximum number of retries if message sending fails.",
+      "type" : "integer",
+      "title" : "connect.servicebus.sink.retries.max"
+    },
+    "connect.servicebus.sink.retries.timeout" : {
+      "default" : 500,
+      "description" : "Timeout (in millis) between retries.",
+      "type" : "integer",
+      "title" : "connect.servicebus.sink.retries.timeout"
+    },
+    "connect.servicebus.kcql" : {
+      "description" : "KCQL expression describing field selection and data routing to the target.",
+      "type" : "string",
+      "title" : "connect.servicebus.kcql"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.servicebus.connection.string", "connect.servicebus.sink.retries.max", "connect.servicebus.sink.retries.timeout", "connect.servicebus.kcql" ]
+}

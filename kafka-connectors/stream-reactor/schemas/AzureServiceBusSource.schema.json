@@ -1,0 +1,109 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/AzureServiceBusSourceConnector/9ece160",
+  "type" : "object",
+  "title" : "Azure Service Bus Source Configuration",
+  "description" : "Configuration schema for AzureServiceBusSourceConnector connector",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.azure.servicebus.source.AzureServiceBusSourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.servicebus.source.task.records.queue.size" : {
+      "default" : 5000,
+      "description" : "An internal buffer that accumulates records arriving asynchronously from ServiceBus.",
+      "type" : "integer",
+      "title" : "connect.servicebus.source.task.records.queue.size"
+    },
+    "connect.servicebus.connection.string" : {
+      "description" : "Azure ServiceBus Connection String",
+      "type" : "string",
+      "title" : "connect.servicebus.connection.string"
+    },
+    "connect.servicebus.kcql" : {
+      "description" : "KCQL expression describing field selection and data routing to the target.",
+      "type" : "string",
+      "title" : "connect.servicebus.kcql"
+    },
+    "connect.servicebus.source.prefetch.count" : {
+      "default" : 1000,
+      "description" : "The number of messages to prefetch from the Azure Service Bus.",
+      "type" : "integer",
+      "title" : "connect.servicebus.source.prefetch.count"
+    },
+    "connect.servicebus.source.complete.retries.max" : {
+      "default" : 3,
+      "description" : "The maximum number of retries to complete a message.",
+      "type" : "integer",
+      "title" : "connect.servicebus.source.complete.retries.max"
+    },
+    "connect.servicebus.source.complete.retries.min.backoff.ms" : {
+      "default" : 1000,
+      "description" : "The minimum duration in milliseconds for the first backoff",
+      "type" : "integer",
+      "title" : "connect.servicebus.source.complete.retries.min.backoff.ms"
+    },
+    "connect.servicebus.source.sleep.on.empty.poll.ms" : {
+      "default" : 250,
+      "description" : "The duration in milliseconds to sleep when no records are returned from the poll. This avoids a tight loop in Connect.",
+      "type" : "integer",
+      "title" : "connect.servicebus.source.sleep.on.empty.poll.ms"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.servicebus.connection.string", "connect.servicebus.kcql" ]
+}

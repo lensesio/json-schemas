@@ -1,0 +1,259 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/S3SinkConnector/10.0.0",
+  "type" : "object",
+  "title" : "S3Sink Configuration",
+  "description" : "Configuration schema for S3SinkConnector connector",
+  "version" : "10.0.0",
+  "oneOf" : [ {
+    "not" : {
+      "required" : [ "topics.regex" ]
+    },
+    "required" : [ "topics" ]
+  }, {
+    "not" : {
+      "required" : [ "topics" ]
+    },
+    "required" : [ "topics.regex" ]
+  } ],
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.aws.s3.sink.S3SinkConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to consume",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "topics.regex" : {
+      "description" : "Regex pattern of topics to consume",
+      "type" : "string",
+      "title" : "topics.regex"
+    },
+    "connect.s3.aws.region" : {
+      "default" : "",
+      "description" : "AWS region",
+      "type" : "string",
+      "title" : "connect.s3.aws.region"
+    },
+    "connect.s3.aws.access.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS access key",
+      "type" : "string",
+      "title" : "connect.s3.aws.access.key"
+    },
+    "connect.s3.aws.secret.key" : {
+      "default" : "[hidden]",
+      "description" : "AWS password key",
+      "type" : "string",
+      "title" : "connect.s3.aws.secret.key"
+    },
+    "connect.s3.aws.auth.mode" : {
+      "default" : "Default",
+      "description" : "Authenticate mode, 'credentials' or 'default'",
+      "type" : "string",
+      "title" : "connect.s3.aws.auth.mode"
+    },
+    "connect.s3.custom.endpoint" : {
+      "default" : "",
+      "description" : "Custom S3-compatible endpoint (usually for testing)",
+      "type" : "string",
+      "title" : "connect.s3.custom.endpoint"
+    },
+    "connect.s3.vhost.bucket" : {
+      "default" : false,
+      "description" : "Enable virtual host buckets",
+      "type" : "boolean",
+      "title" : "connect.s3.vhost.bucket"
+    },
+    "connect.s3.http.max.retries" : {
+      "default" : 5,
+      "description" : "Number of times to retry the http request, in the case of a resolvable error on the server side.",
+      "type" : "integer",
+      "title" : "connect.s3.http.max.retries"
+    },
+    "connect.s3.http.retry.interval" : {
+      "default" : 50,
+      "description" : "If greater than zero, used to determine the delay after which to retry the http request in milliseconds.  Based on an exponential backoff algorithm.",
+      "type" : "integer",
+      "title" : "connect.s3.http.retry.interval"
+    },
+    "connect.s3.http.socket.timeout" : {
+      "default" : 60000,
+      "description" : "Socket timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.socket.timeout"
+    },
+    "connect.s3.http.connection.timeout" : {
+      "default" : 60000,
+      "description" : "Connection timeout (ms)",
+      "type" : "integer",
+      "title" : "connect.s3.http.connection.timeout"
+    },
+    "connect.s3.pool.max.connections" : {
+      "default" : -1,
+      "description" : "Max connections in pool.  -1: Use default according to underlying client.",
+      "type" : "integer",
+      "title" : "connect.s3.pool.max.connections"
+    },
+    "connect.s3.compression.codec" : {
+      "default" : "UNCOMPRESSED",
+      "description" : "Compression codec to use for Avro, Parquet or JSON.",
+      "type" : "string",
+      "title" : "connect.s3.compression.codec"
+    },
+    "connect.s3.compression.level" : {
+      "default" : -1,
+      "description" : "Certain compression codecs require a level specified.",
+      "type" : "integer",
+      "title" : "connect.s3.compression.level"
+    },
+    "connect.s3.delete.mode" : {
+      "default" : "BatchDelete",
+      "description" : "Cleaning index files for GCP Cloud Storage via the compatible S3 APIs requires individual delete requests. Options are `BatchDelete` or `SeparateDelete`. Defaults to `BatchDelete`.",
+      "type" : "string",
+      "title" : "connect.s3.delete.mode"
+    },
+    "connect.s3.log.metrics" : {
+      "default" : false,
+      "description" : "If true, the connector will log metrics to the logger.  This is useful for debugging and performance tuning.",
+      "type" : "boolean",
+      "title" : "connect.s3.log.metrics"
+    },
+    "connect.s3.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.s3.max.retries"
+    },
+    "connect.s3.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.s3.retry.interval"
+    },
+    "connect.s3.error.policy" : {
+      "default" : "THROW",
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.s3.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n  ",
+      "type" : "string",
+      "title" : "connect.s3.error.policy"
+    },
+    "connect.s3.kcql" : {
+      "description" : "Contains the Kafka Connect Query Language describing data mappings from the source to the target system.",
+      "type" : "string",
+      "title" : "connect.s3.kcql"
+    },
+    "connect.s3.disable.flush.count" : {
+      "default" : false,
+      "description" : "Disable flush on reaching count",
+      "type" : "boolean",
+      "title" : "connect.s3.disable.flush.count"
+    },
+    "connect.s3.local.tmp.directory" : {
+      "default" : "",
+      "description" : "Local tmp directory for preparing the files",
+      "type" : "string",
+      "title" : "connect.s3.local.tmp.directory"
+    },
+    "connect.s3.padding.strategy" : {
+      "default" : "",
+      "description" : "Configure in order to pad the partition and offset on the sink output files. Options are `LeftPad`, `RightPad` or `NoOp`  (does not add padding). Defaults to `LeftPad`.",
+      "type" : "string",
+      "title" : "connect.s3.padding.strategy"
+    },
+    "connect.s3.padding.length" : {
+      "default" : -1,
+      "description" : "Length to pad the string up to if connect.s3.padding.strategy is set.",
+      "type" : "integer",
+      "title" : "connect.s3.padding.length"
+    },
+    "connect.s3.seek.max.files" : {
+      "default" : 5,
+      "description" : "Maximum index files to allow per topic/partition.  Advisable to not raise this: if a large number of files build up this means there is a problem with file deletion.",
+      "type" : "integer",
+      "title" : "connect.s3.seek.max.files"
+    },
+    "connect.s3.indexes.name" : {
+      "default" : ".indexes",
+      "description" : "Name of the indexes directory",
+      "type" : "string",
+      "title" : "connect.s3.indexes.name"
+    },
+    "connect.s3.exactly.once.enable" : {
+      "default" : true,
+      "description" : "Exactly once is enabled by default.  It works by keeping an .indexes directory at the root of your bucket with subdirectories for indexes.  Exactly once support can be disabled and the default offset tracking from kafka can be used instead by setting this to false.",
+      "type" : "boolean",
+      "title" : "connect.s3.exactly.once.enable"
+    },
+    "connect.s3.schema.change.detector" : {
+      "default" : "default",
+      "description" : "Schema change detector.",
+      "type" : "string",
+      "title" : "connect.s3.schema.change.detector"
+    },
+    "connect.s3.skip.null.values" : {
+      "default" : false,
+      "description" : "Skip null values.",
+      "type" : "boolean",
+      "title" : "connect.s3.skip.null.values"
+    },
+    "connect.s3.latest.schema.optimization.enabled" : {
+      "default" : false,
+      "description" : "If true, adapt records to the latest known schema before writing. Improves write performance by preventing flushes caused by compatible schema variations. Only use it if your schema evolution ensures backwards compatibility.",
+      "type" : "boolean",
+      "title" : "connect.s3.latest.schema.optimization.enabled"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.s3.aws.region", "connect.s3.aws.access.key", "connect.s3.aws.secret.key", "connect.s3.aws.auth.mode", "connect.s3.error.policy", "connect.s3.kcql" ]
+}

@@ -1,0 +1,278 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "$id" : "https://github.com/lensesio/stream-reactor/CassandraSourceConnector/10.0.0",
+  "type" : "object",
+  "title" : "Cassandra Source Configuration",
+  "description" : "Configuration schema for CassandraSourceConnector connector",
+  "version" : "10.0.0",
+  "properties" : {
+    "connector.class" : {
+      "default" : "io.lenses.streamreactor.connect.cassandra.source.CassandraSourceConnector",
+      "description" : "Class name of the connector",
+      "type" : "string",
+      "title" : "connector.class"
+    },
+    "name" : {
+      "description" : "Name of the connector",
+      "type" : "string",
+      "title" : "name"
+    },
+    "tasks.max" : {
+      "default" : "1",
+      "description" : "Maximum number of tasks to create",
+      "type" : "integer",
+      "minimum" : 1
+    },
+    "topics" : {
+      "description" : "Comma-separated list of topics to produce to",
+      "type" : "string",
+      "title" : "topics"
+    },
+    "connect.cassandra.contact.points" : {
+      "default" : "localhost",
+      "description" : "Initial contact point host for Cassandra including port.",
+      "type" : "string",
+      "title" : "connect.cassandra.contact.points"
+    },
+    "connect.cassandra.port" : {
+      "default" : 9042,
+      "description" : "Cassandra native port.",
+      "type" : "integer",
+      "title" : "connect.cassandra.port"
+    },
+    "connect.cassandra.key.space" : {
+      "description" : "Keyspace to write to.",
+      "type" : "string",
+      "title" : "connect.cassandra.key.space"
+    },
+    "connect.cassandra.username" : {
+      "default" : "",
+      "description" : "Username to connect to Cassandra with.",
+      "type" : "string",
+      "title" : "connect.cassandra.username"
+    },
+    "connect.cassandra.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for the username to connect to Cassandra with.",
+      "type" : "string",
+      "title" : "connect.cassandra.password"
+    },
+    "connect.cassandra.ssl.enabled" : {
+      "default" : false,
+      "description" : "Secure Cassandra driver connection via SSL.",
+      "type" : "boolean",
+      "title" : "connect.cassandra.ssl.enabled"
+    },
+    "connect.cassandra.trust.store.path" : {
+      "default" : "",
+      "description" : "Path to the client Trust Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.trust.store.path"
+    },
+    "connect.cassandra.trust.store.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for the client Trust Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.trust.store.password"
+    },
+    "connect.cassandra.trust.store.type" : {
+      "default" : "JKS",
+      "description" : "Type of the Trust Store, defaults to JKS",
+      "type" : "string",
+      "title" : "connect.cassandra.trust.store.type"
+    },
+    "connect.cassandra.key.store.type" : {
+      "default" : "JKS",
+      "description" : "Type of the Key Store, defauts to JKS",
+      "type" : "string",
+      "title" : "connect.cassandra.key.store.type"
+    },
+    "connect.cassandra.ssl.client.cert.auth" : {
+      "default" : false,
+      "description" : "Enable client certification authentication by Cassandra. Requires KeyStore options to be set.",
+      "type" : "boolean",
+      "title" : "connect.cassandra.ssl.client.cert.auth"
+    },
+    "connect.cassandra.key.store.path" : {
+      "default" : "",
+      "description" : "Path to the client Key Store.",
+      "type" : "string",
+      "title" : "connect.cassandra.key.store.path"
+    },
+    "connect.cassandra.key.store.password" : {
+      "default" : "[hidden]",
+      "description" : "Password for the client Key Store",
+      "type" : "string",
+      "title" : "connect.cassandra.key.store.password"
+    },
+    "connect.cassandra.consistency.level" : {
+      "default" : "",
+      "description" : "\nConsistency refers to how up-to-date and synchronized a row of Cassandra data is on all of its replicas.\nCassandra offers tunable consistency. For any given read or write operation, the client application decides how consistent the requested data must be.\n    ",
+      "type" : "string",
+      "title" : "Consistency Level"
+    },
+    "connect.cassandra.error.policy" : {
+      "default" : "THROW",
+      "description" : "\nSpecifies the action to be taken if an error occurs while inserting the data.\n There are three available options:\n    NOOP - the error is swallowed\n    THROW - the error is allowed to propagate.\n    RETRY - The exception causes the Connect framework to retry the message. The number of retries is set by connect.cassandra.max.retries.\nAll errors will be logged automatically, even if the code swallows them.\n    ",
+      "type" : "string",
+      "title" : "connect.cassandra.error.policy"
+    },
+    "connect.cassandra.max.retries" : {
+      "default" : 20,
+      "description" : "The maximum number of times to try the write again.",
+      "type" : "integer",
+      "title" : "connect.cassandra.max.retries"
+    },
+    "connect.cassandra.retry.interval" : {
+      "default" : 60000,
+      "description" : "The time in milliseconds between retries.",
+      "type" : "integer",
+      "title" : "connect.cassandra.retry.interval"
+    },
+    "connect.cassandra.fetch.size" : {
+      "default" : 5000,
+      "description" : "The number of records the Cassandra driver will return at once.",
+      "type" : "integer",
+      "title" : "connect.cassandra.fetch.size"
+    },
+    "connect.cassandra.load.balancing.policy" : {
+      "default" : "TOKEN_AWARE",
+      "description" : "Cassandra Load balancing policy. ROUND_ROBIN, TOKEN_AWARE, LATENCY_AWARE or DC_AWARE_ROUND_ROBIN. TOKEN_AWARE and LATENCY_AWARE use DC_AWARE_ROUND_ROBIN",
+      "type" : "string",
+      "title" : "connect.cassandra.load.balancing.policy"
+    },
+    "connect.cassandra.connect.timeout.ms" : {
+      "default" : 5000,
+      "description" : "The Cassandra driver connection timeout in milliseconds.",
+      "type" : "integer",
+      "title" : "connect.cassandra.connect.timeout.ms"
+    },
+    "connect.cassandra.read.timeout.ms" : {
+      "default" : 12000,
+      "description" : "The Cassandra driver read timeout in milliseconds.",
+      "type" : "integer",
+      "title" : "connect.cassandra.read.timeout.ms"
+    },
+    "connect.cassandra.assigned.tables" : {
+      "default" : "",
+      "description" : "The tables a task has been assigned.",
+      "type" : "string",
+      "title" : "connect.cassandra.assigned.tables"
+    },
+    "connect.cassandra.kcql" : {
+      "description" : "KCQL expression describing field selection and routes.",
+      "type" : "string",
+      "title" : "connect.cassandra.kcql"
+    },
+    "connect.cassandra.task.buffer.size" : {
+      "default" : 10000,
+      "description" : "The size of the queue as read writes to.",
+      "type" : "integer",
+      "title" : "connect.cassandra.task.buffer.size"
+    },
+    "connect.cassandra.batch.size" : {
+      "default" : 100,
+      "description" : "The number of records the source task should drain from the reader queue.",
+      "type" : "integer",
+      "title" : "connect.cassandra.batch.size"
+    },
+    "connect.cassandra.import.poll.interval" : {
+      "default" : 1000,
+      "description" : "The polling interval between queries against tables for bulk mode.",
+      "type" : "integer",
+      "title" : "connect.cassandra.import.poll.interval"
+    },
+    "connect.cassandra.import.allow.filtering" : {
+      "default" : true,
+      "description" : "Enable ALLOW FILTERING in incremental selects.",
+      "type" : "boolean",
+      "title" : "connect.cassandra.import.allow.filtering"
+    },
+    "connect.cassandra.time.slice.ms" : {
+      "default" : 10000,
+      "description" : "The range of time in milliseconds the source task the timestamp/timeuuid will use for query",
+      "type" : "integer",
+      "title" : "connect.cassandra.time.slice.ms"
+    },
+    "connect.cassandra.slice.duration" : {
+      "default" : 10000,
+      "description" : "Duration to query for in target Cassandra table. Used to restrict query timestamp span",
+      "type" : "integer",
+      "title" : "connect.cassandra.slice.duration"
+    },
+    "connect.cassandra.slice.delay.ms" : {
+      "default" : 30000,
+      "description" : "The delay between the current time and the time range of the query. Used to insure all of the data in the time slice is available",
+      "type" : "integer",
+      "title" : "connect.cassandra.slice.delay.ms"
+    },
+    "connect.cassandra.initial.offset" : {
+      "default" : "1900-01-01 00:00:00.0000000Z",
+      "description" : "The initial timestamp to start querying in Cassandra from (yyyy-MM-dd HH:mm:ss.SSS'Z'). Default 1900-01-01 00:00:00.0000000Z",
+      "type" : "string",
+      "title" : "connect.cassandra.initial.offset"
+    },
+    "connect.cassandra.mapping.collection.to.json" : {
+      "default" : true,
+      "description" : "Mapping columns with type Map, List and Set like json",
+      "type" : "boolean",
+      "title" : "connect.cassandra.mapping.collection.to.json"
+    },
+    "connect.cassandra.bucket.timeseries.mode" : {
+      "default" : "",
+      "description" : "The bucket mode to retrieve timeseries data. DAY, HOUR, MINUTE, SECOND.",
+      "type" : "string",
+      "title" : "connect.cassandra.bucket.timeseries.mode"
+    },
+    "connect.cassandra.bucket.timeseries.format" : {
+      "default" : "",
+      "description" : "The bucket format to retrieve timeseries data",
+      "type" : "string",
+      "title" : "connect.cassandra.bucket.timeseries.format"
+    },
+    "connect.cassandra.bucket.timeseries.field.name" : {
+      "default" : "bucket",
+      "description" : "The name of the field to use on bucket",
+      "type" : "string",
+      "title" : "connect.cassandra.bucket.timeseries.field.name"
+    },
+    "transforms" : {
+      "description" : "Comma-separated list of transformations to apply",
+      "type" : "string"
+    },
+    "transforms.{name}.type" : {
+      "description" : "Type of the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.predicate" : {
+      "description" : "Predicate for the transformation",
+      "type" : "string"
+    },
+    "transforms.{name}.negate" : {
+      "default" : false,
+      "description" : "Whether to negate the predicate",
+      "type" : "boolean"
+    },
+    "predicates" : {
+      "description" : "Comma-separated list of predicates",
+      "type" : "string"
+    },
+    "predicates.{name}.type" : {
+      "description" : "Type of the predicate",
+      "type" : "string"
+    },
+    "predicates.{name}.field" : {
+      "description" : "Field to evaluate (for field-based predicates)",
+      "type" : "string"
+    },
+    "config.providers" : {
+      "description" : "Comma-separated list of config provider aliases",
+      "type" : "string"
+    },
+    "config.providers.{name}.type" : {
+      "description" : "Type of the config provider",
+      "type" : "string"
+    }
+  },
+  "required" : [ "connector.class", "name", "tasks.max", "topics", "connect.cassandra.contact.points", "connect.cassandra.port", "connect.cassandra.key.space", "connect.cassandra.username", "connect.cassandra.error.policy", "connect.cassandra.kcql" ]
+}

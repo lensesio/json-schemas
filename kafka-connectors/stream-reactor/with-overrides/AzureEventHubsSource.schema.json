@@ -1,0 +1,311 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../schemas/AzureEventHubsSource.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-converter-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-consumer-overrides.schema.json"
+    },
+    {
+      "$ref": "../../overrides/kafka-connect-producer-overrides.schema.json"
+    }
+  ],
+  "required": [
+    "connector.class",
+    "name",
+    "tasks.max",
+    "topics",
+    "connect.eventhubs.source.connection.settings.bootstrap.servers",
+    "connect.eventhubs.source.connection.settings.session.timeout.ms",
+    "connect.eventhubs.source.connection.settings.heartbeat.interval.ms",
+    "connect.eventhubs.source.connection.settings.max.partition.fetch.bytes",
+    "connect.eventhubs.source.connection.settings.fetch.min.bytes",
+    "connect.eventhubs.source.connection.settings.group.protocol",
+    "connect.eventhubs.source.connection.settings.ssl.keystore.location",
+    "connect.eventhubs.source.connection.settings.ssl.keystore.password",
+    "connect.eventhubs.source.connection.settings.ssl.key.password",
+    "connect.eventhubs.source.connection.settings.ssl.keystore.key",
+    "connect.eventhubs.source.connection.settings.ssl.keystore.certificate.chain",
+    "connect.eventhubs.source.connection.settings.ssl.truststore.certificates",
+    "connect.eventhubs.source.connection.settings.ssl.truststore.location",
+    "connect.eventhubs.source.connection.settings.ssl.truststore.password",
+    "connect.eventhubs.kcql"
+  ],
+  "defaultSnippets": [
+    {
+      "label": "Connector: Azure Event Hubs Source - Minimal",
+      "description": "Minimal configuration with required fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.azure.eventhubs.source.AzureEventHubsSourceConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "connect.eventhubs.source.connection.settings.bootstrap.servers": [],
+        "connect.eventhubs.source.connection.settings.session.timeout.ms": 45000,
+        "connect.eventhubs.source.connection.settings.heartbeat.interval.ms": 3000,
+        "connect.eventhubs.source.connection.settings.max.partition.fetch.bytes": 1048576,
+        "connect.eventhubs.source.connection.settings.fetch.min.bytes": 1,
+        "connect.eventhubs.source.connection.settings.group.protocol": "classic",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.location": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.password": "",
+        "connect.eventhubs.source.connection.settings.ssl.key.password": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.key": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.certificate.chain": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.certificates": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.location": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.password": "",
+        "connect.eventhubs.kcql": ""
+      }
+    },
+    {
+      "label": "Connector: Azure Event Hubs Source - Full",
+      "description": "Full configuration with all fields",
+      "body": {
+        "connector.class": "io.lenses.streamreactor.connect.azure.eventhubs.source.AzureEventHubsSourceConnector",
+        "name": "",
+        "tasks.max": "1",
+        "topics": "",
+        "connect.eventhubs.source.connection.settings.bootstrap.servers": [],
+        "connect.eventhubs.source.connection.settings.client.dns.lookup": "use_all_dns_ips",
+        "connect.eventhubs.source.connection.settings.group.instance.id": "",
+        "connect.eventhubs.source.connection.settings.session.timeout.ms": 45000,
+        "connect.eventhubs.source.connection.settings.heartbeat.interval.ms": 3000,
+        "connect.eventhubs.source.connection.settings.partition.assignment.strategy": [
+          "org.apache.kafka.clients.consumer.RangeAssignor",
+          "org.apache.kafka.clients.consumer.CooperativeStickyAssignor"
+        ],
+        "connect.eventhubs.source.connection.settings.metadata.max.age.ms": 300000,
+        "connect.eventhubs.source.connection.settings.auto.commit.interval.ms": 5000,
+        "connect.eventhubs.source.connection.settings.client.rack": "",
+        "connect.eventhubs.source.connection.settings.max.partition.fetch.bytes": 1048576,
+        "connect.eventhubs.source.connection.settings.send.buffer.bytes": 131072,
+        "connect.eventhubs.source.connection.settings.receive.buffer.bytes": 65536,
+        "connect.eventhubs.source.connection.settings.fetch.min.bytes": 1,
+        "connect.eventhubs.source.connection.settings.fetch.max.bytes": 52428800,
+        "connect.eventhubs.source.connection.settings.fetch.max.wait.ms": 500,
+        "connect.eventhubs.source.connection.settings.reconnect.backoff.ms": 50,
+        "connect.eventhubs.source.connection.settings.reconnect.backoff.max.ms": 1000,
+        "connect.eventhubs.source.connection.settings.retry.backoff.ms": 100,
+        "connect.eventhubs.source.connection.settings.retry.backoff.max.ms": 1000,
+        "connect.eventhubs.source.connection.settings.enable.metrics.push": true,
+        "connect.eventhubs.source.connection.settings.auto.offset.reset": "latest",
+        "connect.eventhubs.source.connection.settings.check.crcs": true,
+        "connect.eventhubs.source.connection.settings.metrics.sample.window.ms": 30000,
+        "connect.eventhubs.source.connection.settings.metrics.num.samples": 2,
+        "connect.eventhubs.source.connection.settings.metrics.recording.level": "INFO",
+        "connect.eventhubs.source.connection.settings.metric.reporters": [],
+        "connect.eventhubs.source.connection.settings.auto.include.jmx.reporter": true,
+        "connect.eventhubs.source.connection.settings.request.timeout.ms": 30000,
+        "connect.eventhubs.source.connection.settings.default.api.timeout.ms": 60000,
+        "connect.eventhubs.source.connection.settings.socket.connection.setup.timeout.ms": 10000,
+        "connect.eventhubs.source.connection.settings.socket.connection.setup.timeout.max.ms": 30000,
+        "connect.eventhubs.source.connection.settings.connections.max.idle.ms": 540000,
+        "connect.eventhubs.source.connection.settings.interceptor.classes": [],
+        "connect.eventhubs.source.connection.settings.max.poll.records": 500,
+        "connect.eventhubs.source.connection.settings.max.poll.interval.ms": 300000,
+        "connect.eventhubs.source.connection.settings.exclude.internal.topics": true,
+        "connect.eventhubs.source.connection.settings.internal.leave.group.on.close": true,
+        "connect.eventhubs.source.connection.settings.internal.throw.on.fetch.stable.offset.unsupported": false,
+        "connect.eventhubs.source.connection.settings.isolation.level": "read_uncommitted",
+        "connect.eventhubs.source.connection.settings.allow.auto.create.topics": true,
+        "connect.eventhubs.source.connection.settings.group.protocol": "classic",
+        "connect.eventhubs.source.connection.settings.group.remote.assignor": "",
+        "connect.eventhubs.source.connection.settings.security.providers": "",
+        "connect.eventhubs.source.connection.settings.security.protocol": "PLAINTEXT",
+        "connect.eventhubs.source.connection.settings.ssl.protocol": "TLSv1.3",
+        "connect.eventhubs.source.connection.settings.ssl.provider": "",
+        "connect.eventhubs.source.connection.settings.ssl.cipher.suites": [],
+        "connect.eventhubs.source.connection.settings.ssl.enabled.protocols": [
+          "TLSv1.2",
+          "TLSv1.3"
+        ],
+        "connect.eventhubs.source.connection.settings.ssl.keystore.type": "JKS",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.location": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.password": "",
+        "connect.eventhubs.source.connection.settings.ssl.key.password": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.key": "",
+        "connect.eventhubs.source.connection.settings.ssl.keystore.certificate.chain": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.certificates": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.type": "JKS",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.location": "",
+        "connect.eventhubs.source.connection.settings.ssl.truststore.password": "",
+        "connect.eventhubs.source.connection.settings.ssl.keymanager.algorithm": "SunX509",
+        "connect.eventhubs.source.connection.settings.ssl.trustmanager.algorithm": "PKIX",
+        "connect.eventhubs.source.connection.settings.ssl.endpoint.identification.algorithm": "https",
+        "connect.eventhubs.source.connection.settings.ssl.secure.random.implementation": "",
+        "connect.eventhubs.source.connection.settings.ssl.engine.factory.class": "",
+        "connect.eventhubs.source.connection.settings.sasl.kerberos.service.name": "",
+        "connect.eventhubs.source.connection.settings.sasl.kerberos.kinit.cmd": "/usr/bin/kinit",
+        "connect.eventhubs.source.connection.settings.sasl.kerberos.ticket.renew.window.factor": 0.8,
+        "connect.eventhubs.source.connection.settings.sasl.kerberos.ticket.renew.jitter": 0.05,
+        "connect.eventhubs.source.connection.settings.sasl.kerberos.min.time.before.relogin": 60000,
+        "connect.eventhubs.source.connection.settings.sasl.login.refresh.window.factor": 0.8,
+        "connect.eventhubs.source.connection.settings.sasl.login.refresh.window.jitter": 0.05,
+        "connect.eventhubs.source.connection.settings.sasl.login.refresh.min.period.seconds": "60",
+        "connect.eventhubs.source.connection.settings.sasl.login.refresh.buffer.seconds": "300",
+        "connect.eventhubs.source.connection.settings.sasl.mechanism": "GSSAPI",
+        "connect.eventhubs.source.connection.settings.sasl.jaas.config": "",
+        "connect.eventhubs.source.connection.settings.sasl.client.callback.handler.class": "",
+        "connect.eventhubs.source.connection.settings.sasl.login.callback.handler.class": "",
+        "connect.eventhubs.source.connection.settings.sasl.login.class": "",
+        "connect.eventhubs.source.connection.settings.sasl.login.connect.timeout.ms": 0,
+        "connect.eventhubs.source.connection.settings.sasl.login.read.timeout.ms": 0,
+        "connect.eventhubs.source.connection.settings.sasl.login.retry.backoff.max.ms": 10000,
+        "connect.eventhubs.source.connection.settings.sasl.login.retry.backoff.ms": 100,
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.scope.claim.name": "scope",
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.sub.claim.name": "sub",
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.token.endpoint.url": "",
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.jwks.endpoint.url": "",
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.jwks.endpoint.refresh.ms": 3600000,
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms": 10000,
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.jwks.endpoint.retry.backoff.ms": 100,
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.clock.skew.seconds": 30,
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.expected.audience": [],
+        "connect.eventhubs.source.connection.settings.sasl.oauthbearer.expected.issuer": "",
+        "connect.eventhubs.source.close.timeout": 30,
+        "connect.eventhubs.source.default.offset": "earliest",
+        "connect.eventhubs.kcql": "",
+        "transforms": "",
+        "transforms.{name}.type": "",
+        "transforms.{name}.predicate": "",
+        "transforms.{name}.negate": false,
+        "predicates": "",
+        "predicates.{name}.type": "",
+        "predicates.{name}.field": "",
+        "config.providers": "",
+        "config.providers.{name}.type": ""
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry",
+      "description": "Configure Avro converters with Schema Registry integration",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: JSON with Schema",
+      "description": "Configure JSON converters with schema support",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Overrides: String",
+      "description": "Configure String converters without schema",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "key.converter.schemas.enable": false,
+        "value.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Overrides: Avro with Schema Registry Auth",
+      "description": "Configure Avro converters with Schema Registry authentication",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.basic.auth.credentials.source": "USER_INFO",
+        "value.converter.basic.auth.credentials.source": "USER_INFO",
+        "key.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "value.converter.schema.registry.basic.auth.user.info": "user:pass",
+        "key.converter.schemas.enable": true,
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "PLAIN",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "consumer.override.security.protocol": "SASL_PLAINTEXT",
+        "consumer.override.sasl.mechanism": "GSSAPI",
+        "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "consumer.override.security.protocol": "SSL",
+        "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "consumer.override.ssl.truststore.password": "changeit",
+        "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "consumer.override.ssl.keystore.password": "changeit",
+        "consumer.override.ssl.key.password": "changeit"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "PLAIN",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "producer.override.security.protocol": "SASL_SSL",
+        "producer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "producer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "producer.override.security.protocol": "SASL_PLAINTEXT",
+        "producer.override.sasl.mechanism": "GSSAPI",
+        "producer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Producer Overrides: SSL Only",
+      "description": "SSL encryption without SASL authentication",
+      "body": {
+        "producer.override.security.protocol": "SSL",
+        "producer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "producer.override.ssl.truststore.password": "changeit",
+        "producer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "producer.override.ssl.keystore.password": "changeit",
+        "producer.override.ssl.key.password": "changeit"
+      }
+    }
+  ]
+}
