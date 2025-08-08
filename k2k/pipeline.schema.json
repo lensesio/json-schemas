@@ -1,0 +1,1490 @@
+{
+    "$schema" : "http://json-schema.org/draft-07/schema#",
+    "$defs" : {
+  
+    },
+    "type" : "object",
+    "properties" : {
+      "name" : {
+        "description" : "Name given to the current pipeline.",
+        "type" : "string"
+      },
+      "source" : {
+        "description" : "Source connection configuration.",
+        "type" : "object",
+        "properties" : {
+          "kafka" : {
+            "type" : "object",
+            "properties" : {
+              "connection" : {
+                "description" : "Connection details used when instantiating a kafka connection.",
+                "type" : "object",
+                "properties" : {
+                  "servers" : {
+                    "description" : "Bootstrap servers for kafka.",
+                    "type" : "string"
+                  }
+                },
+                "required" : [
+                  "servers"
+                ]
+              },
+              "consumer" : {
+                "description" : "Consumer configuration.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "oneOf" : [
+                        {
+                          "type" : "string"
+                        },
+                        {
+                          "type" : "null"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "registry" : {
+                "description" : "Schema registry configuration.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "supportedTypes" : {
+                        "description" : "List of types supported by K2K.",
+                        "oneOf" : [
+                          {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "string"
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "url" : {
+                        "description" : "Url used to connect to the schema registry",
+                        "type" : "string"
+                      },
+                      "cacheSize" : {
+                        "description" : "Maximum number of of schemas that can be cached by K2K.",
+                        "oneOf" : [
+                          {
+                            "type" : "integer"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "config" : {
+                        "description" : "Configuration keys for the schema registry client.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "oneOf" : [
+                                {
+                                  "oneOf" : [
+                                    {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "integer"
+                                        },
+                                        {
+                                          "type" : "number"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type" : "null"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type" : "null"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "headers" : {
+                        "description" : "Additional http headers to be included when calling the Schema Registry.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "type" : "string"
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                      "url"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+              "connection"
+            ]
+          }
+        },
+        "required" : [
+          "kafka"
+        ]
+      },
+      "coordination" : {
+        "description" : "Configuration for coordination processes.",
+        "type" : "object",
+        "properties" : {
+          "kafka" : {
+            "type" : "object",
+            "properties" : {
+              "consumer" : {
+                "description" : "Configuration used by consumer reading control data from target cluster.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "oneOf" : [
+                        {
+                          "type" : "string"
+                        },
+                        {
+                          "type" : "null"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "assignment" : {
+                "description" : "Configuration for partition assignment module when using exactly once.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "topic" : {
+                        "description" : "Topic used for assignment coordination.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "graceWindow" : {
+                        "description" : "Time to wait before the application actively fences off other applications.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "fencingMaxParallelism" : {
+                        "description" : "Controls the max parallelism when fencing slow/zombie producers.",
+                        "oneOf" : [
+                          {
+                            "type" : "integer"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "commit" : {
+                "description" : "Configuration used by offset commit module.",
+                "type" : "object",
+                "properties" : {
+                  "batchSize" : {
+                    "description" : "Maximum number of records to be sent in one go to the target cluster's consumer.",
+                    "oneOf" : [
+                      {
+                        "type" : "integer"
+                      },
+                      {
+                        "type" : "null"
+                      }
+                    ]
+                  },
+                  "syncTimeout" : {
+                    "description" : "Max amount of time to wait when attempting to determine the last committed offset for a group.",
+                    "oneOf" : [
+                      {
+                        "type" : "string"
+                      },
+                      {
+                        "type" : "null"
+                      }
+                    ]
+                  },
+                  "topic" : {
+                    "description" : "Topic used to publish messages pertaining to offset commits.",
+                    "oneOf" : [
+                      {
+                        "type" : "string"
+                      },
+                      {
+                        "type" : "null"
+                      }
+                    ]
+                  },
+                  "batchTimeout" : {
+                    "description" : "Maximum amount of time to wait for the batch limit to be reached before sending the current batch to the target cluster's consumer.",
+                    "oneOf" : [
+                      {
+                        "type" : "string"
+                      },
+                      {
+                        "type" : "null"
+                      }
+                    ]
+                  },
+                  "group" : {
+                    "description" : "Name used by K2K when committing offsets as well as when determining the last committed offsets for the group.",
+                    "type" : "string"
+                  }
+                },
+                "required" : [
+                  "group"
+                ]
+              }
+            },
+            "required" : [
+              "commit"
+            ]
+          }
+        },
+        "required" : [
+          "kafka"
+        ]
+      },
+      "features" : {
+        "description" : "Feature toggles.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "schemaMapping" : {
+                "description" : "Toggles schema replication.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "headerReplication" : {
+                "description" : "Toggles header replication.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "exactlyOnce" : {
+                "description" : "Toggles exactly once.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "autoCreateTopics" : {
+                "description" : "Toggles auto creation of replicated topics in the target cluster.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "tracingHeaders" : {
+                "description" : "Controls the tracing header's names.",
+                "oneOf" : [
+                  {
+                    "oneOf" : [
+                      {
+                        "enum" : [
+                          "enabled",
+                          "disabled"
+                        ]
+                      },
+                      {
+                        "type" : "object",
+                        "properties" : {
+                          "partition" : {
+                            "description" : "Name used by the header used to inject the source partition number.",
+                            "oneOf" : [
+                              {
+                                "enum" : [
+                                  "enabled",
+                                  "disabled"
+                                ]
+                              },
+                              {
+                                "type" : "null"
+                              }
+                            ]
+                          },
+                          "offset" : {
+                            "description" : "Name used by the header used to inject the source offset.",
+                            "oneOf" : [
+                              {
+                                "enum" : [
+                                  "enabled",
+                                  "disabled"
+                                ]
+                              },
+                              {
+                                "type" : "null"
+                              }
+                            ]
+                          },
+                          "topic" : {
+                            "description" : "Name used by the header used to inject the source topic name.",
+                            "oneOf" : [
+                              {
+                                "enum" : [
+                                  "enabled",
+                                  "disabled"
+                                ]
+                              },
+                              {
+                                "type" : "null"
+                              }
+                            ]
+                          },
+                          "pipeline" : {
+                            "description" : "Name used by the header used to inject the pipeline's name.",
+                            "oneOf" : [
+                              {
+                                "enum" : [
+                                  "enabled",
+                                  "disabled"
+                                ]
+                              },
+                              {
+                                "type" : "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required" : [
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "optimizeCommitPartition" : {
+                "description" : "Toggles optimization where a single partition per consumer group is used when publishing control messages.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "autoCreateControlTopics" : {
+                "description" : "Toggles auto creation of k2k internal topics.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "keepRecordCreationTimestamp" : {
+                "description" : "keepRecordCreationTimestamp",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "validateControlTopicSettings" : {
+                "description" : "Toggles validation that verifies if the necessary control topics are present in the target cluster before K2K starts.",
+                "oneOf" : [
+                  {
+                    "enum" : [
+                      "enabled",
+                      "disabled"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "license" : {
+        "description" : "License configuration for K2K.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "token" : {
+                "description" : "Accepts the EULA for K2K. This must be set to true in order to run K2K.",
+                "oneOf" : [
+                  {
+                    "type" : "string"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "acceptEula" : {
+                "description" : "Accepts the EULA for K2K. This must be set to true in order to run K2K.",
+                "oneOf" : [
+                  {
+                    "type" : "boolean"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "replication" : {
+        "description" : "Definition of replication pipeline.",
+        "type" : "array",
+        "items" : {
+          "oneOf" : [
+            {
+              "type" : "object",
+              "properties" : {
+                "source" : {
+                  "type" : "object",
+                  "properties" : {
+                    "topic" : {
+                      "description" : "topic",
+                      "oneOf" : [
+                        {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string"
+                          }
+                        },
+                        {
+                          "type" : "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required" : [
+                    "topic"
+                  ]
+                }
+              },
+              "required" : [
+                "source"
+              ]
+            },
+            {
+              "type" : "object",
+              "properties" : {
+                "sink" : {
+                  "type" : "object",
+                  "properties" : {
+                    "partition" : {
+                      "description" : "Strategy to be used when assigning a topic to a replicated record.",
+                      "type" : "string"
+                    },
+                    "topic" : {
+                      "description" : "Strategy to be used when assigning a topic to a replicated record.",
+                      "oneOf" : [
+                        {
+                          "enum" : [
+                            "source"
+                          ]
+                        },
+                        {
+                          "type" : "object",
+                          "properties" : {
+                            "prefix" : {
+                              "description" : "Defines a prefix to be prepended to the source topic name when determining the record's target topic name.",
+                              "oneOf" : [
+                                {
+                                  "type" : "string"
+                                },
+                                {
+                                  "type" : "null"
+                                }
+                              ]
+                            },
+                            "suffix" : {
+                              "description" : "Defines a suffix to be appended to the source topic name when determining the record's target topic name.",
+                              "oneOf" : [
+                                {
+                                  "type" : "string"
+                                },
+                                {
+                                  "type" : "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required" : [
+                          ]
+                        },
+                        {
+                          "type" : "object",
+                          "properties" : {
+                            "static" : {
+                              "description" : "Defines the name of the topic record's will be routed towards.",
+                              "type" : "string"
+                            }
+                          },
+                          "required" : [
+                            "static"
+                          ]
+                        },
+                        {
+                          "type" : "object",
+                          "properties" : {
+                            "staticMapping" : {
+                              "description" : "Defines a set of rules to determine a record's target topic based on the source topic's name.",
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "additionalProperties" : {
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          },
+                          "required" : [
+                            "staticMapping"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required" : [
+                    "partition",
+                    "topic"
+                  ]
+                }
+              },
+              "required" : [
+                "sink"
+              ]
+            }
+          ]
+        }
+      },
+      "tracing" : {
+        "description" : "Configuration of the tracing module.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "headers" : {
+                "description" : "Header configuration to be used when tracing headers are enabled.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "partition" : {
+                        "description" : "Name used by the header used to inject the source partition number.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "offset" : {
+                        "description" : "Name used by the header used to inject the source offset.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "topic" : {
+                        "description" : "Name used by the header used to inject the source topic name.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "pipeline" : {
+                        "description" : "Name used by the header used to inject the pipeline's name.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "errorHandling" : {
+        "description" : "Configuration for error handling.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "onCommitSyncTimeout" : {
+                "description" : "Defines the error handling strategy to be used when K2K is not able to deserialize a control message.",
+                "oneOf" : [
+                  {
+                    "type" : "string"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "onControlMessageDeserializationError" : {
+                "description" : "Defines the error handling strategy to be used when K2K is not able to deserialize a control message.",
+                "oneOf" : [
+                  {
+                    "type" : "string"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "configuration" : {
+        "description" : "Assorted parameters that can be used to configure K2K.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "autoControlTopicCreationCheckDelay" : {
+                "description" : "How many times K2K should try to assert that a topic it created is present in the cluster before giving up.",
+                "oneOf" : [
+                  {
+                    "type" : "string"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "autoControlTopicCreationMaxAttempts" : {
+                "description" : "How many times K2K should try to assert that a topic it created is present in the cluster before giving up.",
+                "oneOf" : [
+                  {
+                    "type" : "integer"
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "topicCreation" : {
+        "description" : "Configuration for the auto creation of topics.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "replication" : {
+                "description" : "Configuration for auto-creation of control topics.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "common" : {
+                        "description" : "Specific rules to be applied to all auto-created replicated topics.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "properties" : {
+                              "partitions" : {
+                                "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "replication" : {
+                                "description" : "Default topic replication to be used when auto-creating topics.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "config" : {
+                                "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "object",
+                                    "additionalProperties" : {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required" : [
+                            ]
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "rules" : {
+                        "description" : "Specific rules to be applied to all auto-created replicated topics.",
+                        "oneOf" : [
+                          {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "pattern" : {
+                                  "description" : "Properties to be used when auto creating topics matched by this rule.",
+                                  "type" : "string"
+                                },
+                                "properties" : {
+                                  "description" : "Properties to be used when auto creating topics matched by this rule.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "partitions" : {
+                                      "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                      "oneOf" : [
+                                        {
+                                          "type" : "integer"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    },
+                                    "replication" : {
+                                      "description" : "Default topic replication to be used when auto-creating topics.",
+                                      "oneOf" : [
+                                        {
+                                          "type" : "integer"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    },
+                                    "config" : {
+                                      "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                      "oneOf" : [
+                                        {
+                                          "type" : "object",
+                                          "additionalProperties" : {
+                                            "oneOf" : [
+                                              {
+                                                "type" : "string"
+                                              },
+                                              {
+                                                "type" : "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required" : [
+                                  ]
+                                }
+                              },
+                              "required" : [
+                                "pattern",
+                                "properties"
+                              ]
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "control" : {
+                "description" : "Configuration for auto-creation of control topics.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "common" : {
+                        "description" : "Common configuration to be used when creating control topics.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "properties" : {
+                              "partitions" : {
+                                "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "replication" : {
+                                "description" : "Default topic replication to be used when auto-creating topics.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "config" : {
+                                "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "object",
+                                    "additionalProperties" : {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required" : [
+                            ]
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "assignment" : {
+                        "description" : "Configuration used when auto-creating the assignment control topic.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "properties" : {
+                              "partitions" : {
+                                "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "replication" : {
+                                "description" : "Default topic replication to be used when auto-creating topics.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "config" : {
+                                "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "object",
+                                    "additionalProperties" : {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required" : [
+                            ]
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "commit" : {
+                        "description" : "Configuration used when auto-creating the offset control topic.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "properties" : {
+                              "partitions" : {
+                                "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "replication" : {
+                                "description" : "Default topic replication to be used when auto-creating topics.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "config" : {
+                                "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "object",
+                                    "additionalProperties" : {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required" : [
+                            ]
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "metrics" : {
+                        "description" : "Configuration used when auto-creating the metrics control topic.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "properties" : {
+                              "partitions" : {
+                                "description" : "Default t countopic partition count to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "replication" : {
+                                "description" : "Default topic replication to be used when auto-creating topics.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "integer"
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              },
+                              "config" : {
+                                "description" : "Default topic configuration to be used when auto-creating a topic.",
+                                "oneOf" : [
+                                  {
+                                    "type" : "object",
+                                    "additionalProperties" : {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "type" : "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required" : [
+                            ]
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      },
+      "target" : {
+        "description" : "Target connection configuration.",
+        "type" : "object",
+        "properties" : {
+          "kafka" : {
+            "type" : "object",
+            "properties" : {
+              "connection" : {
+                "description" : "Connection details used when instantiating a kafka connection.",
+                "type" : "object",
+                "properties" : {
+                  "servers" : {
+                    "description" : "Bootstrap servers for kafka.",
+                    "type" : "string"
+                  }
+                },
+                "required" : [
+                  "servers"
+                ]
+              },
+              "producer" : {
+                "description" : "Target producer configuration.",
+                "oneOf" : [
+                  {
+                    "oneOf" : [
+                      {
+                        "type" : "object",
+                        "additionalProperties" : {
+                          "oneOf" : [
+                            {
+                              "type" : "string"
+                            },
+                            {
+                              "type" : "null"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type" : "null"
+                      }
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "registry" : {
+                "description" : "Target schema registry configuration.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "supportedTypes" : {
+                        "description" : "List of types supported by K2K.",
+                        "oneOf" : [
+                          {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "string"
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "url" : {
+                        "description" : "Url used to connect to the schema registry",
+                        "type" : "string"
+                      },
+                      "cacheSize" : {
+                        "description" : "Maximum number of of schemas that can be cached by K2K.",
+                        "oneOf" : [
+                          {
+                            "type" : "integer"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "config" : {
+                        "description" : "Configuration keys for the schema registry client.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "oneOf" : [
+                                {
+                                  "oneOf" : [
+                                    {
+                                      "oneOf" : [
+                                        {
+                                          "type" : "string"
+                                        },
+                                        {
+                                          "type" : "integer"
+                                        },
+                                        {
+                                          "type" : "number"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type" : "null"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type" : "null"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "headers" : {
+                        "description" : "Additional http headers to be included when calling the Schema Registry.",
+                        "oneOf" : [
+                          {
+                            "type" : "object",
+                            "additionalProperties" : {
+                              "type" : "string"
+                            }
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                      "url"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+              "connection"
+            ]
+          }
+        },
+        "required" : [
+          "kafka"
+        ]
+      },
+      "metrics" : {
+        "description" : "Metrics configuration for K2K.",
+        "oneOf" : [
+          {
+            "type" : "object",
+            "properties" : {
+              "prefix" : {
+                "description" : "Configuration used when publishing metrics to kafka.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "sourceConsumer" : {
+                        "description" : "Prefix added to metrics concerning the consumer instantiated against the source cluster.",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "targetConsumer" : {
+                        "description" : "Prefix added to metrics concerning the consumer instantiated against the target cluster. ",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "targetProducer" : {
+                        "description" : "Prefix added to metrics concerning the producer instantiated against the target cluster. ",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      },
+                      "assignment" : {
+                        "description" : "Prefix added to metrics concerning the assignment process (assigned topics, partitions,...) ",
+                        "oneOf" : [
+                          {
+                            "type" : "string"
+                          },
+                          {
+                            "type" : "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required" : [
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              },
+              "kafka" : {
+                "description" : "Configuration used when publishing metrics to kafka.",
+                "oneOf" : [
+                  {
+                    "type" : "object",
+                    "properties" : {
+                      "topic" : {
+                        "type" : "string"
+                      }
+                    },
+                    "required" : [
+                      "topic"
+                    ]
+                  },
+                  {
+                    "type" : "null"
+                  }
+                ]
+              }
+            },
+            "required" : [
+            ]
+          },
+          {
+            "type" : "null"
+          }
+        ]
+      }
+    },
+    "required" : [
+      "name",
+      "source",
+      "coordination",
+      "replication",
+      "target"
+    ]
+  }
