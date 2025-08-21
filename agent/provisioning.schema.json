@@ -1379,7 +1379,7 @@
               },
               "sslAlgorthrim": {
                 "type": "object",
-                "description": "Name of the SSL algorthrim.",
+                "description": "Name of the SSL algorithm.",
                 "properties": {
                   "value": {
                     "type": "string"
@@ -2036,7 +2036,7 @@
             ],
             "configuration": {
               "server": {
-                "value": "<YOUR LENSES HQ SERVER URL>"
+                "value": "<YOUR_LENSES_HQ_SERVER_URL>"
               },
               "port": {
                 "value": 10000
@@ -2289,7 +2289,7 @@
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
               "# sslKeystore": {
                 "# file": "keystore.jks"
               },
@@ -2356,7 +2356,7 @@
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
               "# sslKeystore": {
                 "# file": "keystore.jks"
               },
@@ -2417,7 +2417,7 @@
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
               "# sslKeystore": {
                 "# file": "keystore.jks"
               },
@@ -2525,7 +2525,7 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (mutal TLS/SSL)",
+      "label": "Kafka, AWS MSK (mutual TLS/SSL)",
       "body": {
         "kafka": [
           {
@@ -2653,7 +2653,7 @@
       }
     },
     {
-      "label": "Kafka, mutal SSL/TLS",
+      "label": "Kafka, mutual SSL/TLS",
       "body": {
         "kafka": [
           {
@@ -2770,7 +2770,7 @@
               "sslTruststorePassword": {
                 "value": "truststore-password"
               },
-              "# Optional: Uncomment below to enable mutal TLS/SSL": "Uncomment the properties below",
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
               "# sslKeystore": {
                 "# file": "keystore.jks"
               },
@@ -2829,7 +2829,7 @@
               "# sslTruststorePassword": {
                 "# value": "truststore-password"
               },
-              "# Optional: Uncomment below to enable mutal SSL/TLS": "Uncomment the properties below",
+              "# Optional: Uncomment below to enable mutual SSL/TLS": "Uncomment the properties below",
               "# sslKeystore": {
                 "# file": "keystore.jks"
               },
