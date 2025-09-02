@@ -2948,7 +2948,7 @@
       }
     }
   ],
-  "required": ["kafka", "lensesHq"],
+  // "required": ["kafka", "lensesHq"],
   "dependencies": {
     "glueSchemaRegistry": ["aws"]
   }
