@@ -1274,7 +1274,7 @@
                     "description": "Enter the registry default compatibility (non empty).",
                     "enum": [
                       "BACKWARD",
-                      "BACKWARD_ALL", 
+                      "BACKWARD_ALL",
                       "FORWARD",
                       "FORWARD_ALL",
                       "FULL",
@@ -1292,7 +1292,7 @@
                 "description": "Type of Schema Registry flavor.",
                 "properties": {
                   "value": {
-                    "type": "string", 
+                    "type": "string",
                     "description": "Enter the Registry Flavor.",
                     "enum": [
                       "Confluent",
@@ -1685,11 +1685,11 @@
                 "description": "AWS region.",
                 "properties": {
                   "value": {
-                    "type": "string", 
+                    "type": "string",
                     "description": "Enter the AWS region.",
                     "enum": [
                       "us-east-1",
-                      "us-east-2", 
+                      "us-east-2",
                       "us-west-1",
                       "us-west-2",
                       "af-south-1",
@@ -2880,7 +2880,12 @@
               "protocol": {
                 "value": "SASL_SSL"
               },
-              "## Optional: SSL/TLS": "Uncomment the properties below",
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
               "sslTruststore": {
                 "file": "kafka-truststore.jks"
               },
@@ -2894,11 +2899,8 @@
               "# sslKeystorePassword": {
                 "# value": ""
               },
-              "saslMechanism": {
-                "value": "PLAIN"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              "# sslKeyPassword": {
+                "# value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -2961,6 +2963,9 @@
               "# sslKeystorePassword": {
                 "# value": ""
               },
+              "# sslKeyPassword": {
+                "# value": ""
+              },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
@@ -3020,6 +3025,9 @@
                 "# file": "kafka-keystore.jks"
               },
               "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "# sslKeyPassword": {
                 "# value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
@@ -3429,7 +3437,7 @@
               },
               "# glueRegistryDefaultCompatibility": {
                 "# value": ""
-              },	
+              },
               "# schemaRegistryFlavor": {
                 "# value": ""
               }
@@ -3481,7 +3489,7 @@
               },
               "# glueRegistryDefaultCompatibility": {
                 "# value": ""
-              },	
+              },
               "# schemaRegistryFlavor": {
                 "# value": ""
               }
@@ -3545,7 +3553,7 @@
               },
               "# glueRegistryDefaultCompatibility": {
                 "# value": ""
-              },	
+              },
               "# schemaRegistryFlavor": {
                 "# value": ""
               }
