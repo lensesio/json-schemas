@@ -1820,6 +1820,7 @@
     {
       "label": "HQ Connection",
       "body": {
+        "# Template": "HQ Connection",
         "lensesHq": [
           {
             "name": "lenses-hq",
@@ -1827,13 +1828,13 @@
             "tags": ["hq"],
             "configuration": {
               "server": {
-                "value": "<YOUR_LENSES_HQ_SERVER_URL>"
+                "value": ""
               },
               "port": {
                 "value": 10000
               },
               "agentKey": {
-                "value": "<LENSES_HQ_AGENT_KEY>"
+                "value": ""
               }
             }
           }
@@ -1843,6 +1844,7 @@
     {
       "label": "HQ Connection TLS",
       "body": {
+        "# Template": "HQ Connection TLS",
         "lensesHq": [
           {
             "name": "lenses-hq",
@@ -1850,13 +1852,13 @@
             "tags": ["hq"],
             "configuration": {
               "server": {
-                "value": "<YOUR_LENSES_HQ_SERVER_URL>"
+                "value": ""
               },
               "port": {
                 "value": 10000
               },
               "agentKey": {
-                "value": "<LENSES_HQ_AGENT_KEY>"
+                "value": ""
               },
               "sslEnabled": {
                 "value": true
@@ -1875,6 +1877,7 @@
     {
       "label": "Kafka, Aiven",
       "body": {
+        "# Template": "Kafka, Aiven",
         "kafka": [
           {
             "name": "kafka",
@@ -1933,6 +1936,7 @@
     {
       "label": "Kafka, AWS MSK (TLS/SSL)",
       "body": {
+        "# Template": "Kafka, AWS MSK (TLS/SSL template)",
         "kafka": [
           {
             "name": "kafka",
@@ -1966,6 +1970,7 @@
     {
       "label": "Kafka, AWS MSK (mutual TLS/SSL)",
       "body": {
+        "# Template": "Kafka, AWS MSK (mutual TLS/SSL template)",
         "kafka": [
           {
             "name": "kafka",
@@ -2008,6 +2013,7 @@
     {
       "label": "Kafka, AWS MSK (IAM)",
       "body": {
+        "# Template": "Kafka, AWS MSK (IAM template)",
         "kafka": [
           {
             "name": "kafka",
@@ -2046,6 +2052,7 @@
     {
       "label": "Kafka, Azure Eventhubs",
       "body": {
+        "# Template": "Kafka, Azure Eventhubs",
         "kafka": [
           {
             "name": "kafka",
@@ -2072,6 +2079,7 @@
     {
       "label": "Kafka, Confluent Cloud",
       "body": {
+        "# Template": "Kafka, Confluent Cloud",
         "kafka": [
           {
             "name": "kafka",
@@ -2131,6 +2139,7 @@
     {
       "label": "Kafka, IBM Event Streams",
       "body": {
+        "# Template": "Kafka, IBM Event Streams",
         "kafka": [
           {
             "name": "kafka",
@@ -2173,6 +2182,7 @@
     {
       "label": "Kafka, Redpanda",
       "body": {
+        "# Template": "Kafka, Redpanda",
         "kafka": [
           {
             "name": "kafka",
@@ -2232,6 +2242,7 @@
     {
       "label": "Kafka, PLAINTEXT",
       "body": {
+        "# Template": "Kafka, PLAINTEXT",
         "kafka": [
           {
             "name": "kafka",
@@ -2268,6 +2279,7 @@
     {
       "label": "Kafka, SASL_PLAINTEXT, PLAIN",
       "body": {
+        "# Template": "Kafka, SASL_PLAINTEXT, PLAIN",
         "kafka": [
           {
             "name": "kafka",
@@ -2313,6 +2325,7 @@
     {
       "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
       "body": {
+        "# Template": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
         "kafka": [
           {
             "name": "kafka",
@@ -2358,6 +2371,7 @@
     {
       "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
       "body": {
+        "# Template": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
         "kafka": [
           {
             "name": "kafka",
@@ -2403,6 +2417,7 @@
     {
       "label": "Kafka, SASL_SSL, PLAIN",
       "body": {
+        "# Template": "Kafka, SASL_SSL, PLAIN",
         "kafka": [
           {
             "name": "kafka",
@@ -2462,6 +2477,7 @@
     {
       "label": "Kafka, SASL_SSL, SCRAM-SHA-256",
       "body": {
+        "# Template": "Kafka, SASL_SSL, SCRAM-SHA-256",        
         "kafka": [
           {
             "name": "kafka",
@@ -2520,6 +2536,7 @@
     {
       "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
       "body": {
+        "# Template": "Kafka, SSL",
         "kafka": [
           {
             "name": "kafka",
@@ -2575,6 +2592,7 @@
     {
       "label": "Kafka, SSL",
       "body": {
+        "# Template": "Kafka, mutual SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -2617,6 +2635,7 @@
     {
       "label": "Kafka, mutual SSL/TLS",
       "body": {
+        "# Template": "Kafka, mutual SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -2668,6 +2687,7 @@
     {
       "label": "Zookeeper",
       "body": {
+        "# Template": "Zookeeper",
         "zookeeper": [
           {
             "name": "zookeeper",
@@ -2704,6 +2724,7 @@
     {
       "label": "Kafka Connect",
       "body": {
+        "# Template": "Kafka Connect",
         "connect": [
           {
             "name": "connect",
@@ -2760,6 +2781,7 @@
     {
       "label": "Schema Registry, Confluent",
       "body": {
+        "# Template": "Schema Registry, Confluent",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -2816,6 +2838,7 @@
     {
       "label": "Schema Registry, AWS Glue (Access Keys)",
       "body": {
+        "# Template": "Schema Registry, AWS Glue (Access Keys template)",
         "aws": [
           {
             "name": "my-aws-connection-name",
@@ -2863,6 +2886,7 @@
     {
       "label": "Schema Registry, AWS Glue (Credentials chain)",
       "body": {
+        "# Template": "Schema Registry, AWS Glue (Credentials chain template)",
         "aws": [
           {
             "name": "my-aws-connection-name",
@@ -2898,6 +2922,7 @@
     {
       "label": "Schema Registry, AWS Glue (Assume Role)",
       "body": {
+        "# Template": "Schema Registry, AWS Glue (Assume Role template)",
         "aws": [
           {
             "name": "my-aws-connection-name",
@@ -2945,6 +2970,7 @@
     {
       "label": "Schema Registry, IBM Event Streams",
       "body": {
+        "# Template": "Schema Registry, IBM Event Streams",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -2962,6 +2988,7 @@
     {
       "label": "Schema Registry, ApiCurio",
       "body": {
+        "# Template": "Schema Registry, ApiCurio",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -2979,6 +3006,7 @@
     {
       "label": "AWS Connection",
       "body": {
+        "# Template": "AWS Connection",
         "aws": [
           {
             "name": "my-aws-connection-name",
@@ -2999,6 +3027,7 @@
     {
       "label": "Alerts & Audits, Webhook",
       "body": {
+        "# Template": "Alerts & Audits, Webhook",
         "webhook": [
           {
             "name": "webhook",
@@ -3025,6 +3054,7 @@
     {
       "label": "Alerts, DataDog",
       "body": {
+        "# Template": "Alerts, DataDog",
         "datadog": [
           {
             "name": "datadog",
@@ -3048,6 +3078,7 @@
     {
       "label": "Alerts, PagerDuty",
       "body": {
+        "# Template": "Alerts, PagerDuty",
         "pagerduty": [
           {
             "name": "pagerduty",
@@ -3065,6 +3096,7 @@
     {
       "label": "Alerts, Slack",
       "body": {
+        "# Template": "Alerts, Slack",
         "slack": [
           {
             "name": "slack",
@@ -3082,6 +3114,7 @@
     {
       "label": "Alerts & Audits, Splunk",
       "body": {
+        "# Template": "Alerts & Audits, Splunk",
         "splunk": [
           {
             "name": "splunk",
@@ -3111,6 +3144,7 @@
     {
       "label": "Alerts, Alert Manager",
       "body": {
+        "# Template": "Alerts, Alert Manager",
         "alertmanager": [
           {
             "name": "my-alertmanager-connection",
