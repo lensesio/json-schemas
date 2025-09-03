@@ -2069,7 +2069,7 @@
                 "value": "PLAIN"
               },
               "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required\n                username=\"$ConnectionString\"\n                password=\"Endpoint=sb://[SB_URL]/;SharedAccessKeyName=[KEY_NAME];SharedAccessKey=[ACCESS_KEY]\";"
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required\n                username=\"\\$ConnectionString\"\n                password=\"Endpoint=sb://[SB_URL]/;SharedAccessKeyName=[KEY_NAME];SharedAccessKey=[ACCESS_KEY]\";"
               }
             }
           }
