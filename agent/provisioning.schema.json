@@ -2329,7 +2329,7 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "kafka-keystore.jks"
               },
@@ -2361,9 +2361,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (TLS/SSL)",
+      "label": "Kafka, AWS MSK (SSL/TLS)",
       "body": {
-        "## Template": "Kafka, AWS MSK (TLS/SSL template)",
+        "## Template": "Kafka, AWS MSK (SSL/TLS template)",
         "kafka": [
           {
             "name": "kafka",
@@ -2397,9 +2397,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (mutual TLS/SSL)",
+      "label": "Kafka, AWS MSK (mutual SSL/TLS)",
       "body": {
-        "## Template": "Kafka, AWS MSK (mutual TLS/SSL template)",
+        "## Template": "Kafka, AWS MSK (mutual SSL/TLS template)",
         "kafka": [
           {
             "name": "kafka",
@@ -2529,25 +2529,25 @@
               "protocol": {
                 "value": "SASL_SSL"
               },
-              "## Optional: TLS/SSL": "Uncomment the properties below",
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
-              "# sslKeystore": {
-                "# file": "kafka-keystore.jks"
-              },
-              "# sslKeystorePassword": {
-                "# value": ""
-              },
               "saslMechanism": {
                 "value": "PLAIN"
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "## Optional: SSL/TLS": "Uncomment the properties below",
+              "# sslTruststore": {
+                "# file": "kafka-truststore.jks"
+              },
+              "# sslTruststorePassword": {
+                "# value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -2648,7 +2648,7 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "kafka-keystore.jks"
               },
@@ -2880,14 +2880,14 @@
               "protocol": {
                 "value": "SASL_SSL"
               },
-              "## Optional: TLS/SSL": "Uncomment the properties below",
+              "## Optional: SSL/TLS": "Uncomment the properties below",
               "sslTruststore": {
                 "file": "kafka-truststore.jks"
               },
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "kafka-keystore.jks"
               },
@@ -2954,7 +2954,7 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "kafka-keystore.jks"
               },
@@ -2988,7 +2988,7 @@
     {
       "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
       "body": {
-        "## Template": "Kafka, SSL",
+        "## Template": "Kafka, SASL_SSL, SCRAM-SHA-512",
         "kafka": [
           {
             "name": "kafka",
@@ -3015,7 +3015,7 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "kafka-keystore.jks"
               },
@@ -3044,9 +3044,9 @@
       }
     },
     {
-      "label": "Kafka, SSL",
+      "label": "Kafka, SSL/TLS",
       "body": {
-        "## Template": "Kafka, mutual SSL/TLS",
+        "## Template": "Kafka, SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -3207,7 +3207,7 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual TLS/SSL": "Uncomment the properties below to enable mutual TLS/SSL",
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
                 "# file": "connect-keystore.jks"
               },
@@ -3263,7 +3263,7 @@
                 "# value": ""
               },
               "# password": {
-                "#value": ""
+                "# value": ""
               },
               "## Optional SSL/TLS": "Uncomment the properties below to enable SSL/TLS",
               "# sslTruststore": {
@@ -3328,9 +3328,9 @@
               },
               "## Optional HTTP Basic Auth": "Uncomment the properties below to enable HTTP Basic Auth",
               "# username": {
-                "#value": "USER_INFO"
+                "# value": "USER_INFO"
               },
-              "#password": {
+              "# password": {
                 "# value": ""
               },
               "## Optional SSL/TLS": "Uncomment the properties below to enable SSL/TLS",
@@ -3589,7 +3589,7 @@
                   "http://<hostname>:<port>/apis/compact/v6"
                 ]
               },
-              "## Optional: TLS/SSL": "Uncomment the properties below",
+              "## Optional: SSL/TLS": "Uncomment the properties below",
               "# sslTruststore": {
                 "# file": "schema-registry-truststore.jks"
               },
