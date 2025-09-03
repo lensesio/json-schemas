@@ -251,7 +251,9 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter the JAAS config string (non empty)."
+                    "description": "Enter the JAAS config string (non empty). If contains username= or password=, values must not be empty.",
+                    "pattern": "^(?=.*username=\"[^\"]+\")(?=.*password=\"[^\"]+\").*$"
+
                   }
                 },
                 "required": ["value"],
@@ -688,10 +690,10 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "pattern": "^(http|https)://[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*:[0-9]+(/.*)?$",
-                      "description": "Schema Registry URL. Must include scheme (http/https), valid hostname, and port number. Format: http(s)://hostname:port[/path]"
+                      "pattern": "^(http|https)://([a-zA-Z0-9._%+-]+:[a-zA-Z0-9._%+-]+@)?[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*(:[0-9]+)?(/.*)?$",
+                      "description": "Schema Registry URL. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]. For IBM enter your API key & Host."
                     },
-                    "description": "Enter the Schema Registry URLs. Must include scheme (http/https), valid hostname, and port number. Format: http(s)://hostname:port[/path]"
+                    "description": "Enter the Schema Registry URLs. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]"
                   }
                 },
                 "required": ["value"]
@@ -1871,263 +1873,7 @@
       }
     },
     {
-      "label": "Kafka, Azure Eventhubs",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_SSL://"]
-              },
-              "protocol": {
-                "value": "SASL_SSL"
-              },
-              "saslMechanism": {
-                "value": "PLAIN"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\\\"$ConnectionString\\\" password=\\\"Endpoint=sb://[SB_URL]/;SharedAccessKeyName=[KEY_NAME];SharedAccessKey=[ACCESS_KEY]\\\";"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, PLAINTEXT",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["PLAINTEXT://"]
-              },
-              "protocol": {
-                "value": "PLAINTEXT"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": false
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, SASL_PLAINTEXT, PLAIN",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_PLAINTEXT://"]
-              },
-              "protocol": {
-                "value": "SASL_PLAINTEXT"
-              },
-              "saslMechanism": {
-                "value": "PLAIN"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": false
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_PLAINTEXT://"]
-              },
-              "protocol": {
-                "value": "SASL_PLAINTEXT"
-              },
-              "saslMechanism": {
-                "value": "SCRAM-SHA-256"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": false
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_PLAINTEXT://"]
-              },
-              "protocol": {
-                "value": "SASL_PLAINTEXT"
-              },
-              "saslMechanism": {
-                "value": "SCRAM-SHA-512"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": false
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka & Confluent Cloud, SASL_SSL, PLAIN",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_SSL://"]
-              },
-              "protocol": {
-                "value": "SASL_SSL"
-              },
-              "# Optional: TLS/SSL": "Uncomment the properties below",
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
-              "# sslKeystore": {
-                "# file": "kafka-keystore.jks"
-              },
-              "# sslKeystorePassword": {
-                "# value": ""
-              },
-              "saslMechanism": {
-                "value": "PLAIN"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, SASL_SSL, SCRAM-SHA-256",
+      "label": "Kafka, Aiven",
       "body": {
         "kafka": [
           {
@@ -2145,7 +1891,7 @@
                 "value": "SCRAM-SHA-256"
               },
               "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
               "sslTruststore": {
                 "file": "kafka-truststore.jks"
@@ -2178,103 +1924,6 @@
               },
               "# metricsHttpTimeout": {
                 "# value": 30000
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_SSL://"]
-              },
-              "protocol": {
-                "value": "SASL_SSL"
-              },
-              "saslMechanism": {
-                "value": "SCRAM-SHA-512"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"admin-secret\";"
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
-              "# sslKeystore": {
-                "# file": "kafka-keystore.jks"
-              },
-              "# sslKeystorePassword": {
-                "# value": ""
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka, IBM Event Streams",
-      "body": {
-        "kafka": [
-          {
-            "name": "kafka",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "kafkaBootstrapServers": {
-                "value": ["SASL_SSL://"]
-              },
-              "protocol": {
-                "value": "SASL_SSL"
-              },
-              "saslMechanism": {
-                "value": "PLAIN"
-              },
-              "saslJaasConfig": {
-                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"token\" password=\"<API Key>\";"
-              },
-              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsType": {
-                "# value": ""
-              },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
               }
             }
           }
@@ -2394,6 +2043,535 @@
         ]
       }
     },
+    {
+      "label": "Kafka, Azure Eventhubs",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required\n                username=\"$ConnectionString\"\n                password=\"Endpoint=sb://[SB_URL]/;SharedAccessKeyName=[KEY_NAME];SharedAccessKey=[ACCESS_KEY]\";"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, Confluent Cloud",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "# Optional: TLS/SSL": "Uncomment the properties below",
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, IBM Event Streams",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"token\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, Redpanda",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "saslMechanism": {
+                "value": "SCRAM-SHA-256"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "label": "Kafka, PLAINTEXT",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["PLAINTEXT://"]
+              },
+              "protocol": {
+                "value": "PLAINTEXT"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": false
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, PLAIN",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_PLAINTEXT://"]
+              },
+              "protocol": {
+                "value": "SASL_PLAINTEXT"
+              },
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": false
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_PLAINTEXT://"]
+              },
+              "protocol": {
+                "value": "SASL_PLAINTEXT"
+              },
+              "saslMechanism": {
+                "value": "SCRAM-SHA-256"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": false
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_PLAINTEXT://"]
+              },
+              "protocol": {
+                "value": "SASL_PLAINTEXT"
+              },
+              "saslMechanism": {
+                "value": "SCRAM-SHA-512"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": false
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, PLAIN",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "# Optional: TLS/SSL": "Uncomment the properties below",
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "saslMechanism": {
+                "value": "PLAIN"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, SCRAM-SHA-256",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "saslMechanism": {
+                "value": "SCRAM-SHA-256"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
+      "body": {
+        "kafka": [
+          {
+            "name": "kafka",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": ["SASL_SSL://"]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "saslMechanism": {
+                "value": "SCRAM-SHA-512"
+              },
+              "saslJaasConfig": {
+                "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "# Optional: Uncomment below to enable mutual TLS/SSL": "Uncomment the properties below",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "# Optional: Uncomment below to enable JMX metrics": "Uncomment the properties below",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              }
+            }
+          }
+        ]
+      }
+    },    
     {
       "label": "Kafka, SSL",
       "body": {
@@ -2948,7 +3126,6 @@
       }
     }
   ],
-  // "required": ["kafka", "lensesHq"],
   "dependencies": {
     "glueSchemaRegistry": ["aws"]
   }
