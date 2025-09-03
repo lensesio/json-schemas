@@ -1856,7 +1856,7 @@
                 "value": 10000
               },
               "agentKey": {
-                "value": "<YOUR_HQ_AGENT_KEY>"
+                "value": "<LENSES_HQ_AGENT_KEY>"
               }
             }
           }
@@ -1880,7 +1880,7 @@
                 "value": 10000
               },
               "agentKey": {
-                "value": "<YOUR_HQ_AGENT_KEY>"
+                "value": "<LENSES_HQ_AGENT_KEY>"
               },
               "sslEnabled": {
                 "value": true
