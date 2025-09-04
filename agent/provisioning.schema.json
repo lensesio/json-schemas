@@ -3618,7 +3618,7 @@
     {
       "label": "Alerts, AWS Connection for Glue & CloudWatch",
       "body": {
-        "## Template": "AWS Connection for Glue & CloudWatch",
+        "## Template": "Alerts, AWS Connection for Glue & CloudWatch",
         "aws": [
           {
             "## Repeat": "for more connections",
