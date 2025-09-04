@@ -3145,18 +3145,16 @@
             "tags": "[]",
             "configuration": {
               "zookeeperUrls": {
-                "value": [
-                  "localhost:2181"
-                ]
-              },
-              "# zookeeperChrootPath": {
-                "# value": ""
+                "value": []
               },
               "zookeeperSessionTimeout": {
                 "value": 10000
               },
               "zookeeperConnectionTimeout": {
                 "value": 10000
+              },
+              "# zookeeperChrootPath": {
+                "# value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -3618,7 +3616,7 @@
       }
     },
     {
-      "label": "Alerts, AWS Connection / CloudWatch",
+      "label": "Alerts, AWS Connection & CloudWatch",
       "body": {
         "## Template": "AWS Connection for Glue & CloudWatch",
         "aws": [
