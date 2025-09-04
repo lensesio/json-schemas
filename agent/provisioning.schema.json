@@ -3693,7 +3693,7 @@
         "datadog": [
           {
             "name": "datadog",
-            "version": "1",
+            "version": 1,
             "tags": "[]",
             "configuration": {
               "site": {
@@ -3717,7 +3717,7 @@
         "pagerduty": [
           {
             "name": "pagerduty",
-            "version": "1",
+            "version": 1,
             "tags": "[]",
             "configuration": {
               "integrationKey": {
