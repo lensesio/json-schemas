@@ -3177,7 +3177,7 @@
       "label": "Kafka Connect",
       "body": {
         "## Template": "Kafka Connect",
-        "## MULTIPLE CLUSTERS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CLUSTERS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "connect": [
           {
             "name": "connect",
@@ -3621,7 +3621,7 @@
       "label": "Alerts, AWS Connection / CloudWatch",
       "body": {
         "## Template": "AWS Connection for Glue & CloudWatch",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "aws": [
           {
             "name": "my-aws-connection-name",
@@ -3643,7 +3643,7 @@
       "label": "Alerts & Audits, Webhook",
       "body": {
         "## Template": "Alerts & Audits, Webhook",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "webhook": [
           {
             "name": "webhook",
@@ -3671,7 +3671,7 @@
       "label": "Alerts, DataDog",
       "body": {
         "## Template": "Alerts, DataDog",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "datadog": [
           {
             "name": "datadog",
@@ -3696,7 +3696,7 @@
       "label": "Alerts, PagerDuty",
       "body": {
         "## Template": "Alerts, PagerDuty",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "pagerduty": [
           {
             "name": "pagerduty",
@@ -3715,7 +3715,7 @@
       "label": "Alerts, Slack",
       "body": {
         "## Template": "Alerts, Slack",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "slack": [
           {
             "name": "slack",
@@ -3734,7 +3734,7 @@
       "label": "Alerts & Audits, Splunk",
       "body": {
         "## Template": "Alerts & Audits, Splunk",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "splunk": [
           {
             "name": "splunk",
@@ -3765,7 +3765,7 @@
       "label": "Alerts, Alert Manager",
       "body": {
         "## Template": "Alerts, Alert Manager",
-        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
+        "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one top level entry per connection type allowed",
         "alertmanager": [
           {
             "name": "my-alertmanager-connection",
