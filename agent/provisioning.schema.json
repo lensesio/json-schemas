@@ -1590,7 +1590,7 @@
     },
     "aws": {
       "type": "array",
-      "description": "AWS Connection for AWS Glue & CloudWatch.",
+      "description": "AWS Connection for Glue & CloudWatch.",
       "default": [],
       "items": {
         "type": "object",
@@ -3616,7 +3616,7 @@
       }
     },
     {
-      "label": "Alerts, AWS Connection & CloudWatch",
+      "label": "Alerts, AWS Connection for Glue & CloudWatch",
       "body": {
         "## Template": "AWS Connection for Glue & CloudWatch",
         "aws": [
