@@ -3618,9 +3618,9 @@
       }
     },
     {
-      "label": "AWS Connection",
+      "label": "Alerts, AWS Connection / CloudWatch",
       "body": {
-        "## Template": "AWS Connection",
+        "## Template": "AWS Connection for Glue & CloudWatch",
         "## MULTIPLE CONNECTIONS SUPPORTED": "\n## Add another connection as an item under the connection type. \n## Only one type top level entry per connection type allowed",
         "aws": [
           {
