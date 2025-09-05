@@ -18,6 +18,10 @@
             ],
             "default": "lenses-hq"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Lenses HQ connection version.",
@@ -146,6 +150,10 @@
               "kafka"
             ],
             "default": "kafka"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -597,6 +605,10 @@
             ],
             "default": "zookeeper"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Zookeeper version.",
@@ -783,6 +795,10 @@
               "schema-registry"
             ],
             "default": "schema-registry"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -1122,6 +1138,10 @@
             ],
             "default": "schema-registry"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Glue Schema Registry version.",
@@ -1314,6 +1334,10 @@
             "description": "Connect cluster name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "connect"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -1601,6 +1625,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "aws"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "AWS connection version.",
@@ -1769,6 +1797,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "webhook"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Webhook connection version.",
@@ -1872,6 +1904,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "datadog"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "DataDog connection version.",
@@ -1954,6 +1990,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "pagerduty"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "PagerDuty connection version.",
@@ -2007,6 +2047,10 @@
             "description": "Slack connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "slack"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -2064,6 +2108,10 @@
             "description": "Splunk connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "splunk"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -2174,6 +2222,10 @@
             "description": "Alert Manager connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "my-alertmanager-connection"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
           },
           "version": {
             "type": "integer",
@@ -2290,6 +2342,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "Aiven",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2345,12 +2398,13 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (SSL/TLS)",
+      "label": "Kafka, AWS MSK SSL/TLS",
       "body": {
-        "## Template": "Kafka, AWS MSK (SSL/TLS template)",
+        "## Template": "Kafka, AWS MSK SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "AWS MSK, SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2381,12 +2435,13 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (mutual SSL/TLS)",
+      "label": "Kafka, AWS MSK Mutual SSL/TLS",
       "body": {
-        "## Template": "Kafka, AWS MSK (mutual SSL/TLS template)",
+        "## Template": "Kafka, AWS MSK Mutual SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "AWS MSK, Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2426,12 +2481,13 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (IAM)",
+      "label": "Kafka, AWS MSK IAM",
       "body": {
-        "## Template": "Kafka, AWS MSK (IAM template)",
+        "## Template": "Kafka, AWS MSK IAM",
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "AWS MSK, IAM",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2473,6 +2529,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "Azure Eventhubs",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2502,6 +2559,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "Confluent Cloud",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2564,6 +2622,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "IBM Event Streams",	
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2609,6 +2668,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "Redpanda",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2670,6 +2730,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "PLAINTEXT",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2709,6 +2770,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_PLAINTEXT, PLAIN",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2757,6 +2819,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_PLAINTEXT, SCRAM-SHA-256",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2805,6 +2868,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_PLAINTEXT, SCRAM-SHA-512",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2853,6 +2917,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_SSL, PLAIN",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2917,6 +2982,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_SSL, SCRAM-SHA-256",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2981,6 +3047,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SASL_SSL, SCRAM-SHA-512",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3042,6 +3109,7 @@
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3081,12 +3149,13 @@
       }
     },
     {
-      "label": "Kafka, mutual SSL/TLS",
+      "label": "Kafka, Mutual SSL/TLS",
       "body": {
-        "## Template": "Kafka, mutual SSL/TLS",
+        "## Template": "Kafka, Mutual SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
+            "editorTag": "Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3140,7 +3209,8 @@
         "## Template": "Zookeeper",
         "zookeeper": [
           {
-            "name": "zookeeper",
+            "name": "zookeeper",            
+            "editorTag": "Zookeeper",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3179,6 +3249,7 @@
           {
             "## Repeat": "for more clusters",
             "name": "connect",
+            "editorTag": "Kafka Connect",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3191,7 +3262,51 @@
               "password": {
                 "value": ""
               },
-              "## Optional SSL/TLS": "Uncomment the properties below to enable SSL/TLS",
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka Connect SSL/TLS",
+      "body": {
+        "## Template": "Kafka Connect SSL/TLS",
+        "connect": [
+          {
+            "## Repeat": "for more clusters",
+            "name": "connect",
+            "editorTag": "SSL/TLS",	
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "workers": {
+                "value": []
+              },
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },              
               "sslTruststore": {
                 "file": "connect-truststore.jks"
               },
@@ -3230,12 +3345,73 @@
       }
     },
     {
+      "label": "Kafka Connect Mutual SSL/TLS",
+      "body": {
+        "## Template": "Kafka Connect Mutual SSL/TLS",
+        "connect": [
+          {
+            "## Repeat": "for more clusters",
+            "name": "connect",
+            "editorTag": "Mutual SSL/TLS",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "workers": {
+                "value": []
+              },
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },              
+              "sslTruststore": {
+                "file": "connect-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },              
+              "sslKeystore": {
+                "file": "connect-keystore.jks"
+              },
+              "sslKeystorePassword": {
+                "value": ""
+              },
+              "sslKeyPassword": {
+                "value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "label": "Schema Registry, Confluent",
       "body": {
         "## Template": "Schema Registry, Confluent",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "Confluent",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3304,6 +3480,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "Aiven (Karpace)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3371,7 +3548,9 @@
         "## Template": "Schema Registry, AWS Glue (Access Keys)",
         "aws": [
           {
+            "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
+            "editorTag": "AWS Connection for Glue (Access Keys)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3393,6 +3572,7 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "AWS Glue (Access Keys)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3412,7 +3592,7 @@
               "# sessionToken": {
                 "# value": ""
               },
-              "## Optional Cache settings:": "If ttl (milliseconds) not set default is 24 hours",
+              "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
                 "# value": ""
               },
@@ -3433,7 +3613,9 @@
         "## Template": "Schema Registry, AWS Glue (Credentials chain)",
         "aws": [
           {
+            "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
+            "editorTag": "AWS Connection for Glue (Credentials chain)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3449,6 +3631,7 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "AWS Glue (Credentials chain)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3462,7 +3645,7 @@
               "# sessionToken": {
                 "# value": ""
               },
-              "## Optional Cache settings:": "If ttl (milliseconds) not set default is 24 hours",
+              "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
                 "# value": ""
               },
@@ -3483,7 +3666,9 @@
         "## Template": "Schema Registry, AWS Glue (Assume Role)",
         "aws": [
           {
+            "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
+            "editorTag": "AWS Connection for Glue (Assume Role)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3505,6 +3690,7 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "AWS Glue (Assume Role)",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3524,7 +3710,7 @@
               "# sessionToken": {
                 "# value": ""
               },
-              "## Optional Cache settings:": "If ttl (milliseconds) not set default is 24 hours",
+              "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
                 "# value": ""
               },
@@ -3546,6 +3732,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "IBM Event Streams",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3566,6 +3753,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
+            "editorTag": "ApiCurio",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3623,6 +3811,7 @@
           {
             "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
+            "editorTag": "AWS Connection for Glue & CloudWatch",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3645,6 +3834,7 @@
           {
             "## Repeat": "for more connections",
             "name": "webhook",
+            "editorTag": "Webhook",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3668,11 +3858,12 @@
     {
       "label": "Alerts, DataDog",
       "body": {
-        "## Template": "Alerts, DataDog",
+        "## Template": "Alerts,DataDog",
         "datadog": [
           {
             "## Repeat": "for more connections",
             "name": "datadog",
+            "editorTag": "DataDog",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3698,6 +3889,7 @@
           {
             "## Repeat": "for more connections",
             "name": "pagerduty",
+            "editorTag": "Alerts, PagerDuty",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3717,6 +3909,7 @@
           {
             "## Repeat": "for more connections",
             "name": "slack",
+            "editorTag": "Alerts, Slack",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3736,6 +3929,7 @@
           {
             "## Repeat": "for more connections",
             "name": "splunk",
+            "editorTag": "Splunk",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3767,6 +3961,7 @@
           {
             "## Repeat": "for more connections",
             "name": "my-alertmanager-connection",
+            "editorTag": "Alert Manager",
             "version": 1,
             "tags": "[]",
             "configuration": {
