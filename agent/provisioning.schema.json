@@ -3241,15 +3241,15 @@
         ]
       }
     },
-    {
-      "label": "Kafka Connect",
+        {
+      "label": "Kafka Connect, No Auth",
       "body": {
-        "## Template": "Kafka Connect",
+        "## Template": "Kafka Connect, No Auth",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "Kafka Connect",
+            "editorTag": "No Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3287,14 +3287,59 @@
       }
     },
     {
-      "label": "Kafka Connect SSL/TLS",
+      "label": "Kafka Connect, Basic Auth",
       "body": {
-        "## Template": "Kafka Connect SSL/TLS",
+        "## Template": "Kafka Connect, Basic Auth",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "SSL/TLS",	
+            "editorTag": "Basic Auth",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "workers": {
+                "value": []
+              },
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka Connect, Basic Auth, SSL/TLS",
+      "body": {
+        "## Template": "Kafka Connect, Basic Auth, SSL/TLS",
+        "connect": [
+          {
+            "## Repeat": "for more clusters",
+            "name": "connect",
+            "editorTag": "Basic Auth, SSL/TLS",	
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3313,13 +3358,6 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
-              "# sslKeystore": {
-                "# file": "connect-keystore.jks"
-              },
-              "# sslKeystorePassword": {
-                "# value": ""
-              },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
@@ -3345,14 +3383,14 @@
       }
     },
     {
-      "label": "Kafka Connect Mutual SSL/TLS",
+      "label": "Kafka Connect, Basic Auth, Mutual SSL/TLS",
       "body": {
-        "## Template": "Kafka Connect Mutual SSL/TLS",
+        "## Template": "Kafka Connect Basic Auth, Mutual SSL/TLS",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "Mutual SSL/TLS",
+            "editorTag": "Basic Auth, Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
