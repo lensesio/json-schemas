@@ -305,7 +305,7 @@
                   "value": {
                     "type": "string",
                     "description": "Enter the JAAS config string (non empty). If contains username= or password=, values must not be empty.",
-                    "pattern": "^(?=.*username=\"[^\"]+\")(?=.*password=\"[^\"]+\").*$"
+                    "minLength": 1
                   }
                 },
                 "required": [
@@ -450,6 +450,41 @@
               "kafkaBootstrapServers"
             ],
             "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "saslMechanism": {
+                      "properties": {
+                        "value": {
+                          "const": "AWS_MSK_IAM"
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "saslJaasConfig": {
+                      "properties": {
+                        "value": {
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "saslJaasConfig": {
+                      "properties": {
+                        "value": {
+                          "pattern": "^(?=.*username=\\\"[^\\\"]+\\\")(?!.*username=\\\"\\\")(?!.*password=\\\"\\\")(.*?)(?=.*password=\\\"[^\\\"]+\\\").*$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               {
                 "if": {
                   "properties": {
@@ -3510,7 +3545,7 @@
           }
         ]
       }
-    },
+    },    
     {
       "label": "Schema Registry, Aiven (Karpace)",
       "body": {
@@ -3580,6 +3615,8 @@
         ]
       }
     },
+
+    
     {
       "label": "Schema Registry, AWS Glue (Access Keys)",
       "body": {
