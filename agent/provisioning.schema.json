@@ -3732,14 +3732,14 @@
               }
             }
           }
-        ],
+        ]
       }
     },
     {
       "label": "Schema Registry, AWS Glue (Credentials chain)",
       "body": {
         "## Template": "Schema Registry, AWS Glue (Credentials chain)",        
-        "glueSchemaRegistry": ,[
+        "glueSchemaRegistry": [
           {
             "name": "schema-registry",
             "editorTag": "AWS Glue (Credentials chain)",
@@ -3785,7 +3785,7 @@
               }
             }
           }
-        ],
+        ]
       }
     },
     {
@@ -3850,7 +3850,7 @@
               }
             }
           }
-        ],
+        ]
       }
     },
     {
