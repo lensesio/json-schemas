@@ -3673,30 +3673,7 @@
     {
       "label": "Schema Registry, AWS Glue (Access Keys)",
       "body": {
-        "## Template": "Schema Registry, AWS Glue (Access Keys)",
-        "aws": [
-          {
-            "## Repeat": "for more connections",
-            "name": "my-aws-connection-name",
-            "editorTag": "AWS Connection for Glue (Access Keys)",
-            "version": 1,
-            "tags": "[]",
-            "configuration": {
-              "authMode": {
-                "value": ""
-              },
-              "accessKeyId": {
-                "value": ""
-              },
-              "secretAccessKey": {
-                "value": ""
-              },
-              "region": {
-                "value": ""
-              }
-            }
-          }
-        ],
+        "## Template": "Schema Registry, AWS Glue (Access Keys)",        
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -3732,23 +3709,23 @@
               }
             }
           }
-        ]
-      }
-    },
-    {
-      "label": "Schema Registry, AWS Glue (Credentials chain)",
-      "body": {
-        "## Template": "Schema Registry, AWS Glue (Credentials chain)",
+        ],
         "aws": [
           {
             "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
-            "editorTag": "AWS Connection for Glue (Credentials chain)",
+            "editorTag": "AWS Connection for Glue (Access Keys)",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "authMode": {
-                "value": "Credentials Chain"
+                "value": ""
+              },
+              "accessKeyId": {
+                "value": ""
+              },
+              "secretAccessKey": {
+                "value": ""
               },
               "region": {
                 "value": ""
@@ -3756,7 +3733,13 @@
             }
           }
         ],
-        "glueSchemaRegistry": [
+      }
+    },
+    {
+      "label": "Schema Registry, AWS Glue (Credentials chain)",
+      "body": {
+        "## Template": "Schema Registry, AWS Glue (Credentials chain)",        
+        "glueSchemaRegistry": ,[
           {
             "name": "schema-registry",
             "editorTag": "AWS Glue (Credentials chain)",
@@ -3785,36 +3768,30 @@
               }
             }
           }
-        ]
-      }
-    },
-    {
-      "label": "Schema Registry, AWS Glue (Assume Role)",
-      "body": {
-        "## Template": "Schema Registry, AWS Glue (Assume Role)",
+        ],
         "aws": [
           {
             "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
-            "editorTag": "AWS Connection for Glue (Assume Role)",
+            "editorTag": "AWS Connection for Glue (Credentials chain)",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "authMode": {
-                "value": "Assume Role"
+                "value": "Credentials Chain"
               },
               "region": {
-                "value": ""
-              },
-              "assumeRoleArn": {
-                "value": ""
-              },
-              "assumeRoleSessionName": {
                 "value": ""
               }
             }
           }
         ],
+      }
+    },
+    {
+      "label": "Schema Registry, AWS Glue (Assume Role)",
+      "body": {
+        "## Template": "Schema Registry, AWS Glue (Assume Role)",        
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -3850,7 +3827,30 @@
               }
             }
           }
-        ]
+        ],
+        "aws": [
+          {
+            "## Repeat": "for more connections",
+            "name": "my-aws-connection-name",
+            "editorTag": "AWS Connection for Glue (Assume Role)",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "authMode": {
+                "value": "Assume Role"
+              },
+              "region": {
+                "value": ""
+              },
+              "assumeRoleArn": {
+                "value": ""
+              },
+              "assumeRoleSessionName": {
+                "value": ""
+              }
+            }
+          }
+        ],
       }
     },
     {
