@@ -229,8 +229,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the truststore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the truststore."
                   }
                 },
                 "required": [
@@ -271,8 +270,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the keystore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the keystore."
                   }
                 },
                 "required": [
@@ -451,168 +449,27 @@
             ],
             "allOf": [
               {
-                "if": {
-                  "properties": {
-                    "saslMechanism": {
-                      "properties": {
-                        "value": {
-                          "const": "AWS_MSK_IAM"
-                        }
-                      }
-                    }
-                  }
-                },
+                "if": { "required": ["sslTruststorePassword"] },
                 "then": {
-                  "properties": {
-                    "saslJaasConfig": {
-                      "properties": {
-                        "value": {
-                          "minLength": 1
-                        }
-                      }
-                    }
-                  }
-                },
-                "else": {
-                  "properties": {
-                    "saslJaasConfig": {
-                      "properties": {
-                        "value": {
-                          "pattern": "^(?=.*username=\\\"[^\\\"]+\\\")(?!.*username=\\\"\\\")(?!.*password=\\\"\\\")(.*?)(?=.*password=\\\"[^\\\"]+\\\").*$"
-                        }
-                      }
-                    }
-                  }
+                  "required": ["sslTruststore"]
                 }
               },
               {
-                "if": {
-                  "properties": {
-                    "protocol": {
-                      "properties": {
-                        "value": {
-                          "const": "PLAINTEXT"
-                        }
-                      }
-                    }
-                  }
-                },
+                "if": { "required": ["sslTruststore"] },
                 "then": {
-                  "properties": {
-                    "kafkaBootstrapServers": {
-                      "properties": {
-                        "value": {
-                          "items": {
-                            "pattern": "^PLAINTEXT://.*"
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "required": ["sslTruststorePassword"]
                 }
               },
               {
-                "if": {
-                  "properties": {
-                    "protocol": {
-                      "properties": {
-                        "value": {
-                          "const": "SSL"
-                        }
-                      }
-                    }
-                  }
-                },
+                "if": { "required": ["sslKeystorePassword"] },
                 "then": {
-                  "properties": {
-                    "kafkaBootstrapServers": {
-                      "properties": {
-                        "value": {
-                          "items": {
-                            "pattern": "^SSL://.*"
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "required": ["sslKeystore"]
                 }
-              },
+              },              
               {
-                "if": {
-                  "properties": {
-                    "protocol": {
-                      "properties": {
-                        "value": {
-                          "const": "SASL_PLAINTEXT"
-                        }
-                      }
-                    }
-                  }
-                },
+                "if": { "required": ["sslKeystore"] },
                 "then": {
-                  "properties": {
-                    "kafkaBootstrapServers": {
-                      "properties": {
-                        "value": {
-                          "items": {
-                            "pattern": "^SASL_PLAINTEXT://.*"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "protocol": {
-                      "properties": {
-                        "value": {
-                          "const": "SASL_SSL"
-                        }
-                      }
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "kafkaBootstrapServers": {
-                      "properties": {
-                        "value": {
-                          "items": {
-                            "pattern": "^SASL_SSL://.*"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "protocol": {
-                      "properties": {
-                        "value": {
-                          "const": "AWS_MSK_IAM"
-                        }
-                      }
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "kafkaBootstrapServers": {
-                      "properties": {
-                        "value": {
-                          "items": {
-                            "pattern": "^AWS_MSK_IAM://.*"
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "required": ["sslKeystorePassword"]
                 }
               }
             ]
@@ -731,7 +588,7 @@
               },
               "metricsType": {
                 "type": "object",
-                "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP).",
+                "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
                 "properties": {
                   "value": {
                     "type": "string",
@@ -915,8 +772,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the truststore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the truststore."
                   }
                 }
               },
@@ -940,8 +796,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the keystore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the keystore."
                   }
                 }
               },
@@ -951,8 +806,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the key (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the key."
                   }
                 }
               },
@@ -1125,6 +979,28 @@
             },
             "required": [
               "schemaRegistryUrls"
+            ],
+            "allOf": [
+              {
+                "if": { "required": ["sslTruststorePassword"] },
+                "then": {
+                  "required": ["sslTruststore"]
+                }
+              },
+              {
+                "if": { "required": ["sslTruststore"] },
+                "then": {
+                  "required": ["sslTruststorePassword"]
+                }
+              },
+              {
+                "if": { "required": ["sslKeystorePassword"] },
+                "then": { "required": ["sslKeystore"] }
+              },
+              {
+                "if": { "required": ["sslKeystore"] },
+                "then": { "required": ["sslKeystorePassword"] }
+              }
             ],
             "if": {
               "properties": {
@@ -1457,8 +1333,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the truststore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the truststore."
                   }
                 },
                 "required": [
@@ -1485,8 +1360,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the keystore (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the keystore."
                   }
                 },
                 "required": [
@@ -1499,8 +1373,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter a password for the key (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter a password for the key."
                   }
                 },
                 "required": [
@@ -1637,7 +1510,67 @@
                   "value"
                 ]
               }
-            }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "sslTruststorePassword": {
+                      "required": ["value"]
+                    }
+                  }
+                },
+                "then": {
+                  "required": ["sslTruststore"]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "sslTruststore": {
+                      "required": ["file"]
+                    }
+                  }
+                },
+                "then": {
+                  "required": ["sslTruststorePassword"]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "sslKeystorePassword": {
+                      "required": ["value"]
+                    }
+                  }
+                },
+                "then": {
+                  "required": ["sslKeystore"]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    
+                  }
+                },
+                "then": {
+                  
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "sslKeystore": {
+                      "required": ["file"]
+                    }
+                  }
+                },
+                "then": {
+                  "required": ["sslKeystorePassword"]
+                }
+              }
+            ]
           }
         },
         "required": [
@@ -3322,14 +3255,14 @@
       }
     },
     {
-      "label": "Kafka Connect, Basic Auth",
+      "label": "Kafka Connect, HTTP Basic Auth",  
       "body": {
-        "## Template": "Kafka Connect, Basic Auth",
+        "## Template": "Kafka Connect, HTTP Basic Auth",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "Basic Auth",
+            "editorTag": "HTTP Basic Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3367,14 +3300,14 @@
       }
     },
     {
-      "label": "Kafka Connect, Basic Auth, SSL/TLS",
+      "label": "Kafka Connect, HTTP Basic Auth, SSL/TLS",
       "body": {
-        "## Template": "Kafka Connect, Basic Auth, SSL/TLS",
+        "## Template": "Kafka Connect, HTTP Basic Auth, SSL/TLS",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "Basic Auth, SSL/TLS",	
+            "editorTag": "HTTP Basic Auth, SSL/TLS",	
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3418,14 +3351,14 @@
       }
     },
     {
-      "label": "Kafka Connect, Basic Auth, Mutual SSL/TLS",
+      "label": "Kafka Connect, HTTP Basic Auth, Mutual SSL/TLS",
       "body": {
-        "## Template": "Kafka Connect Basic Auth, Mutual SSL/TLS",
+        "## Template": "Kafka Connect HTTP Basic Auth, Mutual SSL/TLS",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "editorTag": "Basic Auth, Mutual SSL/TLS",
+            "editorTag": "HTTP Basic Auth, Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3478,49 +3411,171 @@
       }
     },
     {
-      "label": "Schema Registry, Confluent",
+      "label": "Schema Registry, Confluent, No Auth",
       "body": {
-        "## Template": "Schema Registry, Confluent",
+        "## Template": "Schema Registry, Confluent, No Auth",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "editorTag": "Confluent",
+            "editorTag": "Confluent No Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
                 "value": []
+              },             
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
               },
-              "## Optional Basic Auth": "Uncomment the properties below to enable Basic Auth",
-              "# basicAuthCredentialsSource": {
+              "# metricsType": {
                 "# value": ""
               },
-              "# basicAuthUserInfo": {
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
                 "# value": ""
               },
-              "## Optional HTTP Basic Auth": "Uncomment the properties below to enable HTTP Basic Auth",
-              "# username": {
+              "# metricsPassword": {
                 "# value": ""
               },
-              "# password": {
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },  
+    {
+      "label": "Schema Registry, Confluent, Basic Auth",
+      "body": {
+        "## Template": "Schema Registry, Confluent, Basic Auth",
+        "confluentSchemaRegistry": [
+          {
+            "name": "schema-registry",
+            "editorTag": "Confluent Basic Auth",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "schemaRegistryUrls": {
+                "value": []
+              },              
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },              
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
                 "# value": ""
               },
-              "## Optional SSL/TLS": "Uncomment the properties below to enable SSL/TLS",
-              "# sslTruststore": {
-                "# file": "schema-registry-truststore.jks"
+              "# metricsSsl": {
+                "# value": true
               },
-              "# sslTruststorePassword": {
+              "# metricsUsername": {
                 "# value": ""
               },
-              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
-              "# sslKeystore": {
-                "# file": "schema-registry-keystore.jks"
-              },
-              "# sslKeystorePassword": {
+              "# metricsPassword": {
                 "# value": ""
               },
-              "# sslKeyPassword": {
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },   
+    {
+      "label": "Schema Registry, Confluent, Basic Auth, SSL/TLS",
+      "body": {
+        "## Template": "Schema Registry, Confluent, Basic Auth, SSL/TLS",
+        "confluentSchemaRegistry": [
+          {
+            "name": "schema-registry",
+            "editorTag": "Confluent Basic Auth, SSL/TLS",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "schemaRegistryUrls": {
+                "value": []
+              },              
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },              
+              "sslTruststore": {
+                "file": "schema-registry-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
                 "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    }, 
+    {
+      "label": "Schema Registry, Confluent, Basic Auth, Mutual SSL/TLS",
+      "body": {
+        "## Template": "Schema Registry, Confluent, Basic Auth, Mutual SSL/TLS",
+        "confluentSchemaRegistry": [
+          {
+            "name": "schema-registry",
+            "editorTag": "Confluent Basic Auth, Mutual SSL/TLS",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "schemaRegistryUrls": {
+                "value": []
+              },              
+              "username": {
+                "value": ""
+              },
+              "password": {
+                "value": ""
+              },              
+              "sslTruststore": {
+                "file": "schema-registry-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },              
+              "sslKeystore": {
+                "file": "schema-registry-keystore.jks"
+              },
+              "sslKeystorePassword": {
+                "value": ""
+              },
+              "sslKeyPassword": {
+                "value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -3615,8 +3670,6 @@
         ]
       }
     },
-
-    
     {
       "label": "Schema Registry, AWS Glue (Access Keys)",
       "body": {
