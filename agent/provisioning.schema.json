@@ -217,8 +217,7 @@
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Enter key password (non empty).",
-                    "pattern": "^.+$"
+                    "description": "Enter key password (can be empty)."
                   }
                 },
                 "required": ["value"]
