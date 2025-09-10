@@ -3441,7 +3441,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "editorTag": "IBM Event Streams",
+            "editorTag": "IBM Event Streams Registry",
             "version": 1,
             "tags": "[]",
             "configuration": {
