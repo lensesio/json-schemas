@@ -180,8 +180,8 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "pattern": "^(SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://[^:]+:[0-9]+$",
-                      "description": "Enter the bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092')"
+                      "pattern": "^(SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://[a-zA-Z0-9.-]+:[0-9]{1,5}$",
+                      "description": "Enter the bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092'). Angle brackets and invalid host characters are not allowed."
                     },
                     "description": "List of bootstrap servers with protocol prefixes."
                   }
