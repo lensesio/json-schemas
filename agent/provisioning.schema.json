@@ -4172,7 +4172,7 @@
           {
             "## Repeat": "for more connections",
             "name": "pagerduty",
-            "editorTag": "Alerts, PagerDuty",
+            "editorTag": "PagerDuty",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -4192,7 +4192,7 @@
           {
             "## Repeat": "for more connections",
             "name": "slack",
-            "editorTag": "Alerts, Slack",
+            "editorTag": "Slack",
             "version": 1,
             "tags": "[]",
             "configuration": {
