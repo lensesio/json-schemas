@@ -3407,9 +3407,9 @@
       }
     },
     {
-      "label": "Kafka Connect, No Auth",
+      "label": "Kafka Connect",
       "body": {
-        "## Template": "Kafka Connect, No Auth",
+        "## Template": "Kafka Connect",
         "connect": [
           {
             "## Repeat": "for more clusters",
