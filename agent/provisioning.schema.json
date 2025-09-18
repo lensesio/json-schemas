@@ -2544,9 +2544,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK SSL/TLS",
+      "label": "Kafka, AWS MSK (TLS/SSL)",
       "body": {
-        "## Template": "Kafka, AWS MSK SSL/TLS",
+        "## Template": "Kafka, AWS MSK (TLS/SSL)",
         "kafka": [
           {
             "name": "kafka",
@@ -2582,13 +2582,13 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK Mutual SSL/TLS",
+      "label": "Kafka, AWS MSK (mutal TLS/SSL)",
       "body": {
-        "## Template": "Kafka, AWS MSK Mutual SSL/TLS",
+        "## Template": "Kafka, AWS MSK (mutal TLS/SSL)",
         "kafka": [
           {
             "name": "kafka",
-            "editorTag": "AWS MSK, Mutual SSL/TLS",
+            "editorTag": "AWS MSK, mutal TLS/SSL",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2629,9 +2629,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK IAM",
+      "label": "Kafka, AWS MSK (IAM)",
       "body": {
-        "## Template": "Kafka, AWS MSK IAM",
+        "## Template": "Kafka, AWS MSK (IAM)",
         "kafka": [
           {
             "name": "kafka",
@@ -2703,9 +2703,9 @@
       }
     },
     {
-      "label": "Kafka, Confluent",
+      "label": "Kafka & Confluent Cloud, SASL_SSL, PLAIN",
       "body": {
-        "## Template": "Kafka, Confluent",
+        "## Template": "Kafka & Confluent Cloud, SASL_SSL, PLAIN",
         "kafka": [
           {
             "name": "kafka",
@@ -3263,9 +3263,9 @@
       }
     },
     {
-      "label": "Kafka, SSL/TLS",
+      "label": "Kafka, SSL",
       "body": {
-        "## Template": "Kafka, SSL/TLS",
+        "## Template": "Kafka, SSL",
         "kafka": [
           {
             "name": "kafka",
@@ -3310,9 +3310,9 @@
       }
     },
     {
-      "label": "Kafka, Mutual SSL/TLS",
+      "label": "Kafka, mutal SSL/TLS",
       "body": {
-        "## Template": "Kafka, Mutual SSL/TLS",
+        "## Template": "Kafka, mutal SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -3424,11 +3424,19 @@
                   "http://<host2>:8083"
                 ]
               },
-              "username": {
-                "value": ""
+              "## Optional Basic Auth": "Uncomment the properties below to enable basic auth",
+              "# username": {
+                "# value": ""
               },
-              "password": {
-                "value": ""
+              "# password": {
+                "# value": ""
+              },
+              "## Optional SSL": "Uncomment the properties below to enable SSL",
+              "# sslTruststore": {
+                "# file": "connect-truststore.jks"
+              },
+              "# sslTruststorePassword": {
+                "# value": ""
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -3709,9 +3717,9 @@
       }
     },
     {
-      "label": "Schema Registry, Confluent, Basic Auth, SSL/TLS",
+      "label": "Schema Registry, Confluent",
       "body": {
-        "## Template": "Schema Registry, Confluent, Basic Auth, SSL/TLS",
+        "## Template": "Schema Registry, Confluent",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -4087,9 +4095,9 @@
       }
     },
     {
-      "label": "Alerts, AWS Connection for Glue & CloudWatch",
+      "label": "Alerts, AWS Connection",
       "body": {
-        "## Template": "Alerts, AWS Connection for Glue & CloudWatch",
+        "## Template": "Alerts, AWS Connection",
         "aws": [
           {
             "## Repeat": "for more connections",
