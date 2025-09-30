@@ -1,0 +1,286 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lenses Kafka Connect Provisioning",
+  "type": "object",
+  "properties": {
+    "connect": {
+      "type": "array",
+      "description": "Array of Kafka Connect clusters.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Connect cluster name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
+            "pattern": "^[a-zA-Z0-9-]+$",
+            "default": "connect"
+          },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Connect version.",
+            "default": 1
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags for this Connect cluster.",
+            "default": []
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Kafka Connect connection configuration.",
+            "properties": {
+              "workers": {
+                "type": "object",
+                "description": "Connect worker URLs.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(http|https)://[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*:[0-9]+(/.*)?$",
+                      "description": "Array of Connect worker URL"
+                    },
+                    "description": "Enter the Connect worker URLs"
+                  }
+                },
+                "required": ["value"]
+              },
+              "username": {
+                "type": "object",
+                "description": "Username for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "password": {
+                "type": "object",
+                "description": "Password for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslTruststore": {
+                "type": "object",
+                "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslTruststorePassword": {
+                "type": "object",
+                "description": "Truststore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the truststore."
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslKeystore": {
+                "type": "object",
+                "description": "Unique keystore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique keystore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslKeystorePassword": {
+                "type": "object",
+                "description": "Keystore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the keystore."
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslKeyPassword": {
+                "type": "object",
+                "description": "Key password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the key."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPort": {
+                "type": "object",
+                "description": "Port for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port number for metrics collection."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsType": {
+                "type": "object",
+                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsSsl": {
+                "type": "object",
+                "description": "Enable SSL for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsUsername": {
+                "type": "object",
+                "description": "Username for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPassword": {
+                "type": "object",
+                "description": "Password for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsHttpSuffix": {
+                "type": "object",
+                "description": "Enter custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "HTTP suffix value."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsHttpTimeout": {
+                "type": "object",
+                "description": "Enter HTTP request timeout in milliseconds for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsCustomUrlMappings": {
+                "type": "object",
+                "description": "Enter custom URL mappings for metrics collection per broker/node/worker.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Map of custom URL mappings.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslAlgorthrim": {
+                "type": "object",
+                "description": "Name of the SSL algorithm.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the name of the SSL algorithm (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "default": "X509",
+                "required": ["value"]
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "required": ["sslTruststorePassword"]
+                },
+                "then": {
+                  "required": ["sslTruststore"]
+                }
+              },
+              {
+                "if": {
+                  "required": ["sslTruststore"]
+                },
+                "then": {
+                  "required": ["sslTruststorePassword"]
+                }
+              },
+              {
+                "if": {
+                  "required": ["sslKeystorePassword"]
+                },
+                "then": {
+                  "required": ["sslKeystore"]
+                }
+              },
+              {
+                "if": {
+                  "required": ["sslKeystore"]
+                },
+                "then": {
+                  "required": ["sslKeystorePassword"]
+                }
+              }
+            ]
+          }
+        },
+        "required": ["name", "version", "configuration"]
+      }
+    }
+  }
+}

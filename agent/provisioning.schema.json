@@ -181,7 +181,7 @@
                     "items": {
                       "type": "string",
                       "pattern": "^(SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://[a-zA-Z0-9.-]+:[0-9]{1,5}$",
-                      "description": "Enter the bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092')"
+                      "description": "Enter the bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092'). Prefix must match protocol setting."
                     },
                     "description": "List of bootstrap servers with protocol prefixes."
                   }
@@ -447,6 +447,82 @@
               "kafkaBootstrapServers"
             ],
             "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "protocol": { "properties": { "value": { "const": "PLAINTEXT" } } }
+                  },
+                  "required": ["protocol", "kafkaBootstrapServers"]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": { "pattern": "^PLAINTEXT://" }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": { "properties": { "value": { "const": "SSL" } } }
+                  },
+                  "required": ["protocol", "kafkaBootstrapServers"]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": { "pattern": "^SSL://" }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": { "properties": { "value": { "const": "SASL_SSL" } } }
+                  },
+                  "required": ["protocol", "kafkaBootstrapServers"]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": { "pattern": "^SASL_SSL://" }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "protocol": { "properties": { "value": { "const": "SASL_PLAINTEXT" } } }
+                  },
+                  "required": ["protocol", "kafkaBootstrapServers"]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "items": { "pattern": "^SASL_PLAINTEXT://" }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               {
                 "if": {
                   "properties": {
@@ -2544,9 +2620,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (TLS/SSL)",
+      "label": "Kafka, AWS MSK, SSL/TLS",
       "body": {
-        "## Template": "Kafka, AWS MSK (TLS/SSL)",
+        "## Template": "Kafka, AWS MSK, SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -2582,13 +2658,13 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (mutal TLS/SSL)",
+      "label": "Kafka, AWS MSK, mutal SSL/TLS",
       "body": {
-        "## Template": "Kafka, AWS MSK (mutal TLS/SSL)",
+        "## Template": "Kafka, AWS MSK, mutal SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
-            "editorTag": "AWS MSK, mutal TLS/SSL",
+            "editorTag": "AWS MSK, mutal SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -2629,9 +2705,9 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK (IAM)",
+      "label": "Kafka, AWS MSK, IAM",
       "body": {
-        "## Template": "Kafka, AWS MSK (IAM)",
+        "## Template": "Kafka, AWS MSK, IAM",
         "kafka": [
           {
             "name": "kafka",
@@ -3263,9 +3339,9 @@
       }
     },
     {
-      "label": "Kafka, SSL",
+      "label": "Kafka, SSL/TLS",
       "body": {
-        "## Template": "Kafka, SSL",
+        "## Template": "Kafka, SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -3310,9 +3386,9 @@
       }
     },
     {
-      "label": "Kafka, mutal SSL/TLS",
+      "label": "Kafka, Mutal SSL/TLS",
       "body": {
-        "## Template": "Kafka, mutal SSL/TLS",
+        "## Template": "Kafka, Mutal SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
@@ -3407,9 +3483,9 @@
       }
     },
     {
-      "label": "Kafka Connect",
+      "label": "Kafka Connect, No Auth",
       "body": {
-        "## Template": "Kafka Connect",
+        "## Template": "Kafka Connect, No Auth",
         "connect": [
           {
             "## Repeat": "for more clusters",
@@ -3423,21 +3499,7 @@
                   "http://<host1>:8083",
                   "http://<host2>:8083"
                 ]
-              },
-              "## Optional Basic Auth": "Uncomment the properties below to enable basic auth",
-              "# username": {
-                "# value": ""
-              },
-              "# password": {
-                "# value": ""
-              },
-              "## Optional SSL": "Uncomment the properties below to enable SSL",
-              "# sslTruststore": {
-                "# file": "connect-truststore.jks"
-              },
-              "# sslTruststorePassword": {
-                "# value": ""
-              },
+              },              
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
@@ -3717,9 +3779,9 @@
       }
     },
     {
-      "label": "Schema Registry, Confluent",
+      "label": "Schema Registry, Confluent Basic Auth, SSL/TLS",
       "body": {
-        "## Template": "Schema Registry, Confluent",
+        "## Template": "Schema Registry, Confluent Basic Auth, SSL/TLS",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
@@ -4095,7 +4157,7 @@
       }
     },
     {
-      "label": "Alerts, AWS Connection",
+      "label": "Alerts, AWS Connection for Glue & CloudWatchn",
       "body": {
         "## Template": "Alerts, AWS Connection",
         "aws": [
