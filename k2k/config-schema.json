@@ -1,0 +1,1522 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kafka2Kafka Configuration Schema",
+  "description": "JSON Schema for validating Kafka2Kafka pipeline configuration",
+  "type": "object",
+  "required": ["name", "source", "target", "replication"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the pipeline",
+      "minLength": 1
+    },
+    "license": {
+      "type": "object",
+      "required": ["acceptEula", "token"],
+      "properties": {
+        "acceptEula": {
+          "type": "boolean",
+          "description": "Needs to be set to true to run the application"
+        },
+        "token": {
+          "type": "string",
+          "description": "License token for running K2K"
+        }
+      },
+      "additionalProperties": false
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "exactlyOnce": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "disabled",
+          "description": "Enables exactly-once processing"
+        },
+        "headerReplication": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "disabled",
+          "description": "Enables/disables header replication"
+        },
+        "schemaMapping": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "disabled",
+          "description": "Enables/disables schema replication"
+        },
+        "optimizeOffsetCommitPartition": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "enabled",
+          "description": "Optimizes offset commit messages by publishing all control messages to the same partition"
+        },
+        "validateControlTopicSettings": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "enabled",
+          "description": "Enables validation of configurations for control topics"
+        },
+        "keepRecordCreationTimestamp": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "enabled",
+          "description": "Enables replication of record's creation timestamp"
+        },
+        "tracingHeaders": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["enabled", "disabled"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "partition": {
+                  "type": "string",
+                  "enum": ["enabled", "disabled"],
+                  "default": "disabled"
+                },
+                "offset": {
+                  "type": "string",
+                  "enum": ["enabled", "disabled"],
+                  "default": "disabled"
+                },
+                "topic": {
+                  "type": "string",
+                  "enum": ["enabled", "disabled"],
+                  "default": "disabled"
+                },
+                "pipeline": {
+                  "type": "string",
+                  "enum": ["enabled", "disabled"],
+                  "default": "disabled"
+                }
+              }
+            }
+          ],
+          "default": "disabled",
+          "description": "Appends tracing headers to each replicated record"
+        },
+        "autoCreateControlTopics": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "disabled",
+          "description": "Enables creation of the necessary control topics"
+        },
+        "autoCreateTopics": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "enabled",
+          "description": "Enables automatic topic creation"
+        },
+        "checkKafkaConnectionOnStartup": {
+          "type": "string",
+          "enum": ["enabled", "disabled"],
+          "default": "enabled",
+          "description": "K2K will validate connectivity to source and target clusters on startup"
+        }
+      },
+      "additionalProperties": false
+    },
+    "tracing": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "type": "object",
+          "properties": {
+            "partition": {
+              "type": "string",
+              "default": "__k2k_partition",
+              "description": "Name given to the header containing the source partition information"
+            },
+            "offset": {
+              "type": "string",
+              "default": "__k2k_offset",
+              "description": "Name given to the header containing the source offset information"
+            },
+            "topic": {
+              "type": "string",
+              "default": "__k2k_topic",
+              "description": "Name given to the header containing the source topic information"
+            },
+            "pipeline": {
+              "type": "string",
+              "default": "__k2k_pipeline",
+              "description": "Name given to the header containing the source pipeline information"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "errorHandling": {
+      "type": "object",
+      "properties": {
+        "onCommitSyncTimeout": {
+          "type": "string",
+          "enum": ["fail", "ignore"],
+          "description": "Handles the timeout when determining the latest committed offset"
+        },
+        "onControlMessageDeserializationError": {
+          "type": "string",
+          "enum": ["fail", "ignore"],
+          "description": "Handles deserialization errors for control messages"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schemaMapping": {
+      "type": "object",
+      "properties": {
+        "supportedTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["AVRO", "JSON", "PROTOBUF", "YANG"],
+          "description": "Schema Registry supported types"
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pattern"],
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern for topics to apply schema mapping"
+              },
+              "key": {
+                "type": "string",
+                "enum": ["enabled", "disabled"],
+                "description": "Enable schema replication for key"
+              },
+              "value": {
+                "type": "string",
+                "enum": ["enabled", "disabled"],
+                "description": "Enable schema replication for value"
+              }
+            },
+            "additionalProperties": false
+          },
+          "description": "Schema mapping rules per topic pattern"
+        }
+      },
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "autoControlTopicCreationCheckDelay": {
+          "type": "string",
+          "pattern": "^\\d+\\s+(milliseconds?|millis?|seconds?|minutes?|hours?)$",
+          "default": "750 milliseconds",
+          "description": "Time to wait between retries when asserting that a topic exists"
+        },
+        "autoControlTopicCreationMaxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10,
+          "description": "Max attempts to assert that a topic exists before giving up"
+        },
+        "pipelineParallelism": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Pipeline parallelism level"
+        },
+        "partitionParallelism": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Partition parallelism level"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coordination": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "default": "__k2k_consumer-offsets",
+              "description": "Topic for offset commits"
+            },
+            "syncTimeout": {
+              "type": "string",
+              "pattern": "^\\d+\\s+(milliseconds?|millis?|seconds?|minutes?|hours?)$",
+              "default": "10 seconds",
+              "description": "Time limit to wait for catchup when reading from the offset control topic"
+            },
+            "batchSize": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 100,
+              "description": "Number of records after which an offset is committed"
+            },
+            "batchTimeout": {
+              "type": "string",
+              "pattern": "^\\d+\\s+(milliseconds?|millis?|seconds?|minutes?|hours?)$",
+              "default": "5 seconds",
+              "description": "Time to wait before committing if the batch size is not reached"
+            }
+          },
+          "additionalProperties": false
+        },
+        "assignment": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "default": "__k2k_assignment",
+              "description": "Topic used for assignment coordination"
+            },
+            "graceWindow": {
+              "type": "string",
+              "pattern": "^\\d+\\s+(milliseconds?|millis?|seconds?|minutes?|hours?)$",
+              "default": "15 seconds",
+              "description": "Time to wait before the application actively fences off other applications"
+            },
+            "fencingMaxParallelism": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 10,
+              "description": "Max parallelism when fencing slow/zombie producers"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "type": "object",
+          "properties": {
+            "targetConsumer": {
+              "type": "string",
+              "default": "k2k.consumer.control.",
+              "description": "Prefix for target consumer metrics"
+            },
+            "targetProducer": {
+              "type": "string",
+              "default": "k2k.producer.",
+              "description": "Prefix for target producer metrics"
+            },
+            "sourceConsumer": {
+              "type": "string",
+              "default": "k2k.consumer.source.",
+              "description": "Prefix for source consumer metrics"
+            },
+            "assignment": {
+              "type": "string",
+              "default": "k2k.",
+              "description": "Prefix for assignment metrics"
+            }
+          },
+          "additionalProperties": false
+        },
+        "kafka": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "default": "__k2k_metrics",
+              "description": "Topic where metrics are published to"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["kafka"],
+      "properties": {
+        "kafka": {
+          "type": "object",
+          "required": ["common", "consumer"],
+          "properties": {
+            "common": {
+              "type": "object",
+              "required": ["bootstrap.servers"],
+              "properties": {
+                "bootstrap.servers": {
+                  "type": "string",
+                  "description": "Kafka bootstrap servers"
+                }
+              },
+              "additionalProperties": true,
+              "description": "Common configurations inherited by consumer and admin clients"
+            },
+            "consumer": {
+              "type": "object",
+              "required": ["group.id"],
+              "properties": {
+                "group.id": {
+                  "type": "string",
+                  "description": "Consumer group name"
+                },
+                "key.deserializer": {
+                  "type": "string",
+                  "description": "Deserializer class for key"
+                },
+                "value.deserializer": {
+                  "type": "string",
+                  "description": "Deserializer class for value"
+                },
+                "auto.offset.reset": {
+                  "type": "string",
+                  "enum": ["earliest", "latest", "none"],
+                  "description": "What to do when there is no initial offset"
+                },
+                "enable.auto.commit": {
+                  "type": "boolean",
+                  "description": "If true the consumer's offset will be periodically committed"
+                },
+                "auto.commit.interval.ms": {
+                  "type": "integer",
+                  "description": "Frequency in milliseconds that the consumer offsets are auto-committed"
+                },
+                "session.timeout.ms": {
+                  "type": "integer",
+                  "description": "Timeout used to detect client failures"
+                },
+                "heartbeat.interval.ms": {
+                  "type": "integer",
+                  "description": "Expected time between heartbeats"
+                },
+                "max.poll.records": {
+                  "type": "integer",
+                  "description": "Maximum number of records returned in a single call to poll()"
+                },
+                "max.poll.interval.ms": {
+                  "type": "integer",
+                  "description": "Maximum delay between invocations of poll()"
+                },
+                "fetch.min.bytes": {
+                  "type": "integer",
+                  "description": "Minimum amount of data the server should return for a fetch request"
+                },
+                "fetch.max.bytes": {
+                  "type": "integer",
+                  "description": "Maximum amount of data the server should return for a fetch request"
+                },
+                "fetch.max.wait.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time the server will block before answering the fetch request"
+                },
+                "max.partition.fetch.bytes": {
+                  "type": "integer",
+                  "description": "Maximum amount of data per-partition the server will return"
+                },
+                "client.id": {
+                  "type": "string",
+                  "description": "Id string to pass to the server when making requests"
+                },
+                "isolation.level": {
+                  "type": "string",
+                  "enum": ["read_uncommitted", "read_committed"],
+                  "description": "Controls how to read messages written transactionally"
+                },
+                "group.instance.id": {
+                  "type": "string",
+                  "description": "Unique identifier of the consumer instance for static membership"
+                },
+                "partition.assignment.strategy": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of class names of partition assignment strategies"
+                },
+                "allow.auto.create.topics": {
+                  "type": "boolean",
+                  "description": "Allow automatic topic creation on the broker when subscribing to or assigning a topic"
+                },
+                "interceptor.classes": {
+                  "type": "string",
+                  "description": "List of classes to use as interceptors"
+                },
+                "exclude.internal.topics": {
+                  "type": "boolean",
+                  "description": "Whether internal topics should be exposed to the consumer"
+                },
+                "check.crcs": {
+                  "type": "boolean",
+                  "description": "Automatically check the CRC32 of the records consumed"
+                },
+                "metadata.max.age.ms": {
+                  "type": "integer",
+                  "description": "Period of time in milliseconds after which we force a refresh of metadata"
+                },
+                "connections.max.idle.ms": {
+                  "type": "integer",
+                  "description": "Close idle connections after the number of milliseconds"
+                },
+                "request.timeout.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time the client will wait for the response of a request"
+                },
+                "default.api.timeout.ms": {
+                  "type": "integer",
+                  "description": "Specifies the timeout for client APIs"
+                },
+                "reconnect.backoff.ms": {
+                  "type": "integer",
+                  "description": "Amount of time to wait before attempting to reconnect"
+                },
+                "reconnect.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time in milliseconds to wait when reconnecting"
+                },
+                "retry.backoff.ms": {
+                  "type": "integer",
+                  "description": "Amount of time to wait before attempting to retry a failed request"
+                },
+                "security.protocol": {
+                  "type": "string",
+                  "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
+                  "description": "Protocol used to communicate with brokers"
+                },
+                "sasl.mechanism": {
+                  "type": "string",
+                  "description": "SASL mechanism used for client connections"
+                },
+                "sasl.jaas.config": {
+                  "type": "string",
+                  "description": "JAAS login context parameters for SASL connections"
+                },
+                "sasl.kerberos.service.name": {
+                  "type": "string",
+                  "description": "Kerberos principal name that Kafka runs as"
+                },
+                "ssl.keystore.location": {
+                  "type": "string",
+                  "description": "Location of the key store file"
+                },
+                "ssl.keystore.password": {
+                  "type": "string",
+                  "description": "Store password for the key store file"
+                },
+                "ssl.key.password": {
+                  "type": "string",
+                  "description": "Password of the private key in the key store file"
+                },
+                "ssl.truststore.location": {
+                  "type": "string",
+                  "description": "Location of the trust store file"
+                },
+                "ssl.truststore.password": {
+                  "type": "string",
+                  "description": "Password for the trust store file"
+                },
+                "ssl.truststore.type": {
+                  "type": "string",
+                  "description": "File format of the trust store file"
+                },
+                "ssl.keystore.type": {
+                  "type": "string",
+                  "description": "File format of the key store file"
+                },
+                "ssl.protocol": {
+                  "type": "string",
+                  "description": "SSL protocol used to generate the SSLContext"
+                },
+                "ssl.enabled.protocols": {
+                  "type": "string",
+                  "description": "List of protocols enabled for SSL connections"
+                },
+                "ssl.endpoint.identification.algorithm": {
+                  "type": "string",
+                  "description": "Endpoint identification algorithm to validate server hostname"
+                },
+                "metrics.sample.window.ms": {
+                  "type": "integer",
+                  "description": "Window of time a metrics sample is computed over"
+                },
+                "metrics.num.samples": {
+                  "type": "integer",
+                  "description": "Number of samples maintained to compute metrics"
+                },
+                "metric.reporters": {
+                  "type": "string",
+                  "description": "List of classes to use as metrics reporters"
+                },
+                "metrics.recording.level": {
+                  "type": "string",
+                  "description": "Highest recording level for metrics"
+                },
+                "receive.buffer.bytes": {
+                  "type": "integer",
+                  "description": "Size of the TCP receive buffer (SO_RCVBUF)"
+                },
+                "send.buffer.bytes": {
+                  "type": "integer",
+                  "description": "Size of the TCP send buffer (SO_SNDBUF)"
+                },
+                "bootstrap.servers": {
+                  "type": "string",
+                  "description": "Kafka bootstrap servers"
+                },
+                "group.protocol": {
+                  "type": "string",
+                  "enum": ["CONSUMER", "CLASSIC"],
+                  "description": "The rebalance protocol for a consumer group"
+                },
+                "client.dns.lookup": {
+                  "type": "string",
+                  "enum": ["default", "use_all_dns_ips", "resolve_canonical_bootstrap_servers_only"],
+                  "description": "Controls how the client uses DNS lookups"
+                },
+                "socket.connection.setup.timeout.ms": {
+                  "type": "integer",
+                  "description": "Amount of time the client will wait for the socket connection to be established"
+                },
+                "socket.connection.setup.timeout.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time the client will wait for the socket connection to be established"
+                },
+                "retry.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time to wait before attempting to retry a failed request"
+                },
+                "client.rack": {
+                  "type": "string",
+                  "description": "A rack identifier for this client"
+                },
+                "enable.metrics.push": {
+                  "type": "boolean",
+                  "description": "Enable metrics push"
+                },
+                "group.remote.assignor": {
+                  "type": "string",
+                  "description": "The server-side assignor to use"
+                },
+                "metadata.recovery.strategy": {
+                  "type": "string",
+                  "description": "Strategy for metadata recovery"
+                },
+                "metadata.recovery.rebootstrap.trigger.ms": {
+                  "type": "integer",
+                  "description": "Time to trigger rebootstrap for metadata recovery"
+                },
+                "sasl.client.callback.handler.class": {
+                  "type": "string",
+                  "description": "SASL client callback handler class"
+                },
+                "sasl.jaas.config.jndi.allowlist": {
+                  "type": "string",
+                  "description": "JNDI names that are allowed in the JAAS configuration"
+                },
+                "sasl.login.callback.handler.class": {
+                  "type": "string",
+                  "description": "SASL login callback handler class"
+                },
+                "sasl.login.class": {
+                  "type": "string",
+                  "description": "SASL login class"
+                },
+                "sasl.kerberos.kinit.cmd": {
+                  "type": "string",
+                  "description": "Kerberos kinit command path"
+                },
+                "sasl.kerberos.ticket.renew.window.factor": {
+                  "type": "number",
+                  "description": "Login thread will sleep until the specified window factor of time from last refresh"
+                },
+                "sasl.kerberos.ticket.renew.jitter": {
+                  "type": "number",
+                  "description": "Percentage of random jitter added to the renewal time"
+                },
+                "sasl.kerberos.min.time.before.relogin": {
+                  "type": "integer",
+                  "description": "Login thread sleep time between refresh attempts"
+                },
+                "sasl.login.refresh.window.factor": {
+                  "type": "number",
+                  "description": "Login refresh thread will sleep until the specified window factor of time"
+                },
+                "sasl.login.refresh.window.jitter": {
+                  "type": "number",
+                  "description": "Maximum amount of random jitter relative to credential's lifetime"
+                },
+                "sasl.login.refresh.min.period.seconds": {
+                  "type": "integer",
+                  "description": "Minimum time in seconds that login refresh thread will wait before refreshing"
+                },
+                "sasl.login.refresh.buffer.seconds": {
+                  "type": "integer",
+                  "description": "Amount of buffer time before credential expiration to maintain"
+                },
+                "sasl.login.connect.timeout.ms": {
+                  "type": "integer",
+                  "description": "Optional value in milliseconds for the external authentication provider connection timeout"
+                },
+                "sasl.login.read.timeout.ms": {
+                  "type": "integer",
+                  "description": "Optional value in milliseconds for the external authentication provider read timeout"
+                },
+                "sasl.login.retry.backoff.ms": {
+                  "type": "integer",
+                  "description": "Time to wait before attempting to retry login"
+                },
+                "sasl.login.retry.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum time to wait before attempting to retry login"
+                },
+                "sasl.oauthbearer.jwks.endpoint.url": {
+                  "type": "string",
+                  "description": "OAuth/OIDC provider URL for JWKS retrieval"
+                },
+                "sasl.oauthbearer.token.endpoint.url": {
+                  "type": "string",
+                  "description": "OAuth/OIDC provider URL for token retrieval"
+                },
+                "sasl.oauthbearer.scope.claim.name": {
+                  "type": "string",
+                  "description": "Name of the scope claim in the JWT"
+                },
+                "sasl.oauthbearer.sub.claim.name": {
+                  "type": "string",
+                  "description": "Name of the subject claim in the JWT"
+                },
+                "sasl.oauthbearer.expected.audience": {
+                  "type": "string",
+                  "description": "Expected audience value in the JWT"
+                },
+                "sasl.oauthbearer.expected.issuer": {
+                  "type": "string",
+                  "description": "Expected issuer value in the JWT"
+                },
+                "sasl.oauthbearer.clock.skew.seconds": {
+                  "type": "integer",
+                  "description": "Allowable clock skew in seconds for OAuth validation"
+                },
+                "ssl.provider": {
+                  "type": "string",
+                  "description": "Name of the security provider used for SSL connections"
+                },
+                "ssl.cipher.suites": {
+                  "type": "string",
+                  "description": "List of cipher suites for SSL connections"
+                },
+                "ssl.keymanager.algorithm": {
+                  "type": "string",
+                  "description": "Algorithm used by key manager factory for SSL connections"
+                },
+                "ssl.trustmanager.algorithm": {
+                  "type": "string",
+                  "description": "Algorithm used by trust manager factory for SSL connections"
+                },
+                "ssl.secure.random.implementation": {
+                  "type": "string",
+                  "description": "SecureRandom PRNG implementation to use for SSL cryptography"
+                },
+                "ssl.keystore.certificate.chain": {
+                  "type": "string",
+                  "description": "Certificate chain in PEM format"
+                },
+                "ssl.keystore.key": {
+                  "type": "string",
+                  "description": "Private key in PEM format"
+                },
+                "ssl.truststore.certificates": {
+                  "type": "string",
+                  "description": "Trusted certificates in PEM format"
+                },
+                "security.providers": {
+                  "type": "string",
+                  "description": "List of configurable creator classes for security providers"
+                },
+                "group.share.isolation.level": {
+                  "type": "string",
+                  "description": "Isolation level for share group consumers"
+                },
+                "group.share.record.lock.duration.ms": {
+                  "type": "integer",
+                  "description": "Record lock duration for share group consumers"
+                },
+                "metrics.log.level": {
+                  "type": "string",
+                  "description": "Log level for metrics"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Kafka consumer configuration"
+            },
+            "admin": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Kafka admin client configuration"
+            }
+          },
+          "additionalProperties": false
+        },
+        "registry": {
+          "type": "object",
+          "properties": {
+            "config": {
+              "type": "object",
+              "properties": {
+                "schema.registry.url": {
+                  "type": "string",
+                  "description": "Schema Registry URL"
+                }
+              },
+              "additionalProperties": true,
+              "description": "Schema Registry connection options"
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Headers to add to all schema registry HTTP requests"
+            },
+            "cacheSize": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 31,
+              "description": "Schema Registry client cache size"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["kafka"],
+      "properties": {
+        "kafka": {
+          "type": "object",
+          "required": ["common"],
+          "properties": {
+            "common": {
+              "type": "object",
+              "required": ["bootstrap.servers"],
+              "properties": {
+                "bootstrap.servers": {
+                  "type": "string",
+                  "description": "Kafka bootstrap servers"
+                }
+              },
+              "additionalProperties": true,
+              "description": "Common configurations inherited by consumer, producer and admin clients"
+            },
+            "consumer": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Kafka consumer configuration"
+            },
+            "producer": {
+              "type": "object",
+              "properties": {
+                "key.serializer": {
+                  "type": "string",
+                  "description": "Serializer class for key"
+                },
+                "value.serializer": {
+                  "type": "string",
+                  "description": "Serializer class for value"
+                },
+                "acks": {
+                  "type": "string",
+                  "description": "Number of acknowledgments the producer requires the leader to have received"
+                },
+                "buffer.memory": {
+                  "type": "integer",
+                  "description": "Total bytes of memory the producer can use to buffer records"
+                },
+                "compression.type": {
+                  "type": "string",
+                  "enum": ["none", "gzip", "snappy", "lz4", "zstd"],
+                  "description": "Compression type for all data generated by the producer"
+                },
+                "retries": {
+                  "type": "integer",
+                  "description": "Setting a value greater than zero will cause the client to resend any record"
+                },
+                "batch.size": {
+                  "type": "integer",
+                  "description": "Producer will attempt to batch records together into fewer requests"
+                },
+                "client.id": {
+                  "type": "string",
+                  "description": "Id string to pass to the server when making requests"
+                },
+                "linger.ms": {
+                  "type": "integer",
+                  "description": "Producer groups together any records that arrive in between request transmissions"
+                },
+                "max.block.ms": {
+                  "type": "integer",
+                  "description": "Controls how long send() and partitionsFor() will block"
+                },
+                "max.request.size": {
+                  "type": "integer",
+                  "description": "Maximum size of a request in bytes"
+                },
+                "partitioner.class": {
+                  "type": "string",
+                  "description": "Partitioner class that implements the Partitioner interface"
+                },
+                "receive.buffer.bytes": {
+                  "type": "integer",
+                  "description": "Size of the TCP receive buffer (SO_RCVBUF)"
+                },
+                "request.timeout.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time the client will wait for the response of a request"
+                },
+                "send.buffer.bytes": {
+                  "type": "integer",
+                  "description": "Size of the TCP send buffer (SO_SNDBUF)"
+                },
+                "max.in.flight.requests.per.connection": {
+                  "type": "integer",
+                  "description": "Maximum number of unacknowledged requests the client will send on a single connection"
+                },
+                "metadata.max.age.ms": {
+                  "type": "integer",
+                  "description": "Period of time in milliseconds after which we force a refresh of metadata"
+                },
+                "reconnect.backoff.ms": {
+                  "type": "integer",
+                  "description": "Amount of time to wait before attempting to reconnect"
+                },
+                "retry.backoff.ms": {
+                  "type": "integer",
+                  "description": "Amount of time to wait before attempting to retry a failed request"
+                },
+                "enable.idempotence": {
+                  "type": "boolean",
+                  "description": "When set to true, the producer will ensure that exactly one copy of each message is written"
+                },
+                "transaction.timeout.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time in ms that the transaction coordinator will wait"
+                },
+                "transactional.id": {
+                  "type": "string",
+                  "description": "TransactionalId to use for transactional delivery"
+                },
+                "security.protocol": {
+                  "type": "string",
+                  "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
+                  "description": "Protocol used to communicate with brokers"
+                },
+                "sasl.mechanism": {
+                  "type": "string",
+                  "description": "SASL mechanism used for client connections"
+                },
+                "sasl.jaas.config": {
+                  "type": "string",
+                  "description": "JAAS login context parameters for SASL connections"
+                },
+                "ssl.keystore.location": {
+                  "type": "string",
+                  "description": "Location of the key store file"
+                },
+                "ssl.keystore.password": {
+                  "type": "string",
+                  "description": "Store password for the key store file"
+                },
+                "ssl.key.password": {
+                  "type": "string",
+                  "description": "Password of the private key in the key store file"
+                },
+                "ssl.truststore.location": {
+                  "type": "string",
+                  "description": "Location of the trust store file"
+                },
+                "ssl.truststore.password": {
+                  "type": "string",
+                  "description": "Password for the trust store file"
+                },
+                "interceptor.classes": {
+                  "type": "string",
+                  "description": "List of classes to use as interceptors"
+                },
+                "bootstrap.servers": {
+                  "type": "string",
+                  "description": "Kafka bootstrap servers"
+                },
+                "delivery.timeout.ms": {
+                  "type": "integer",
+                  "description": "Upper bound on the time to report success or failure after a call to send() returns"
+                },
+                "client.dns.lookup": {
+                  "type": "string",
+                  "enum": ["default", "use_all_dns_ips", "resolve_canonical_bootstrap_servers_only"],
+                  "description": "Controls how the client uses DNS lookups"
+                },
+                "connections.max.idle.ms": {
+                  "type": "integer",
+                  "description": "Close idle connections after the number of milliseconds"
+                },
+                "partitioner.adaptive.partitioning.enable": {
+                  "type": "boolean",
+                  "description": "Enable adaptive partitioning"
+                },
+                "partitioner.availability.timeout.ms": {
+                  "type": "integer",
+                  "description": "Timeout for partitioner availability"
+                },
+                "partitioner.ignore.keys": {
+                  "type": "boolean",
+                  "description": "Enable partitioner to ignore record keys"
+                },
+                "socket.connection.setup.timeout.ms": {
+                  "type": "integer",
+                  "description": "Amount of time the client will wait for the socket connection to be established"
+                },
+                "socket.connection.setup.timeout.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time the client will wait for the socket connection to be established"
+                },
+                "reconnect.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time in milliseconds to wait when reconnecting"
+                },
+                "retry.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum amount of time to wait before attempting to retry a failed request"
+                },
+                "compression.gzip.level": {
+                  "type": "integer",
+                  "description": "Compression level for gzip compression"
+                },
+                "compression.lz4.level": {
+                  "type": "integer",
+                  "description": "Compression level for lz4 compression"
+                },
+                "compression.zstd.level": {
+                  "type": "integer",
+                  "description": "Compression level for zstd compression"
+                },
+                "enable.metrics.push": {
+                  "type": "boolean",
+                  "description": "Enable metrics push"
+                },
+                "metadata.max.idle.ms": {
+                  "type": "integer",
+                  "description": "Controls how long the producer will cache metadata for a topic that's idle"
+                },
+                "metadata.recovery.strategy": {
+                  "type": "string",
+                  "description": "Strategy for metadata recovery"
+                },
+                "metadata.recovery.rebootstrap.trigger.ms": {
+                  "type": "integer",
+                  "description": "Time to trigger rebootstrap for metadata recovery"
+                },
+                "metric.reporters": {
+                  "type": "string",
+                  "description": "List of classes to use as metrics reporters"
+                },
+                "metrics.num.samples": {
+                  "type": "integer",
+                  "description": "Number of samples maintained to compute metrics"
+                },
+                "metrics.recording.level": {
+                  "type": "string",
+                  "description": "Highest recording level for metrics"
+                },
+                "metrics.sample.window.ms": {
+                  "type": "integer",
+                  "description": "Window of time a metrics sample is computed over"
+                },
+                "sasl.kerberos.service.name": {
+                  "type": "string",
+                  "description": "Kerberos principal name that Kafka runs as"
+                },
+                "sasl.client.callback.handler.class": {
+                  "type": "string",
+                  "description": "SASL client callback handler class"
+                },
+                "sasl.login.callback.handler.class": {
+                  "type": "string",
+                  "description": "SASL login callback handler class"
+                },
+                "sasl.login.class": {
+                  "type": "string",
+                  "description": "SASL login class"
+                },
+                "sasl.kerberos.kinit.cmd": {
+                  "type": "string",
+                  "description": "Kerberos kinit command path"
+                },
+                "sasl.kerberos.ticket.renew.window.factor": {
+                  "type": "number",
+                  "description": "Login thread will sleep until the specified window factor of time from last refresh"
+                },
+                "sasl.kerberos.ticket.renew.jitter": {
+                  "type": "number",
+                  "description": "Percentage of random jitter added to the renewal time"
+                },
+                "sasl.kerberos.min.time.before.relogin": {
+                  "type": "integer",
+                  "description": "Login thread sleep time between refresh attempts"
+                },
+                "sasl.login.refresh.window.factor": {
+                  "type": "number",
+                  "description": "Login refresh thread will sleep until the specified window factor of time"
+                },
+                "sasl.login.refresh.window.jitter": {
+                  "type": "number",
+                  "description": "Maximum amount of random jitter relative to credential's lifetime"
+                },
+                "sasl.login.refresh.min.period.seconds": {
+                  "type": "integer",
+                  "description": "Minimum time in seconds that login refresh thread will wait before refreshing"
+                },
+                "sasl.login.refresh.buffer.seconds": {
+                  "type": "integer",
+                  "description": "Amount of buffer time before credential expiration to maintain"
+                },
+                "sasl.login.connect.timeout.ms": {
+                  "type": "integer",
+                  "description": "Optional value in milliseconds for the external authentication provider connection timeout"
+                },
+                "sasl.login.read.timeout.ms": {
+                  "type": "integer",
+                  "description": "Optional value in milliseconds for the external authentication provider read timeout"
+                },
+                "sasl.login.retry.backoff.ms": {
+                  "type": "integer",
+                  "description": "Time to wait before attempting to retry login"
+                },
+                "sasl.login.retry.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "Maximum time to wait before attempting to retry login"
+                },
+                "sasl.oauthbearer.jwks.endpoint.url": {
+                  "type": "string",
+                  "description": "OAuth/OIDC provider URL for JWKS retrieval"
+                },
+                "sasl.oauthbearer.token.endpoint.url": {
+                  "type": "string",
+                  "description": "OAuth/OIDC provider URL for token retrieval"
+                },
+                "sasl.oauthbearer.scope.claim.name": {
+                  "type": "string",
+                  "description": "Name of the scope claim in the JWT"
+                },
+                "sasl.oauthbearer.sub.claim.name": {
+                  "type": "string",
+                  "description": "Name of the subject claim in the JWT"
+                },
+                "sasl.oauthbearer.expected.audience": {
+                  "type": "string",
+                  "description": "Expected audience value in the JWT"
+                },
+                "sasl.oauthbearer.expected.issuer": {
+                  "type": "string",
+                  "description": "Expected issuer value in the JWT"
+                },
+                "sasl.oauthbearer.jwks.endpoint.refresh.ms": {
+                  "type": "integer",
+                  "description": "The refresh interval for JWKS endpoint"
+                },
+                "sasl.oauthbearer.jwks.endpoint.retry.backoff.ms": {
+                  "type": "integer",
+                  "description": "The retry backoff for JWKS endpoint"
+                },
+                "sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms": {
+                  "type": "integer",
+                  "description": "The maximum retry backoff for JWKS endpoint"
+                },
+                "sasl.oauthbearer.clock.skew.seconds": {
+                  "type": "integer",
+                  "description": "Allowable clock skew in seconds for OAuth validation"
+                },
+                "ssl.protocol": {
+                  "type": "string",
+                  "description": "SSL protocol used to generate the SSLContext"
+                },
+                "ssl.provider": {
+                  "type": "string",
+                  "description": "Name of the security provider used for SSL connections"
+                },
+                "ssl.cipher.suites": {
+                  "type": "string",
+                  "description": "List of cipher suites for SSL connections"
+                },
+                "ssl.enabled.protocols": {
+                  "type": "string",
+                  "description": "List of protocols enabled for SSL connections"
+                },
+                "ssl.keystore.type": {
+                  "type": "string",
+                  "description": "File format of the key store file"
+                },
+                "ssl.truststore.type": {
+                  "type": "string",
+                  "description": "File format of the trust store file"
+                },
+                "ssl.keymanager.algorithm": {
+                  "type": "string",
+                  "description": "Algorithm used by key manager factory for SSL connections"
+                },
+                "ssl.trustmanager.algorithm": {
+                  "type": "string",
+                  "description": "Algorithm used by trust manager factory for SSL connections"
+                },
+                "ssl.endpoint.identification.algorithm": {
+                  "type": "string",
+                  "description": "Endpoint identification algorithm to validate server hostname"
+                },
+                "ssl.secure.random.implementation": {
+                  "type": "string",
+                  "description": "SecureRandom PRNG implementation to use for SSL cryptography"
+                },
+                "ssl.engine.factory.class": {
+                  "type": "string",
+                  "description": "Class that implements SSLEngineFactory"
+                },
+                "ssl.keystore.certificate.chain": {
+                  "type": "string",
+                  "description": "Certificate chain in PEM format"
+                },
+                "ssl.keystore.key": {
+                  "type": "string",
+                  "description": "Private key in PEM format"
+                },
+                "ssl.truststore.certificates": {
+                  "type": "string",
+                  "description": "Trusted certificates in PEM format"
+                },
+                "security.providers": {
+                  "type": "string",
+                  "description": "List of configurable creator classes for security providers"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Kafka producer configuration"
+            },
+            "admin": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Kafka admin client configuration"
+            }
+          },
+          "additionalProperties": false
+        },
+        "registry": {
+          "type": "object",
+          "properties": {
+            "config": {
+              "type": "object",
+              "properties": {
+                "schema.registry.url": {
+                  "type": "string",
+                  "description": "Schema Registry URL"
+                }
+              },
+              "additionalProperties": true,
+              "description": "Schema Registry connection options"
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Headers to add to all schema registry HTTP requests"
+            },
+            "cacheSize": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 31,
+              "description": "Schema Registry client cache size"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "topicCreation": {
+      "type": "object",
+      "properties": {
+        "replication": {
+          "type": "object",
+          "properties": {
+            "common": {
+              "type": "object",
+              "properties": {
+                "partitions": {
+                  "type": ["integer", "null"],
+                  "minimum": 1,
+                  "description": "Default partition count for replicated topics"
+                },
+                "replication": {
+                  "type": ["integer", "null"],
+                  "minimum": 1,
+                  "description": "Default replication factor for replicated topics"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Default topic configuration for replicated topics"
+                }
+              },
+              "additionalProperties": false
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["pattern"],
+                "properties": {
+                  "pattern": {
+                    "type": "string",
+                    "description": "Regex pattern to match topic names"
+                  },
+                  "properties": {
+                    "type": "object",
+                    "properties": {
+                      "partitions": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Partition count for matching topics"
+                      },
+                      "replication": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Replication factor for matching topics"
+                      },
+                      "config": {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "description": "Topic configuration for matching topics"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Rules for topic-specific configurations"
+            }
+          },
+          "additionalProperties": false
+        },
+        "control": {
+          "type": "object",
+          "properties": {
+            "common": {
+              "type": "object",
+              "properties": {
+                "partitions": {
+                  "type": ["integer", "null"],
+                  "minimum": 1,
+                  "description": "Default partition count for control topics"
+                },
+                "replication": {
+                  "type": ["integer", "null"],
+                  "minimum": 1,
+                  "description": "Default replication factor for control topics"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Default topic configuration for control topics"
+                }
+              },
+              "additionalProperties": false
+            },
+            "assignment": {
+              "type": "object",
+              "properties": {
+                "partitions": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Partition count for assignment topic"
+                },
+                "replication": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Replication factor for assignment topic"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Topic configuration for assignment topic"
+                }
+              },
+              "additionalProperties": false
+            },
+            "commit": {
+              "type": "object",
+              "properties": {
+                "partitions": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Partition count for commit topic"
+                },
+                "replication": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Replication factor for commit topic"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Topic configuration for commit topic"
+                }
+              },
+              "additionalProperties": false
+            },
+            "metrics": {
+              "type": "object",
+              "properties": {
+                "partitions": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Partition count for metrics topic"
+                },
+                "replication": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Replication factor for metrics topic"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Topic configuration for metrics topic"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "replication": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["source"],
+            "properties": {
+              "source": {
+                "type": "object",
+                "required": ["name", "topic"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the source node"
+                  },
+                  "topic": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "Regex pattern for topic selection"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "description": "List of specific topics"
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["sink"],
+            "properties": {
+              "sink": {
+                "type": "object",
+                "required": ["name", "topic", "partition"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the sink node"
+                  },
+                  "topic": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": ["source"],
+                        "description": "Use source topic name"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "static": {
+                            "type": "string",
+                            "description": "Static topic name"
+                          }
+                        },
+                        "required": ["static"],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "prefix": {
+                            "type": "string",
+                            "description": "Prefix to prepend to source topic name"
+                          },
+                          "suffix": {
+                            "type": "string",
+                            "description": "Suffix to append to source topic name"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "minProperties": 1
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "staticMapping": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "description": "Map source topic patterns to target topic names"
+                          }
+                        },
+                        "required": ["staticMapping"],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "partition": {
+                    "type": "string",
+                    "enum": ["source", "producer"],
+                    "description": "Partition assignment strategy"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "Replication rules defining source and sink configurations"
+    }
+  },
+  "additionalProperties": false
+}
