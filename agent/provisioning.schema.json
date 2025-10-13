@@ -1095,18 +1095,6 @@
               "zookeeperConnectionTimeout": {
                 "$ref": "#/definitions/zookeeperConnectionTimeout"
               },
-              "metricsType": {
-                "type": "object",
-                "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Enter a metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP')",
-                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
-                  }
-                },
-                "required": ["value"]
-              },
               "metricsType": { "$ref": "#/definitions/metricsType" },
               "metricsPort": { "$ref": "#/definitions/metricsPort" },
               "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
@@ -1243,6 +1231,32 @@
                 },
                 "then": {
                   "required": ["sslKeystorePassword"]
+                }
+              },
+              {
+                "if": {
+                  "anyOf": [
+                    { "required": ["sslKeystore"] },
+                    { "required": ["sslKeystorePassword"] },
+                    { "required": ["sslKeyPassword"] },
+                    { "required": ["sslTruststore"] },
+                    { "required": ["sslTruststorePassword"] }
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "schemaRegistryUrls": {
+                      "properties": {
+                        "value": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^https://"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             ],
@@ -1419,6 +1433,33 @@
                 },
                 "then": {
                   "required": ["sslKeystorePassword"]
+                }
+              },
+              {
+                "if": {
+                  "anyOf": [
+                    { "required": ["sslKeystore"] },
+                    { "required": ["sslKeystorePassword"] },
+                    { "required": ["sslKeyPassword"] },
+                    { "required": ["sslTruststore"] },
+                    { "required": ["sslTruststorePassword"] },
+                    { "required": ["sslAlgorthrim"] }
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "workers": {
+                      "properties": {
+                        "value": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^https://"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             ]
@@ -3085,7 +3126,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["http://<host1>:8083", "http://<host2>:8083"]
+                "value": ["https://<host1>:8083", "https://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3151,7 +3192,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["http://<host1>:8083", "http://<host2>:8083"]
+                "value": ["https://<host1>:8083", "https://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3338,7 +3379,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<host1>:8081", "http://<host2>:8081"]
+                "value": ["https://<host1>:8081", "https://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3404,7 +3445,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<host1>:8081", "http://<host2>:8081"]
+                "value": ["https://<host1>:8081", "https://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3479,7 +3520,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<host1>:8081", "http://<host2>:8081"]
+                "value": ["https://<host1>:8081", "https://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
