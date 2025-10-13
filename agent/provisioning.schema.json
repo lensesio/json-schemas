@@ -862,7 +862,8 @@
           },
           "configuration": {
             "type": "object",
-            "description": "Kafka connection configuration.",
+            "title": "Kafka Configuration",
+            "description": "Kafka connection configuration with SASL and SSL validation rules.",
             "properties": {
               "kafkaBootstrapServers": {
                 "$ref": "#/definitions/kafkaBootstrapServers"
@@ -906,6 +907,8 @@
             "required": ["kafkaBootstrapServers"],
             "allOf": [
               {
+                "title": "SASL PLAIN Mechanism Validation",
+                "description": "When SASL mechanism is PLAIN, saslJaasConfig must contain valid PlainLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -932,6 +935,8 @@
                 }
               },
               {
+                "title": "SASL AWS MSK IAM Mechanism Validation",
+                "description": "When SASL mechanism is AWS_MSK_IAM, additionalProperties must contain IAMClientCallbackHandler configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -965,6 +970,8 @@
                 }
               },
               {
+                "title": "SASL SCRAM Mechanism Validation",
+                "description": "When SASL mechanism is SCRAM-SHA-256 or SCRAM-SHA-512, saslJaasConfig must contain valid ScramLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -991,6 +998,8 @@
                 }
               },
               {
+                "title": "SASL AWS MSK IAM JAAS Configuration",
+                "description": "When SASL mechanism is AWS_MSK_IAM, saslJaasConfig must contain IAMLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -1017,6 +1026,8 @@
                 }
               },
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1025,6 +1036,8 @@
                 }
               },
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1033,6 +1046,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1041,6 +1056,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
@@ -1152,7 +1169,8 @@
           },
           "configuration": {
             "type": "object",
-            "description": "Schema Registry connection configuration.",
+            "title": "Schema Registry Configuration",
+            "description": "Schema Registry connection configuration with SSL and authentication validation rules.",
             "properties": {
               "schemaRegistryUrls": {
                 "$ref": "#/definitions/schemaRegistryUrls"
@@ -1202,6 +1220,8 @@
             "required": ["schemaRegistryUrls"],
             "allOf": [
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1210,6 +1230,8 @@
                 }
               },
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1218,6 +1240,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1226,6 +1250,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
@@ -1234,6 +1260,8 @@
                 }
               },
               {
+                "title": "SSL HTTPS URL Requirement",
+                "description": "When SSL configuration is provided, schema registry URLs must use HTTPS protocol",
                 "if": {
                   "anyOf": [
                     { "required": ["sslKeystore"] },
@@ -1260,6 +1288,8 @@
                 }
               }
             ],
+            "title": "Basic Authentication Requirement",
+            "description": "When basicAuthCredentialsSource is set to USER_INFO or URL, basicAuthUserInfo is required",
             "if": {
               "properties": {
                 "basicAuthCredentialsSource": {
@@ -1366,7 +1396,8 @@
           },
           "configuration": {
             "type": "object",
-            "description": "Kafka Connect connection configuration.",
+            "title": "Kafka Connect Configuration",
+            "description": "Kafka Connect connection configuration with SSL validation rules.",
             "properties": {
               "workers": { "$ref": "#/definitions/workers" },
               "username": { "$ref": "#/definitions/username" },
@@ -1404,6 +1435,8 @@
             },
             "allOf": [
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1412,6 +1445,8 @@
                 }
               },
               {
+                "title": "SSL Truststore Password Requirement",
+                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1420,6 +1455,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1428,6 +1465,8 @@
                 }
               },
               {
+                "title": "SSL Keystore Password Requirement",
+                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
@@ -1436,6 +1475,8 @@
                 }
               },
               {
+                "title": "SSL HTTPS URL Requirement",
+                "description": "When SSL configuration is provided, Connect worker URLs must use HTTPS protocol",
                 "if": {
                   "anyOf": [
                     { "required": ["sslKeystore"] },
