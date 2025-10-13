@@ -161,6 +161,9 @@
     "additionalProperties": {
       "type": "object",
       "description": "Additional configuration properties for Kafka client (REQUIRED FOR AWS MSK IAM.",
+      "example": {	
+        "sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
+      },
       "properties": {
         "value": {
           "type": "object",
@@ -221,7 +224,11 @@
     },
     "metricsCustomUrlMappings": {
       "type": "object",
-      "description": "Map of custom URL mappings for metrics.",
+      "description": "Map of custom URL mappings for metrics",
+      "example": {
+        "kafka1:9092": "kafka1_jmx_metrics:9581",
+        "kafka2:9092": "kafka2_jmx_metrics:9581"
+      },
       "properties": {
         "value": {
           "type": "object",
