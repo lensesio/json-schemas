@@ -13,9 +13,7 @@
           "name": {
             "type": "string",
             "description": "Lenses HQ connection name.",
-            "enum": [
-              "lenses-hq"
-            ],
+            "enum": ["lenses-hq"],
             "default": "lenses-hq"
           },
           "editorTag": {
@@ -48,9 +46,7 @@
                     "description": "Server address."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "port": {
                 "type": "object",
@@ -61,9 +57,7 @@
                     "description": "Enter the Server port"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "agentKey": {
                 "type": "object",
@@ -75,9 +69,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslEnabled": {
                 "type": "object",
@@ -89,9 +81,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslTruststore": {
                 "type": "object",
@@ -103,9 +93,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslTruststorePassword": {
                 "type": "object",
@@ -117,23 +105,13 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "server",
-              "port",
-              "agentKey"
-            ]
+            "required": ["server", "port", "agentKey"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "kafka": {
@@ -146,9 +124,7 @@
           "name": {
             "type": "string",
             "description": "Cluster name.",
-            "enum": [
-              "kafka"
-            ],
+            "enum": ["kafka"],
             "default": "kafka"
           },
           "editorTag": {
@@ -186,9 +162,7 @@
                     "description": "List of bootstrap servers with protocol prefixes."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "protocol": {
                 "type": "object",
@@ -197,17 +171,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter the Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
-                    "enum": [
-                      "SASL_PLAINTEXT",
-                      "SASL_SSL",
-                      "PLAINTEXT",
-                      "SSL"
-                    ]
+                    "enum": ["SASL_PLAINTEXT", "SASL_SSL", "PLAINTEXT", "SSL"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslTruststore": {
                 "type": "object",
@@ -219,9 +186,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslTruststorePassword": {
                 "type": "object",
@@ -232,9 +197,7 @@
                     "description": "Enter a password for the truststore."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslKeystore": {
                 "type": "object",
@@ -246,9 +209,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslKeyPassword": {
                 "type": "object",
@@ -259,9 +220,7 @@
                     "description": "Enter key password (can be empty)."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslKeystorePassword": {
                 "type": "object",
@@ -272,9 +231,7 @@
                     "description": "Enter a password for the keystore."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "saslMechanism": {
                 "type": "object",
@@ -291,9 +248,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "saslJaasConfig": {
                 "type": "object",
@@ -305,9 +260,7 @@
                     "minLength": 1
                   }
                 },
-                "required": [
-                  "value"
-                ],
+                "required": ["value"],
                 "multiline": true
               },
               "additionalProperties": {
@@ -322,9 +275,7 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPort": {
                 "type": "object",
@@ -335,9 +286,7 @@
                     "description": "Enter the port number for metrics collection."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsType": {
                 "type": "object",
@@ -346,17 +295,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter a metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS')",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX",
-                      "AWS"
-                    ]
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX", "AWS"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsSsl": {
                 "type": "object",
@@ -368,9 +310,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsUsername": {
                 "type": "object",
@@ -382,9 +322,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPassword": {
                 "type": "object",
@@ -396,9 +334,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpSuffix": {
                 "type": "object",
@@ -409,9 +345,7 @@
                     "description": "Enter the HTTP suffix value."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
                 "type": "object",
@@ -422,9 +356,7 @@
                     "description": "Enter the Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
                 "type": "object",
@@ -438,14 +370,10 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "kafkaBootstrapServers"
-            ],
+            "required": ["kafkaBootstrapServers"],
             "allOf": [
               {
                 "if": {
@@ -458,10 +386,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslMechanism",
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslMechanism", "saslJaasConfig"]
                 },
                 "then": {
                   "properties": {
@@ -473,9 +398,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslJaasConfig"]
                 }
               },
               {
@@ -489,14 +412,10 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslMechanism"
-                  ]
+                  "required": ["saslMechanism"]
                 },
                 "then": {
-                  "required": [
-                    "additionalProperties"
-                  ],
+                  "required": ["additionalProperties"],
                   "properties": {
                     "additionalProperties": {
                       "properties": {
@@ -508,9 +427,7 @@
                               "const": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
                             }
                           },
-                          "required": [
-                            "sasl.client.callback.handler.class"
-                          ]
+                          "required": ["sasl.client.callback.handler.class"]
                         }
                       }
                     }
@@ -523,18 +440,12 @@
                     "saslMechanism": {
                       "properties": {
                         "value": {
-                          "enum": [
-                            "SCRAM-SHA-256",
-                            "SCRAM-SHA-512"
-                          ]
+                          "enum": ["SCRAM-SHA-256", "SCRAM-SHA-512"]
                         }
                       }
                     }
                   },
-                  "required": [
-                    "saslMechanism",
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslMechanism", "saslJaasConfig"]
                 },
                 "then": {
                   "properties": {
@@ -546,9 +457,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslJaasConfig"]
                 }
               },
               {
@@ -562,10 +471,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslMechanism",
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslMechanism", "saslJaasConfig"]
                 },
                 "then": {
                   "properties": {
@@ -577,67 +483,45 @@
                       }
                     }
                   },
-                  "required": [
-                    "saslJaasConfig"
-                  ]
+                  "required": ["saslJaasConfig"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 }
               }
             ]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "zookeeper": {
@@ -650,9 +534,7 @@
           "name": {
             "type": "string",
             "description": "Zookeeper name.",
-            "enum": [
-              "zookeeper"
-            ],
+            "enum": ["zookeeper"],
             "default": "zookeeper"
           },
           "editorTag": {
@@ -689,9 +571,7 @@
                     "description": "List of Zookeeper URLs in host:port format."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "zookeeperChrootPath": {
                 "type": "object",
@@ -702,9 +582,7 @@
                     "description": "Enter the Chroot path value."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "zookeeperSessionTimeout": {
                 "type": "object",
@@ -715,9 +593,7 @@
                     "description": "Enter the Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "zookeeperConnectionTimeout": {
                 "type": "object",
@@ -728,9 +604,7 @@
                     "description": "Enter the Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPort": {
                 "type": "object",
@@ -741,9 +615,7 @@
                     "description": "Enter the Port number."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsType": {
                 "type": "object",
@@ -752,16 +624,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter a metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP')",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX"
-                    ]
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsSsl": {
                 "type": "object",
@@ -772,9 +638,7 @@
                     "description": "SSL enabled flag."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpSuffix": {
                 "type": "object",
@@ -785,9 +649,7 @@
                     "description": "Enter the HTTP suffix value."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
                 "type": "object",
@@ -798,9 +660,7 @@
                     "description": "Enter the Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
                 "type": "object",
@@ -814,21 +674,13 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "zookeeperUrls"
-            ]
+            "required": ["zookeeperUrls"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "confluentSchemaRegistry": {
@@ -842,9 +694,7 @@
           "name": {
             "type": "string",
             "description": "Schema Registry name.",
-            "enum": [
-              "schema-registry"
-            ],
+            "enum": ["schema-registry"],
             "default": "schema-registry"
           },
           "editorTag": {
@@ -882,9 +732,7 @@
                     "description": "Enter the Schema Registry URLs. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "username": {
                 "type": "object",
@@ -907,9 +755,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslTruststore": {
                 "type": "object",
@@ -921,9 +767,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslTruststorePassword": {
                 "type": "object",
@@ -945,9 +789,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslKeystorePassword": {
                 "type": "object",
@@ -976,11 +818,7 @@
                   "value": {
                     "type": "string",
                     "description": "Enter source for the basic auth credentials.",
-                    "enum": [
-                      "URL",
-                      "USER_INFO",
-                      "SASL_INHERIT"
-                    ]
+                    "enum": ["URL", "USER_INFO", "SASL_INHERIT"]
                   }
                 }
               },
@@ -1013,9 +851,7 @@
                     "description": "Enter the port number for metrics collection."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsType": {
                 "type": "object",
@@ -1024,16 +860,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter the metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP').",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX"
-                    ]
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsSsl": {
                 "type": "object",
@@ -1045,9 +875,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsUsername": {
                 "type": "object",
@@ -1059,9 +887,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPassword": {
                 "type": "object",
@@ -1073,9 +899,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpSuffix": {
                 "type": "object",
@@ -1086,9 +910,7 @@
                     "description": "HTTP suffix value."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
                 "type": "object",
@@ -1099,9 +921,7 @@
                     "description": "Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
                 "type": "object",
@@ -1115,9 +935,7 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "additionalProperties": {
                 "type": "object",
@@ -1131,61 +949,41 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "schemaRegistryUrls"
-            ],
+            "required": ["schemaRegistryUrls"],
             "allOf": [
               {
                 "if": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 }
               }
             ],
@@ -1194,30 +992,19 @@
                 "basicAuthCredentialsSource": {
                   "properties": {
                     "value": {
-                      "enum": [
-                        "USER_INFO",
-                        "URL"
-                      ]
+                      "enum": ["USER_INFO", "URL"]
                     }
                   }
                 }
               },
-              "required": [
-                "basicAuthCredentialsSource"
-              ]
+              "required": ["basicAuthCredentialsSource"]
             },
             "then": {
-              "required": [
-                "basicAuthUserInfo"
-              ]
+              "required": ["basicAuthUserInfo"]
             }
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "glueSchemaRegistry": {
@@ -1231,9 +1018,7 @@
           "name": {
             "type": "string",
             "description": "Glue Schema Registry connection name.",
-            "enum": [
-              "schema-registry"
-            ],
+            "enum": ["schema-registry"],
             "default": "schema-registry"
           },
           "editorTag": {
@@ -1267,9 +1052,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "reference"
-                ]
+                "required": ["reference"]
               },
               "accessKeyId": {
                 "type": "object",
@@ -1281,9 +1064,7 @@
                     "pattern": "^[a-zA-Z0-9-]+$"
                   }
                 },
-                "required": [
-                  "reference"
-                ]
+                "required": ["reference"]
               },
               "secretAccessKey": {
                 "type": "object",
@@ -1295,9 +1076,7 @@
                     "pattern": "^[a-zA-Z0-9-]+$"
                   }
                 },
-                "required": [
-                  "reference"
-                ]
+                "required": ["reference"]
               },
               "assumeRoleArn": {
                 "type": "object",
@@ -1309,9 +1088,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "reference"
-                ]
+                "required": ["reference"]
               },
               "assumeRoleSessionName": {
                 "type": "object",
@@ -1323,9 +1100,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "reference"
-                ]
+                "required": ["reference"]
               },
               "glueRegistryArn": {
                 "type": "object",
@@ -1337,9 +1112,7 @@
                     "pattern": "^arn:aws:glue:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9._/-]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sessionToken": {
                 "type": "object",
@@ -1351,9 +1124,7 @@
                     "pattern": "^[a-zA-Z0-9-]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "glueRegistryCacheTtl": {
                 "type": "object",
@@ -1365,9 +1136,7 @@
                     "pattern": "^[0-9]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "glueRegistryCacheSize": {
                 "type": "object",
@@ -1380,9 +1149,7 @@
                     "default": 200
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "glueRegistryDefaultCompatibility": {
                 "type": "object",
@@ -1402,22 +1169,13 @@
                     ]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "authMode",
-              "glueRegistryArn"
-            ]
+            "required": ["authMode", "glueRegistryArn"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "connect": {
@@ -1468,9 +1226,7 @@
                     "description": "Enter the Connect worker URLs"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "username": {
                 "type": "object",
@@ -1482,9 +1238,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "password": {
                 "type": "object",
@@ -1496,9 +1250,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslTruststore": {
                 "type": "object",
@@ -1510,9 +1262,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslTruststorePassword": {
                 "type": "object",
@@ -1523,9 +1273,7 @@
                     "description": "Enter a password for the truststore."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslKeystore": {
                 "type": "object",
@@ -1537,9 +1285,7 @@
                     "pattern": "^.*\\.jks$"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               },
               "sslKeystorePassword": {
                 "type": "object",
@@ -1550,9 +1296,7 @@
                     "description": "Enter a password for the keystore."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslKeyPassword": {
                 "type": "object",
@@ -1563,9 +1307,7 @@
                     "description": "Enter a password for the key."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPort": {
                 "type": "object",
@@ -1576,9 +1318,7 @@
                     "description": "Enter the port number for metrics collection."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsType": {
                 "type": "object",
@@ -1587,16 +1327,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter the metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP').",
-                    "enum": [
-                      "JOLOKIAG",
-                      "JOLOKIAP",
-                      "JMX"
-                    ]
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsSsl": {
                 "type": "object",
@@ -1608,9 +1342,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsUsername": {
                 "type": "object",
@@ -1622,9 +1354,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsPassword": {
                 "type": "object",
@@ -1636,9 +1366,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpSuffix": {
                 "type": "object",
@@ -1649,9 +1377,7 @@
                     "description": "HTTP suffix value."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
                 "type": "object",
@@ -1662,9 +1388,7 @@
                     "description": "Timeout value in milliseconds."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
                 "type": "object",
@@ -1678,9 +1402,7 @@
                     }
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sslAlgorthrim": {
                 "type": "object",
@@ -1693,68 +1415,46 @@
                   }
                 },
                 "default": "X509",
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
             "allOf": [
               {
                 "if": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslTruststore"
-                  ]
+                  "required": ["sslTruststore"]
                 },
                 "then": {
-                  "required": [
-                    "sslTruststorePassword"
-                  ]
+                  "required": ["sslTruststorePassword"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 }
               },
               {
                 "if": {
-                  "required": [
-                    "sslKeystore"
-                  ]
+                  "required": ["sslKeystore"]
                 },
                 "then": {
-                  "required": [
-                    "sslKeystorePassword"
-                  ]
+                  "required": ["sslKeystorePassword"]
                 }
               }
             ]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "aws": {
@@ -1798,16 +1498,10 @@
                   "value": {
                     "type": "string",
                     "description": "Enter the Auth mode value.",
-                    "enum": [
-                      "Access Key",
-                      "Credentials Chain",
-                      "Assume Role"
-                    ]
+                    "enum": ["Access Key", "Credentials Chain", "Assume Role"]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "accessKeyId": {
                 "type": "object",
@@ -1819,9 +1513,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "secretAccessKey": {
                 "type": "object",
@@ -1833,9 +1525,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "region": {
                 "type": "object",
@@ -1870,9 +1560,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "sessionToken": {
                 "type": "object",
@@ -1884,9 +1572,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "assumeRoleArn": {
                 "type": "object",
@@ -1898,9 +1584,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "assumeRoleSessionName": {
                 "type": "object",
@@ -1912,21 +1596,13 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "authMode"
-            ]
+            "required": ["authMode"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "webhook": {
@@ -1973,9 +1649,7 @@
                     "pattern": "^[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "port": {
                 "type": "object",
@@ -1987,9 +1661,7 @@
                     "pattern": "^[0-9]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "useHttps": {
                 "type": "object",
@@ -2000,9 +1672,7 @@
                     "description": "Use HTTPS flag."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "creds": {
                 "type": "object",
@@ -2018,22 +1688,13 @@
                     "description": "Array of credential strings."
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "host",
-              "useHttps"
-            ]
+            "required": ["host", "useHttps"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "datadog": {
@@ -2080,9 +1741,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "apiKey": {
                 "type": "object",
@@ -2094,9 +1753,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "applicationKey": {
                 "type": "object",
@@ -2108,18 +1765,12 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             }
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "pagerduty": {
@@ -2166,18 +1817,12 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             }
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "slack": {
@@ -2224,21 +1869,13 @@
                     "pattern": "^(https?:\\/\\/.+)$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "webhookUrl"
-            ]
+            "required": ["webhookUrl"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "splunk": {
@@ -2285,9 +1922,7 @@
                     "pattern": "^.+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "port": {
                 "type": "object",
@@ -2299,9 +1934,7 @@
                     "pattern": "^[0-9]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "useHttps": {
                 "type": "object",
@@ -2313,9 +1946,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "insecure": {
                 "type": "object",
@@ -2327,9 +1958,7 @@
                     "pattern": "^true|false$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               },
               "token": {
                 "type": "object",
@@ -2341,18 +1970,12 @@
                     "pattern": "^[A-Za-z0-9_-]+$"
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             }
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     },
     "alertmanager": {
@@ -2400,21 +2023,13 @@
                     "minLength": 1
                   }
                 },
-                "required": [
-                  "value"
-                ]
+                "required": ["value"]
               }
             },
-            "required": [
-              "endpoints"
-            ]
+            "required": ["endpoints"]
           }
         },
-        "required": [
-          "name",
-          "version",
-          "configuration"
-        ]
+        "required": ["name", "version", "configuration"]
       }
     }
   },
@@ -2427,9 +2042,7 @@
           {
             "name": "lenses-hq",
             "version": 1,
-            "tags": [
-              "hq"
-            ],
+            "tags": ["hq"],
             "configuration": {
               "server": {
                 "value": "<YOUR_LENSES_HQ_SERVER_URL>"
@@ -2453,9 +2066,7 @@
           {
             "name": "lenses-hq",
             "version": 1,
-            "tags": [
-              "hq"
-            ],
+            "tags": ["hq"],
             "configuration": {
               "server": {
                 "value": "<YOUR_LENSES_HQ_SERVER_URL>"
@@ -2492,7 +2103,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                 "value": [
+                "value": [
                   "SASL_SSL://<broker1>:9092",
                   "SASL_SSL://<broker2>:9092"
                 ]
@@ -2555,10 +2166,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                 "value": [
-                  "SSL://<broker1>:9092",
-                  "SSL://<broker2>:9092"
-                ]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -2593,10 +2201,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                 "value": [
-                  "SSL://<broker1>:9092",
-                  "SSL://<broker2>:9092"
-                ]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -2683,7 +2288,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                 "value": [
+                "value": [
                   "SASL_SSL://<broker1>:9092",
                   "SASL_SSL://<broker2>:9092"
                 ]
@@ -3274,10 +2879,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": [
-                  "SSL://<broker1>:9092",
-                  "SSL://<broker2>:9092"
-                ]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -3321,10 +2923,7 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": [
-                  "SSL://<broker1>:9092",
-                  "SSL://<broker2>:9092"
-                ]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -3377,10 +2976,7 @@
             "tags": "[]",
             "configuration": {
               "zookeeperUrls": {
-                "value": [
-                  "<host1>:8080",
-                  "<host2>:8080"
-                ]
+                "value": ["<host1>:8080", "<host2>:8080"]
               },
               "zookeeperSessionTimeout": {
                 "value": 10000
@@ -3419,10 +3015,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": [
-                  "http://<host1>:8083",
-                  "http://<host2>:8083"
-                ]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "## Optional Basic Auth": "Uncomment the properties below to enable basic auth",
               "# username": {
@@ -3475,10 +3068,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": [
-                  "http://<host1>:8083",
-                  "http://<host2>:8083"
-                ]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3523,10 +3113,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": [
-                  "http://<host1>:8083",
-                  "http://<host2>:8083"
-                ]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3577,10 +3164,7 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": [
-                  "http://<host1>:8083",
-                  "http://<host2>:8083"
-                ]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3639,10 +3223,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<host1>:8081",
-                  "http://<host2>:8081"
-                ]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
@@ -3680,10 +3261,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<host1>:8081",
-                  "http://<host2>:8081"
-                ]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3728,10 +3306,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<host1>:8081",
-                  "http://<host2>:8081"
-                ]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3782,10 +3357,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<host1>:8081",
-                  "http://<host2>:8081"
-                ]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3845,10 +3417,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<host1>:8081",
-                  "http://<host2>:8081"
-                ]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -4028,9 +3597,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "https://token:<API Key>@<Host>/confluent"
-                ]
+                "value": ["https://token:<API Key>@<Host>/confluent"]
               }
             }
           }
@@ -4049,9 +3616,7 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": [
-                  "http://<hostname>:<port>/apis/compact/v6"
-                ]
+                "value": ["http://<hostname>:<port>/apis/compact/v6"]
               },
               "## Optional SSL/TLS": "Uncomment the properties below",
               "# sslTruststore": {
@@ -4266,8 +3831,6 @@
     }
   ],
   "dependencies": {
-    "glueSchemaRegistry": [
-      "aws"
-    ]
+    "glueSchemaRegistry": ["aws"]
   }
 }
