@@ -2,782 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Lenses Provisioning",
   "type": "object",
-  "definitions": {
-    "kafkaBootstrapServers": {
-      "type": "object",
-      "description": "Kafka bootstrap servers.",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9.-]+:[0-9]{1,5}$",
-            "description": "Enter the bootstrap server URL (e.g., 'broker:9092', 'broker:9092'). Protocol Prefix set in protocol setting."
-          },
-          "description": "List of bootstrap servers with protocol prefixes."
-        }
-      },
-      "required": ["value"]
-    },
-    "schemaRegistryUrls": {
-      "type": "object",
-      "description": "Schema Registry URLs.",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^(http|https)://([a-zA-Z0-9._%+-]+:[a-zA-Z0-9._%+-]+@)?[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*(:[0-9]+)?(/.*)?$",
-            "description": "Schema Registry URL. Must include scheme (http/https) and valid hostname."
-          },
-          "description": "Enter the Schema Registry URLs. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]"
-        }
-      },
-      "required": ["value"]
-    },
-    "workers": {
-      "type": "object",
-      "description": "Connect worker URLs.",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^(http|https)://[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*:[0-9]+(/.*)?$",
-            "description": "Array of Connect worker URL"
-          },
-          "description": "Enter the Connect worker URLs"
-        }
-      },
-      "required": ["value"]
-    },
-    "protocol": {
-      "type": "object",
-      "description": "Kafka protocol.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
-          "enum": ["SASL_PLAINTEXT", "SASL_SSL", "PLAINTEXT", "SSL"]
-        }
-      },
-      "required": ["value"]
-    },
-    "saslMechanism": {
-      "type": "object",
-      "description": "SASL mechanism.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
-          "enum": ["AWS_MSK_IAM", "PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512"]
-        }
-      },
-      "required": ["value"]
-    },
-    "saslJaasConfig": {
-      "type": "object",
-      "description": "SASL JAAS config string.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
-          "minLength": 1
-        }
-      },
-      "required": ["value"],
-      "multiline": true
-    },
-    "sslKeystore": {
-      "type": "object",
-      "description": "Unique keystore (JKS) file name in double quotes. Must end with .jks",
-      "properties": {
-        "file": {
-          "type": "string",
-          "description": "Enter a unique keystore (JKS) file name in double quotes. Must end with .jks",
-          "pattern": "^.*\\.jks$"
-        }
-      },
-      "required": ["file"]
-    },
-    "sslKeystorePassword": {
-      "type": "object",
-      "description": "Keystore password.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter a password for the keystore."
-        }
-      },
-      "required": ["value"]
-    },
-    "sslKeyPassword": {
-      "type": "object",
-      "description": "Key password.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter key password (can be empty)."
-        }
-      },
-      "required": ["value"]
-    },
-    "sslTruststore": {
-      "type": "object",
-      "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
-      "properties": {
-        "file": {
-          "type": "string",
-          "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
-          "pattern": "^.*\\.jks$"
-        }
-      },
-      "required": ["file"]
-    },
-    "sslTruststorePassword": {
-      "type": "object",
-      "description": "Truststore password.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter a password for the truststore."
-        }
-      },
-      "required": ["value"]
-    },
-    "sslAlgorthrim": {
-      "type": "object",
-      "description": "Name of the SSL algorithm.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the name of the SSL algorithm (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "default": "X509",
-      "required": ["value"]
-    },
-    "additionalProperties": {
-      "type": "object",
-      "description": "Additional configuration properties for Kafka client (REQUIRED FOR AWS MSK IAM.",
-      "example": {	
-        "sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
-      },
-      "properties": {
-        "value": {
-          "type": "object",
-          "description": "Arbitrary key-value pairs for additional Kafka client properties.",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["value"]
-    },
-    "metricsType": {
-      "type": "object",
-      "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
-      "properties": {
-        "value": {
-          "type": "string",
-          "enum": ["JOLOKIAG", "JOLOKIAP", "JMX", "AWS"]
-        }
-      },
-      "required": ["value"]
-    },
-    "metricsPort": {
-      "type": "object",
-      "description": "Port for metrics collection.",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
-    },
-    "metricsSsl": {
-      "type": "object",
-      "description": "Enable SSL for metrics collection.",
-      "properties": { "value": { "type": "boolean" } },
-      "required": ["value"]
-    },
-    "metricsUsername": {
-      "type": "object",
-      "description": "Username for metrics authentication.",
-      "properties": { "value": { "type": "string" } },
-      "required": ["value"]
-    },
-    "metricsPassword": {
-      "type": "object",
-      "description": "Password for metrics authentication.",
-      "properties": { "value": { "type": "string" } },
-      "required": ["value"]
-    },
-    "metricsHttpSuffix": {
-      "type": "object",
-      "description": "Custom HTTP suffix for metrics endpoint.",
-      "properties": { "value": { "type": "string" } },
-      "required": ["value"]
-    },
-    "metricsHttpTimeout": {
-      "type": "object",
-      "description": "HTTP request timeout in milliseconds for metrics collection.",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
-    },
-    "metricsCustomUrlMappings": {
-      "type": "object",
-      "description": "Map of custom URL mappings for metrics",
-      "example": {
-        "kafka1:9092": "kafka1_jmx_metrics:9581",
-        "kafka2:9092": "kafka2_jmx_metrics:9581"
-      },
-      "properties": {
-        "value": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "required": ["value"]
-    },
-    "metricsRateLimitingMaxRetries": {
-      "type": "object",
-      "description": "HTTP retries when 429 is returned for Jolokia metrics",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
-    },
-    "metricsRateLimitingBackoff": {
-      "type": "object",
-      "description": "Backoff interval (ms) when 429 is returned for Jolokia metrics",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
-    },
-    "username": {
-      "type": "object",
-      "description": "Username for Basic Auth.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the username (non empty).",
-          "pattern": "^.+$"
-        }
-      }
-    },
-    "password": {
-      "type": "object",
-      "description": "Password for Basic Auth.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the password (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "basicAuthCredentialsSource": {
-      "type": "object",
-      "description": "Source for the basic auth credentials.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter source for the basic auth credentials.",
-          "enum": ["URL", "USER_INFO", "SASL_INHERIT"]
-        }
-      }
-    },
-    "basicAuthUserInfo": {
-      "type": "object",
-      "description": "Basic auth user information.",
-      "properties": {
-        "value": {
-          "description": "Enter the basic auth user information (non empty).",
-          "type": "string",
-          "pattern": "^.+$"
-        }
-      }
-    },
-    "accessKeyId": {
-      "type": "object",
-      "description": "Reference to AWS connection for access key.",
-      "properties": {
-        "reference": {
-          "type": "string",
-          "description": "Enter the reference to AWS connection for access key (non empty).",
-          "pattern": "^[a-zA-Z0-9-]+$"
-        }
-      },
-      "required": ["reference"]
-    },
-    "region": {
-      "type": "object",
-      "description": "AWS region.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the AWS region.",
-          "enum": [
-            "us-east-1",
-            "us-east-2",
-            "us-west-1",
-            "us-west-2",
-            "af-south-1",
-            "ap-east-1",
-            "ap-south-1",
-            "ap-northeast-1",
-            "ap-northeast-2",
-            "ap-northeast-3",
-            "ap-southeast-1",
-            "ap-southeast-2",
-            "ap-southeast-3",
-            "ca-central-1",
-            "eu-central-1",
-            "eu-west-1",
-            "eu-west-2",
-            "eu-west-3",
-            "eu-south-1",
-            "eu-north-1",
-            "me-south-1",
-            "sa-east-1"
-          ]
-        }
-      },
-      "required": ["value"]
-    },
-    "secretAccessKey": {
-      "type": "object",
-      "description": "Reference to AWS connection for secret access key.",
-      "properties": {
-        "reference": {
-          "type": "string",
-          "description": "Enter the reference to AWS connection for secret access key (non empty).",
-          "pattern": "^[a-zA-Z0-9-]+$"
-        }
-      },
-      "required": ["reference"]
-    },
-    "sessionToken": {
-      "type": "object",
-      "description": "Specifies the session token value that is required when you are using temporary credentials that you receive from AWS STS.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the session token value (non empty).",
-          "pattern": "^[a-zA-Z0-9-]+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "authMode": {
-      "type": "object",
-      "description": "Reference to AWS connection for auth mode.",
-      "properties": {
-        "reference": {
-          "type": "string",
-          "description": "Enter the reference to AWS connection for auth mode (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["reference"]
-    },
-    "assumeRoleArn": {
-      "type": "object",
-      "description": "Reference to AWS connection for assume role ARN.",
-      "properties": {
-        "reference": {
-          "type": "string",
-          "description": "Enter the reference to AWS connection (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["reference"]
-    },
-    "assumeRoleSessionName": {
-      "type": "object",
-      "description": "Reference to AWS connection for assume role session name.",
-      "properties": {
-        "reference": {
-          "type": "string",
-          "description": "Enter the reference to AWS connection (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["reference"]
-    },
-    "glueRegistryArn": {
-      "type": "object",
-      "description": "Glue Registry ARN following the format arn:aws:glue:region:account-id:registry-name",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Glue Registry ARN (non empty).",
-          "pattern": "^arn:aws:glue:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9._/-]+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "glueRegistryCacheTtl": {
-      "type": "object",
-      "description": "The period of time in milliseconds to cache the Schema Registry information, if not set, 24 hours",
-      "properties": {
-        "value": {
-          "type": "integer",
-          "description": "Enter the registry cache ttl (non empty).",
-          "pattern": "^[0-9]+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "glueRegistryCacheSize": {
-      "type": "object",
-      "description": "The cache size for the Schema Registry information.",
-      "properties": {
-        "value": {
-          "type": "integer",
-          "description": "Enter the registry cache size (non empty).",
-          "pattern": "^[0-9]+$",
-          "default": 200
-        }
-      },
-      "required": ["value"]
-    },
-    "glueRegistryDefaultCompatibility": {
-      "type": "object",
-      "description": "The default compatibility level for the Schema Registry.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the registry default compatibility (non empty).",
-          "enum": [
-            "BACKWARD",
-            "BACKWARD_ALL",
-            "FORWARD",
-            "FORWARD_ALL",
-            "FULL",
-            "FULL_ALL",
-            "NONE"
-          ]
-        }
-      },
-      "required": ["value"]
-    },
-    "endpoints": {
-      "type": "object",
-      "description": "Comma separated list of Alert Manager endpoints.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Alert Manager endpoints (non empty).",
-          "pattern": "^(https?:\\/\\/.+)$",
-          "minLength": 1
-        }
-      },
-      "required": ["value"]
-    },
-    "host": {
-      "type": "object",
-      "description": "The host name for the Splunk API.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the host value (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "port": {
-      "type": "object",
-      "description": "The port number.",
-      "properties": {
-        "value": {
-          "type": "integer",
-          "description": "Enter the port value.",
-          "pattern": "^[0-9]+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "useHttps": {
-      "type": "object",
-      "description": "Set to true in order to set the URL scheme to https. Will otherwise default to http.",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "Use HTTPS flag.",
-          "pattern": "^true|false$"
-        }
-      },
-      "required": ["value"]
-    },
-    "insecure": {
-      "type": "object",
-      "description": "Set to true in order to disable SSL verification.",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "Insecure flag.",
-          "pattern": "^true|false$"
-        }
-      },
-      "required": ["value"]
-    },
-    "token": {
-      "type": "object",
-      "description": "The token for authentication.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the token value (non empty).",
-          "pattern": "^[A-Za-z0-9_-]+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "hardDelete": {
-      "type": "object",
-      "description": "If true, delete resources instead of soft-deleting them.",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "Hard delete flag.",
-          "pattern": "^true|false$"
-        }
-      },
-      "required": ["value"]
-    },
-    "webhookUrl": {
-      "type": "object",
-      "description": "The webhook URL for the Slack API.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Slack webhook URL (non empty).",
-          "pattern": "^(https?:\\/\\/.+)$"
-        }
-      },
-      "required": ["value"]
-    },
-    "integrationKey": {
-      "type": "object",
-      "description": "The integration key for authentication.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the integration key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
-        }
-      },
-      "required": ["value"]
-    },
-    "site": {
-      "type": "object",
-      "description": "The site URL for the DataDog API.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the site value (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "apiKey": {
-      "type": "object",
-      "description": "The API key for authentication.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the API key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
-        }
-      },
-      "required": ["value"]
-    },
-    "applicationKey": {
-      "type": "object",
-      "description": "The application key for authentication.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the application key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
-        }
-      },
-      "required": ["value"]
-    },
-    "creds": {
-      "type": "object",
-      "description": "An array of (secret) strings to be passed over to alert channel plugins.",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "description": "Enter the credential string (non empty).",
-            "pattern": "^.+$"
-          },
-          "description": "Array of credential strings."
-        }
-      },
-      "required": ["value"]
-    },
-    "zookeeperUrls": {
-      "type": "object",
-      "description": "Zookeeper connection URLs.",
-      "properties": {
-        "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"
-          },
-          "description": "List of Zookeeper URLs in host:port format."
-        }
-      },
-      "required": ["value"]
-    },
-    "zookeeperChrootPath": {
-      "type": "object",
-      "description": "Optional suffix to Zookeeper's connection string.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Chroot path value."
-        }
-      },
-      "required": ["value"]
-    },
-    "zookeeperSessionTimeout": {
-      "type": "object",
-      "description": "Zookeeper session timeout in milliseconds.",
-      "properties": {
-        "value": {
-          "type": "integer",
-          "description": "Enter the Timeout value in milliseconds."
-        }
-      },
-      "required": ["value"]
-    },
-    "zookeeperConnectionTimeout": {
-      "type": "object",
-      "description": "Zookeeper connection timeout in milliseconds.",
-      "properties": {
-        "value": {
-          "type": "integer",
-          "description": "Enter the Timeout value in milliseconds."
-        }
-      },
-      "required": ["value"]
-    },
-    "server": {
-      "type": "object",
-      "description": "Lenses HQ server address.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Server address."
-        }
-      },
-      "required": ["value"]
-    },
-    "agentKey": {
-      "type": "object",
-      "description": "Agent key for authentication.",
-      "properties": {
-        "value": {
-          "type": "string",
-          "description": "Enter the Agent key value (non empty).",
-          "pattern": "^.+$"
-        }
-      },
-      "required": ["value"]
-    },
-    "sslEnabled": {
-      "type": "object",
-      "description": "Enable SSL for HQ connection.",
-      "properties": {
-        "value": {
-          "type": "boolean",
-          "description": "SSL enabled flag.",
-          "pattern": "^true|false$"
-        }
-      },
-      "required": ["value"]
-    },
-    "sslEnabledProtocols": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      },
-      "title": "LensesHQ SSL Enabled Protocols",
-      "description": "The list of SSL/TLS protocols enabled for communication with the LensesHQ server."
-    },
-    "algorithm": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      },
-      "title": "LensesHQ SSL algorithm",
-      "description": "The SSL algorithm to use when establishing the connection."
-    },
-    "cipherSuites": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      },
-      "title": "LensesHQ Cipher Suites",
-      "description": "The list of cipher suites supported for encryption in communication with the LensesHQ server."
-    },
-    "maxBackOffInterval": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "integer"
-        }
-      },
-      "title": "LensesHQ Max BackOff Interval",
-      "description": "The maximum interval for backoff retries in communication with the LensesHQ server."
-    },
-    "isShutDownInterval": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "integer"
-        }
-      },
-      "title": "LensesHQ ShutDown Interval",
-      "description": "The interval for shutting down the LensesHQ server gracefully."
-    },
-    "connectTimeout": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "integer"
-        }
-      },
-      "title": "LensesHQ Connection Timeout",
-      "description": "The timeout duration for establishing a connection with the LensesHQ server."
-    },
-    "maxJitterWindowMilliseconds": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "integer"
-        }
-      },
-      "title": "LensesHQ Max Jitter Window Milliseconds",
-      "description": "The maximum duration of jitter window in milliseconds for retries in communication with the LensesHQ server."
-    }
-  },
   "properties": {
     "lensesHq": {
       "type": "array",
@@ -792,7 +16,10 @@
             "enum": ["lenses-hq"],
             "default": "lenses-hq"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Lenses HQ connection version.",
@@ -810,22 +37,76 @@
             "type": "object",
             "description": "Lenses HQ connection configuration.",
             "properties": {
-              "server": { "$ref": "#/definitions/server" },
-              "port": { "$ref": "#/definitions/port" },
-              "agentKey": { "$ref": "#/definitions/agentKey" },
-              "sslEnabled": { "$ref": "#/definitions/sslEnabled" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
-              "sslTruststorePassword": {
-                "$ref": "#/definitions/sslTruststorePassword"
+              "server": {
+                "type": "object",
+                "description": "Lenses HQ server address.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Server address."
+                  }
+                },
+                "required": ["value"]
               },
-              "maxBackOffInterval": { "$ref": "#/definitions/maxBackOffInterval" },
-              "isShutDownInterval": { "$ref": "#/definitions/isShutDownInterval" },
-              "connectTimeout": { "$ref": "#/definitions/connectTimeout" },
-              "maxJitterWindowMilliseconds": { "$ref": "#/definitions/maxJitterWindowMilliseconds" },
-              "sslEnabledProtocols": { "$ref": "#/definitions/sslEnabledProtocols" },
-              "algorithm": { "$ref": "#/definitions/algorithm" },
-              "cipherSuites": { "$ref": "#/definitions/cipherSuites" }
-              
+              "port": {
+                "type": "object",
+                "description": "Lenses HQ server port.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Server port"
+                  }
+                },
+                "required": ["value"]
+              },
+              "agentKey": {
+                "type": "object",
+                "description": "Agent key for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Agent key value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslEnabled": {
+                "type": "object",
+                "description": "Enable SSL for HQ connection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslTruststore": {
+                "type": "object",
+                "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslTruststorePassword": {
+                "type": "object",
+                "description": "Truststore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the truststore (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              }
             },
             "required": ["server", "port", "agentKey"]
           }
@@ -846,7 +127,10 @@
             "enum": ["kafka"],
             "default": "kafka"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Kafka version.",
@@ -862,53 +146,236 @@
           },
           "configuration": {
             "type": "object",
-            "title": "Kafka Configuration",
-            "description": "Kafka connection configuration with SASL and SSL validation rules.",
+            "description": "Kafka connection configuration.",
             "properties": {
               "kafkaBootstrapServers": {
-                "$ref": "#/definitions/kafkaBootstrapServers"
+                "type": "object",
+                "description": "Kafka bootstrap servers.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://[a-zA-Z0-9.-]+:[0-9]{1,5}$",
+                      "description": "Enter the bootstrap server URL with protocol prefix (e.g., 'SASL_SSL://broker:9092', 'PLAINTEXT://broker:9092')"
+                    },
+                    "description": "List of bootstrap servers with protocol prefixes."
+                  }
+                },
+                "required": ["value"]
               },
-              "protocol": { "$ref": "#/definitions/protocol" },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
-              "sslKeystorePassword": {
-                "$ref": "#/definitions/sslKeystorePassword"
+              "protocol": {
+                "type": "object",
+                "description": "Kafka protocol.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
+                    "enum": ["SASL_PLAINTEXT", "SASL_SSL", "PLAINTEXT", "SSL"]
+                  }
+                },
+                "required": ["value"]
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "sslTruststore": {
+                "type": "object",
+                "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
               "sslTruststorePassword": {
-                "$ref": "#/definitions/sslTruststorePassword"
+                "type": "object",
+                "description": "Truststore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the truststore."
+                  }
+                },
+                "required": ["value"]
               },
-              "saslMechanism": { "$ref": "#/definitions/saslMechanism" },
-              "saslJaasConfig": { "$ref": "#/definitions/saslJaasConfig" },
+              "sslKeystore": {
+                "type": "object",
+                "description": "Unique keystore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique keystore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslKeyPassword": {
+                "type": "object",
+                "description": "Key password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter key password (can be empty)."
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslKeystorePassword": {
+                "type": "object",
+                "description": "Keystore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the keystore."
+                  }
+                },
+                "required": ["value"]
+              },
+              "saslMechanism": {
+                "type": "object",
+                "description": "SASL mechanism.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
+                    "enum": [
+                      "AWS_MSK_IAM",
+                      "PLAIN",
+                      "SCRAM-SHA-256",
+                      "SCRAM-SHA-512"
+                    ]
+                  }
+                },
+                "required": ["value"]
+              },
+              "saslJaasConfig": {
+                "type": "object",
+                "description": "SASL JAAS config string.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
+                    "minLength": 1
+                  }
+                },
+                "required": ["value"],
+                "multiline": true
+              },
               "additionalProperties": {
-                "$ref": "#/definitions/additionalProperties"
+                "type": "object",
+                "description": "Additional configuration properties for Kafka client (REQUIRED FOR AWS MSK IAM.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Arbitrary key-value pairs for additional Kafka client properties.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsPort": {
+                "type": "object",
+                "description": "Port for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port number for metrics collection."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsType": {
+                "type": "object",
+                "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP', 'AWS')",
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX", "AWS"]
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsSsl": {
+                "type": "object",
+                "description": "Enable SSL for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsUsername": {
+                "type": "object",
+                "description": "Username for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPassword": {
+                "type": "object",
+                "description": "Password for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
               "metricsHttpSuffix": {
-                "$ref": "#/definitions/metricsHttpSuffix"
+                "type": "object",
+                "description": "Custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the HTTP suffix value."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
-                "$ref": "#/definitions/metricsHttpTimeout"
+                "type": "object",
+                "description": "HTTP request timeout in milliseconds for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
-                "$ref": "#/definitions/metricsCustomUrlMappings"
-              },
-              "metricsRateLimitingMaxRetries": {
-                " $ref": "#/definitions/metricsRateLimitingMaxRetries"
-              },
-              "metricsRateLimitingBackoff": {
-                "$ref": "#/definitions/metricsRateLimitingBackoff"
+                "type": "object",
+                "description": "Custom URL mappings for metrics collection per broker/node/worker.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Enter the Map of custom URL mappings.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
               }
             },
             "required": ["kafkaBootstrapServers"],
             "allOf": [
               {
-                "title": "SASL PLAIN Mechanism Validation",
-                "description": "When SASL mechanism is PLAIN, saslJaasConfig must contain valid PlainLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -935,8 +402,6 @@
                 }
               },
               {
-                "title": "SASL AWS MSK IAM Mechanism Validation",
-                "description": "When SASL mechanism is AWS_MSK_IAM, additionalProperties must contain IAMClientCallbackHandler configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -970,8 +435,6 @@
                 }
               },
               {
-                "title": "SASL SCRAM Mechanism Validation",
-                "description": "When SASL mechanism is SCRAM-SHA-256 or SCRAM-SHA-512, saslJaasConfig must contain valid ScramLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -998,8 +461,6 @@
                 }
               },
               {
-                "title": "SASL AWS MSK IAM JAAS Configuration",
-                "description": "When SASL mechanism is AWS_MSK_IAM, saslJaasConfig must contain IAMLoginModule configuration",
                 "if": {
                   "properties": {
                     "saslMechanism": {
@@ -1026,8 +487,6 @@
                 }
               },
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1036,8 +495,6 @@
                 }
               },
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1046,8 +503,6 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1056,8 +511,6 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
@@ -1084,7 +537,10 @@
             "enum": ["zookeeper"],
             "default": "zookeeper"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Zookeeper version.",
@@ -1102,35 +558,123 @@
             "type": "object",
             "description": "Zookeeper connection configuration.",
             "properties": {
-              "zookeeperUrls": { "$ref": "#/definitions/zookeeperUrls" },
+              "zookeeperUrls": {
+                "type": "object",
+                "description": "Zookeeper connection URLs.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"
+                    },
+                    "description": "List of Zookeeper URLs in host:port format."
+                  }
+                },
+                "required": ["value"]
+              },
               "zookeeperChrootPath": {
-                "$ref": "#/definitions/zookeeperChrootPath"
+                "type": "object",
+                "description": "Optional suffix to Zookeeper's connection string.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Chroot path value."
+                  }
+                },
+                "required": ["value"]
               },
               "zookeeperSessionTimeout": {
-                "$ref": "#/definitions/zookeeperSessionTimeout"
+                "type": "object",
+                "description": "Zookeeper session timeout in milliseconds.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
               "zookeeperConnectionTimeout": {
-                "$ref": "#/definitions/zookeeperConnectionTimeout"
+                "type": "object",
+                "description": "Zookeeper connection timeout in milliseconds.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsPort": {
+                "type": "object",
+                "description": "Port for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Port number."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsType": {
+                "type": "object",
+                "description": "Enter the type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP')",
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsSsl": {
+                "type": "object",
+                "description": "Enable SSL for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag."
+                  }
+                },
+                "required": ["value"]
+              },
               "metricsHttpSuffix": {
-                "$ref": "#/definitions/metricsHttpSuffix"
+                "type": "object",
+                "description": "Custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the HTTP suffix value."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
-                "$ref": "#/definitions/metricsHttpTimeout"
+                "type": "object",
+                "description": "HTTP request timeout in milliseconds for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
-                "$ref": "#/definitions/metricsCustomUrlMappings"
-              },
-              "metricsRateLimitingMaxRetries": {
-                " $ref": "#/definitions/metricsRateLimitingMaxRetries"
-              },
-              "metricsRateLimitingBackoff": {
-                "$ref": "#/definitions/metricsRateLimitingBackoff"
+                "type": "object",
+                "description": "Custom URL mappings for metrics collection per broker/node/worker.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Enter the Map of custom URL mappings.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
               }
             },
             "required": ["zookeeperUrls"]
@@ -1153,7 +697,10 @@
             "enum": ["schema-registry"],
             "default": "schema-registry"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Schema Registry version.",
@@ -1169,59 +716,245 @@
           },
           "configuration": {
             "type": "object",
-            "title": "Schema Registry Configuration",
-            "description": "Schema Registry connection configuration with SSL and authentication validation rules.",
+            "description": "Schema Registry connection configuration.",
             "properties": {
               "schemaRegistryUrls": {
-                "$ref": "#/definitions/schemaRegistryUrls"
+                "type": "object",
+                "description": "Schema Registry URLs.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(http|https)://([a-zA-Z0-9._%+-]+:[a-zA-Z0-9._%+-]+@)?[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*(:[0-9]+)?(/.*)?$",
+                      "description": "Schema Registry URL. Must include scheme (http/https) and valid hostname."
+                    },
+                    "description": "Enter the Schema Registry URLs. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]"
+                  }
+                },
+                "required": ["value"]
               },
-              "username": { "$ref": "#/definitions/username" },
-              "password": { "$ref": "#/definitions/password" },
+              "username": {
+                "type": "object",
+                "description": "Username for Basic Auth.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                }
+              },
+              "password": {
+                "type": "object",
+                "description": "Password for Basic Auth.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslTruststore": {
+                "type": "object",
+                "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslTruststorePassword": {
+                "type": "object",
+                "description": "Password for truststore.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the truststore."
+                  }
+                }
+              },
+              "sslKeystore": {
+                "type": "object",
+                "description": "Unique keystore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique keystore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslKeystorePassword": {
+                "type": "object",
+                "description": "Password for the keystore.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the keystore."
+                  }
+                }
+              },
+              "sslKeyPassword": {
+                "type": "object",
+                "description": "Password for the key.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the key."
+                  }
+                }
+              },
               "basicAuthCredentialsSource": {
-                "$ref": "#/definitions/basicAuthCredentialsSource"
+                "type": "object",
+                "description": "Source for the basic auth credentials.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter source for the basic auth credentials.",
+                    "enum": ["URL", "USER_INFO", "SASL_INHERIT"]
+                  }
+                }
               },
               "basicAuthUserInfo": {
-                "$ref": "#/definitions/basicAuthUserInfo"
+                "type": "object",
+                "description": "Basic auth user information.",
+                "properties": {
+                  "value": {
+                    "description": "Enter the basic auth user information (non empty).",
+                    "type": "string",
+                    "pattern": "^.+$"
+                  }
+                }
               },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
-              "sslKeystorePassword": {
-                "$ref": "#/definitions/sslKeystorePassword"
+              "hardDelete": {
+                "type": "object",
+                "description": "Enable hard delete (default true).",
+                "properties": {
+                  "value": {
+                    "type": "boolean"
+                  }
+                }
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
-              "sslTruststorePassword": {
-                "$ref": "#/definitions/sslTruststorePassword"
+              "metricsPort": {
+                "type": "object",
+                "description": "Port for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port number for metrics collection."
+                  }
+                },
+                "required": ["value"]
               },
-              "additionalProperties": {
-                "$ref": "#/definitions/additionalProperties"
+              "metricsType": {
+                "type": "object",
+                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
+                  }
+                },
+                "required": ["value"]
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsSsl": {
+                "type": "object",
+                "description": "Enable SSL for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsUsername": {
+                "type": "object",
+                "description": "Username for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPassword": {
+                "type": "object",
+                "description": "Password for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
               "metricsHttpSuffix": {
-                "$ref": "#/definitions/metricsHttpSuffix"
+                "type": "object",
+                "description": "Enter custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "HTTP suffix value."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
-                "$ref": "#/definitions/metricsHttpTimeout"
+                "type": "object",
+                "description": "Enter HTTP request timeout in milliseconds for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
-                "$ref": "#/definitions/metricsCustomUrlMappings"
+                "type": "object",
+                "description": "Enter custom URL mappings for metrics collection per broker/node/worker.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Map of custom URL mappings.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
               },
-              "metricsRateLimitingMaxRetries": {
-                "$ref": "#/definitions/metricsRateLimitingMaxRetries"
-              },
-              "metricsRateLimitingBackoff": {
-                "$ref": "#/definitions/metricsRateLimitingBackoff"
-              },
-              "hardDelete": { "$ref": "#/definitions/hardDelete" }
+              "additionalProperties": {
+                "type": "object",
+                "description": "Additional configuration properties for Schema registry client.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Arbitrary key-value pairs for additional Schema registry properties.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
+              }
             },
             "required": ["schemaRegistryUrls"],
             "allOf": [
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1230,8 +963,6 @@
                 }
               },
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1240,8 +971,6 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1250,46 +979,14 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
                 "then": {
                   "required": ["sslKeystorePassword"]
-                }
-              },
-              {
-                "title": "SSL HTTPS URL Requirement",
-                "description": "When SSL configuration is provided, schema registry URLs must use HTTPS protocol",
-                "if": {
-                  "anyOf": [
-                    { "required": ["sslKeystore"] },
-                    { "required": ["sslKeystorePassword"] },
-                    { "required": ["sslKeyPassword"] },
-                    { "required": ["sslTruststore"] },
-                    { "required": ["sslTruststorePassword"] }
-                  ]
-                },
-                "then": {
-                  "properties": {
-                    "schemaRegistryUrls": {
-                      "properties": {
-                        "value": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "pattern": "^https://"
-                          }
-                        }
-                      }
-                    }
-                  }
                 }
               }
             ],
-            "title": "Basic Authentication Requirement",
-            "description": "When basicAuthCredentialsSource is set to USER_INFO or URL, basicAuthUserInfo is required",
             "if": {
               "properties": {
                 "basicAuthCredentialsSource": {
@@ -1324,7 +1021,10 @@
             "enum": ["schema-registry"],
             "default": "schema-registry"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Glue Schema Registry version.",
@@ -1342,23 +1042,134 @@
             "type": "object",
             "description": "Glue Schema Registry connection configuration.",
             "properties": {
-              "accessKeyId": { "$ref": "#/definitions/accessKeyId" },
-              "secretAccessKey": { "$ref": "#/definitions/secretAccessKey" },
-              "sessionToken": { "$ref": "#/definitions/sessionToken" },
-              "authMode": { "$ref": "#/definitions/authMode" },
-              "assumeRoleArn": { "$ref": "#/definitions/assumeRoleArn" },
-              "assumeRoleSessionName": {
-                "$ref": "#/definitions/assumeRoleSessionName"
+              "authMode": {
+                "type": "object",
+                "description": "Reference to AWS connection for auth mode.",
+                "properties": {
+                  "reference": {
+                    "type": "string",
+                    "description": "Enter the reference to AWS connection for auth mode (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["reference"]
               },
-              "glueRegistryArn": { "$ref": "#/definitions/glueRegistryArn" },
+              "accessKeyId": {
+                "type": "object",
+                "description": "Reference to AWS connection for access key.",
+                "properties": {
+                  "reference": {
+                    "type": "string",
+                    "description": "Enter the reference to AWS connection for access key (non empty).",
+                    "pattern": "^[a-zA-Z0-9-]+$"
+                  }
+                },
+                "required": ["reference"]
+              },
+              "secretAccessKey": {
+                "type": "object",
+                "description": "Reference to AWS connection for secret access key.",
+                "properties": {
+                  "reference": {
+                    "type": "string",
+                    "description": "Enter the reference to AWS connection for secret access key (non empty).",
+                    "pattern": "^[a-zA-Z0-9-]+$"
+                  }
+                },
+                "required": ["reference"]
+              },
+              "assumeRoleArn": {
+                "type": "object",
+                "description": "Reference to AWS connection for assume role ARN.",
+                "properties": {
+                  "reference": {
+                    "type": "string",
+                    "description": "Enter the reference to AWS connection (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["reference"]
+              },
+              "assumeRoleSessionName": {
+                "type": "object",
+                "description": "Reference to AWS connection for assume role session name.",
+                "properties": {
+                  "reference": {
+                    "type": "string",
+                    "description": "Enter the reference to AWS connection (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["reference"]
+              },
+              "glueRegistryArn": {
+                "type": "object",
+                "description": "Glue Registry ARN following the format arn:aws:glue:region:account-id:registry-name",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Glue Registry ARN (non empty).",
+                    "pattern": "^arn:aws:glue:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9._/-]+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sessionToken": {
+                "type": "object",
+                "description": "Specifies the session token value that is required when you are using temporary credentials that you receive from AWS STS.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the session token value (non empty).",
+                    "pattern": "^[a-zA-Z0-9-]+$"
+                  }
+                },
+                "required": ["value"]
+              },
               "glueRegistryCacheTtl": {
-                "$ref": "#/definitions/glueRegistryCacheTtl"
+                "type": "object",
+                "description": "The period of time in milliseconds to cache the Schema Registry information, if not set, 24 hours",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the registry cache ttl (non empty).",
+                    "pattern": "^[0-9]+$"
+                  }
+                },
+                "required": ["value"]
               },
               "glueRegistryCacheSize": {
-                "$ref": "#/definitions/glueRegistryCacheSize"
+                "type": "object",
+                "description": "The cache size for the Schema Registry information.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the registry cache size (non empty).",
+                    "pattern": "^[0-9]+$",
+                    "default": 200
+                  }
+                },
+                "required": ["value"]
               },
               "glueRegistryDefaultCompatibility": {
-                "$ref": "#/definitions/glueRegistryDefaultCompatibility"
+                "type": "object",
+                "description": "The default compatibility level for the Schema Registry.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the registry default compatibility (non empty).",
+                    "enum": [
+                      "BACKWARD",
+                      "BACKWARD_ALL",
+                      "FORWARD",
+                      "FORWARD_ALL",
+                      "FULL",
+                      "FULL_ALL",
+                      "NONE"
+                    ]
+                  }
+                },
+                "required": ["value"]
               }
             },
             "required": ["authMode", "glueRegistryArn"]
@@ -1380,7 +1191,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "connect"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Connect version.",
@@ -1396,47 +1210,216 @@
           },
           "configuration": {
             "type": "object",
-            "title": "Kafka Connect Configuration",
-            "description": "Kafka Connect connection configuration with SSL validation rules.",
+            "description": "Kafka Connect connection configuration.",
             "properties": {
-              "workers": { "$ref": "#/definitions/workers" },
-              "username": { "$ref": "#/definitions/username" },
-              "password": { "$ref": "#/definitions/password" },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
-              "sslKeystorePassword": {
-                "$ref": "#/definitions/sslKeystorePassword"
+              "workers": {
+                "type": "object",
+                "description": "Connect worker URLs.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^(http|https)://[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*:[0-9]+(/.*)?$",
+                      "description": "Array of Connect worker URL"
+                    },
+                    "description": "Enter the Connect worker URLs"
+                  }
+                },
+                "required": ["value"]
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "username": {
+                "type": "object",
+                "description": "Username for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "password": {
+                "type": "object",
+                "description": "Password for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslTruststore": {
+                "type": "object",
+                "description": "Unique truststore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique truststore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
               "sslTruststorePassword": {
-                "$ref": "#/definitions/sslTruststorePassword"
+                "type": "object",
+                "description": "Truststore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the truststore."
+                  }
+                },
+                "required": ["value"]
               },
-              "sslAlgorthrim": { "$ref": "#/definitions/sslAlgorthrim" },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "sslKeystore": {
+                "type": "object",
+                "description": "Unique keystore (JKS) file name in double quotes. Must end with .jks",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "Enter a unique keystore (JKS) file name in double quotes. Must end with .jks",
+                    "pattern": "^.*\\.jks$"
+                  }
+                },
+                "required": ["file"]
+              },
+              "sslKeystorePassword": {
+                "type": "object",
+                "description": "Keystore password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the keystore."
+                  }
+                },
+                "required": ["value"]
+              },
+              "sslKeyPassword": {
+                "type": "object",
+                "description": "Key password.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter a password for the key."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPort": {
+                "type": "object",
+                "description": "Port for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port number for metrics collection."
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsType": {
+                "type": "object",
+                "description": "Type of metrics to collect (e.g., 'JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics type value ('JMX', 'JOLOKIAG', 'JOLOKIAP').",
+                    "enum": ["JOLOKIAG", "JOLOKIAP", "JMX"]
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsSsl": {
+                "type": "object",
+                "description": "Enable SSL for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "SSL enabled flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsUsername": {
+                "type": "object",
+                "description": "Username for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics username (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "metricsPassword": {
+                "type": "object",
+                "description": "Password for metrics authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the metrics password (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
               "metricsHttpSuffix": {
-                "$ref": "#/definitions/metricsHttpSuffix"
+                "type": "object",
+                "description": "Enter custom HTTP suffix for metrics endpoint (e.g., '/jolokia/').",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "HTTP suffix value."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsHttpTimeout": {
-                "$ref": "#/definitions/metricsHttpTimeout"
+                "type": "object",
+                "description": "Enter HTTP request timeout in milliseconds for metrics collection.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Timeout value in milliseconds."
+                  }
+                },
+                "required": ["value"]
               },
               "metricsCustomUrlMappings": {
-                "$ref": "#/definitions/metricsCustomUrlMappings"
+                "type": "object",
+                "description": "Enter custom URL mappings for metrics collection per broker/node/worker.",
+                "properties": {
+                  "value": {
+                    "type": "object",
+                    "description": "Map of custom URL mappings.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["value"]
               },
-              "metricsRateLimitingMaxRetries": {
-                "$ref": "#/definitions/metricsRateLimitingMaxRetries"
-              },
-              "metricsRateLimitingBackoff": {
-                "$ref": "#/definitions/metricsRateLimitingBackoff"
+              "sslAlgorthrim": {
+                "type": "object",
+                "description": "Name of the SSL algorithm.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the name of the SSL algorithm (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "default": "X509",
+                "required": ["value"]
               }
             },
             "allOf": [
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
                   "required": ["sslTruststorePassword"]
                 },
@@ -1445,8 +1428,6 @@
                 }
               },
               {
-                "title": "SSL Truststore Password Requirement",
-                "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
                   "required": ["sslTruststore"]
                 },
@@ -1455,8 +1436,6 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
                   "required": ["sslKeystorePassword"]
                 },
@@ -1465,42 +1444,11 @@
                 }
               },
               {
-                "title": "SSL Keystore Password Requirement",
-                "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
                   "required": ["sslKeystore"]
                 },
                 "then": {
                   "required": ["sslKeystorePassword"]
-                }
-              },
-              {
-                "title": "SSL HTTPS URL Requirement",
-                "description": "When SSL configuration is provided, Connect worker URLs must use HTTPS protocol",
-                "if": {
-                  "anyOf": [
-                    { "required": ["sslKeystore"] },
-                    { "required": ["sslKeystorePassword"] },
-                    { "required": ["sslKeyPassword"] },
-                    { "required": ["sslTruststore"] },
-                    { "required": ["sslTruststorePassword"] },
-                    { "required": ["sslAlgorthrim"] }
-                  ]
-                },
-                "then": {
-                  "properties": {
-                    "workers": {
-                      "properties": {
-                        "value": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "pattern": "^https://"
-                          }
-                        }
-                      }
-                    }
-                  }
                 }
               }
             ]
@@ -1522,7 +1470,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "aws"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "AWS connection version.",
@@ -1540,14 +1491,112 @@
             "type": "object",
             "description": "AWS connection configuration.",
             "properties": {
-              "accessKeyId": { "$ref": "#/definitions/accessKeyId" },
-              "secretAccessKey": { "$ref": "#/definitions/secretAccessKey" },
-              "region": { "$ref": "#/definitions/region" },
-              "sessionToken": { "$ref": "#/definitions/sessionToken" },
-              "authMode": { "$ref": "#/definitions/authMode" },
-              "assumeRoleArn": { "$ref": "#/definitions/assumeRoleArn" },
+              "authMode": {
+                "type": "object",
+                "description": "AWS authentication mode.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Auth mode value.",
+                    "enum": ["Access Key", "Credentials Chain", "Assume Role"]
+                  }
+                },
+                "required": ["value"]
+              },
+              "accessKeyId": {
+                "type": "object",
+                "description": "AWS access key ID.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Access key ID value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "secretAccessKey": {
+                "type": "object",
+                "description": "AWS secret access key.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Secret access key value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "region": {
+                "type": "object",
+                "description": "AWS region.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the AWS region.",
+                    "enum": [
+                      "us-east-1",
+                      "us-east-2",
+                      "us-west-1",
+                      "us-west-2",
+                      "af-south-1",
+                      "ap-east-1",
+                      "ap-south-1",
+                      "ap-northeast-1",
+                      "ap-northeast-2",
+                      "ap-northeast-3",
+                      "ap-southeast-1",
+                      "ap-southeast-2",
+                      "ap-southeast-3",
+                      "ca-central-1",
+                      "eu-central-1",
+                      "eu-west-1",
+                      "eu-west-2",
+                      "eu-west-3",
+                      "eu-south-1",
+                      "eu-north-1",
+                      "me-south-1",
+                      "sa-east-1"
+                    ]
+                  }
+                },
+                "required": ["value"]
+              },
+              "sessionToken": {
+                "type": "object",
+                "description": "AWS session token.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Session token value (non empty) .",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "assumeRoleArn": {
+                "type": "object",
+                "description": "AWS role ARN to assume.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Role ARN value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
               "assumeRoleSessionName": {
-                "$ref": "#/definitions/assumeRoleSessionName"
+                "type": "object",
+                "description": "AWS role session name.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Session name value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
               }
             },
             "required": ["authMode"]
@@ -1569,7 +1618,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "webhook"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Webhook connection version.",
@@ -1587,10 +1639,57 @@
             "type": "object",
             "description": "Webhook connection configuration.",
             "properties": {
-              "host": { "$ref": "#/definitions/host" },
-              "port": { "$ref": "#/definitions/port" },
-              "useHttps": { "$ref": "#/definitions/useHttps" },
-              "creds": { "$ref": "#/definitions/creds" }
+              "host": {
+                "type": "object",
+                "description": "The host name.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Host value.",
+                    "pattern": "^[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "port": {
+                "type": "object",
+                "description": "The port number.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port value.",
+                    "pattern": "^[0-9]+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "useHttps": {
+                "type": "object",
+                "description": "Set to true in order to set the URL scheme to https. Will otherwise default to http.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "Use HTTPS flag."
+                  }
+                },
+                "required": ["value"]
+              },
+              "creds": {
+                "type": "object",
+                "description": "An array of (secret) strings to be passed over to alert channel plugins.",
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Enter the credential string (non empty).",
+                      "pattern": "^.+$"
+                    },
+                    "description": "Array of credential strings."
+                  }
+                },
+                "required": ["value"]
+              }
             },
             "required": ["host", "useHttps"]
           }
@@ -1611,7 +1710,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "datadog"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "DataDog connection version.",
@@ -1629,9 +1731,42 @@
             "type": "object",
             "description": "DataDog connection configuration.",
             "properties": {
-              "site": { "$ref": "#/definitions/site" },
-              "apiKey": { "$ref": "#/definitions/apiKey" },
-              "applicationKey": { "$ref": "#/definitions/applicationKey" }
+              "site": {
+                "type": "object",
+                "description": "The site URL for the DataDog API.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the site value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "apiKey": {
+                "type": "object",
+                "description": "The API key for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the API key value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "applicationKey": {
+                "type": "object",
+                "description": "The application key for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the application key value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              }
             }
           }
         },
@@ -1651,7 +1786,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "pagerduty"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "PagerDuty connection version.",
@@ -1669,7 +1807,18 @@
             "type": "object",
             "description": "PagerDuty connection configuration.",
             "properties": {
-              "integrationKey": { "$ref": "#/definitions/integrationKey" }
+              "integrationKey": {
+                "type": "object",
+                "description": "The integration key for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the integration key value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              }
             }
           }
         },
@@ -1689,7 +1838,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "slack"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Slack connection version.",
@@ -1707,7 +1859,18 @@
             "type": "object",
             "description": "Slack connection configuration.",
             "properties": {
-              "webhookUrl": { "$ref": "#/definitions/webhookUrl" }
+              "webhookUrl": {
+                "type": "object",
+                "description": "The webhook URL for the Slack API.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Slack webhook URL (non empty).",
+                    "pattern": "^(https?:\\/\\/.+)$"
+                  }
+                },
+                "required": ["value"]
+              }
             },
             "required": ["webhookUrl"]
           }
@@ -1728,7 +1891,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "splunk"
           },
-
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Splunk connection version.",
@@ -1746,11 +1912,66 @@
             "type": "object",
             "description": "Splunk connection configuration.",
             "properties": {
-              "host": { "$ref": "#/definitions/host" },
-              "port": { "$ref": "#/definitions/port" },
-              "useHttps": { "$ref": "#/definitions/useHttps" },
-              "insecure": { "$ref": "#/definitions/insecure" },
-              "token": { "$ref": "#/definitions/token" }
+              "host": {
+                "type": "object",
+                "description": "The host name for the Splunk API.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the host value (non empty).",
+                    "pattern": "^.+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "port": {
+                "type": "object",
+                "description": "The port number for the Splunk API.",
+                "properties": {
+                  "value": {
+                    "type": "integer",
+                    "description": "Enter the port value.",
+                    "pattern": "^[0-9]+$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "useHttps": {
+                "type": "object",
+                "description": "Set to true in order to set the URL scheme to https. Will otherwise default to http.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "Use HTTPS flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "insecure": {
+                "type": "object",
+                "description": "Set to true in order to disable SSL verification.",
+                "properties": {
+                  "value": {
+                    "type": "boolean",
+                    "description": "Insecure flag.",
+                    "pattern": "^true|false$"
+                  }
+                },
+                "required": ["value"]
+              },
+              "token": {
+                "type": "object",
+                "description": "The token for authentication.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the token value (non empty).",
+                    "pattern": "^[A-Za-z0-9_-]+$"
+                  }
+                },
+                "required": ["value"]
+              }
             }
           }
         },
@@ -1770,6 +1991,10 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "my-alertmanager-connection"
           },
+          "editorTag": {
+            "type": "string",
+            "description": "Tag for editor support only"
+          },
           "version": {
             "type": "integer",
             "description": "Alert Manager connection version.",
@@ -1787,7 +2012,19 @@
             "type": "object",
             "description": "Alert Manager connection configuration.",
             "properties": {
-              "endpoints": { "$ref": "#/definitions/endpoints" }
+              "endpoints": {
+                "type": "object",
+                "description": "Comma separated list of Alert Manager endpoints.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Enter the Alert Manager endpoints (non empty).",
+                    "pattern": "^(https?:\\/\\/.+)$",
+                    "minLength": 1
+                  }
+                },
+                "required": ["value"]
+              }
             },
             "required": ["endpoints"]
           }
@@ -1861,30 +2098,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "Aiven",
+            "editorTag": "Aiven",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": ""
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslKeyPassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "SCRAM-SHA-256"
@@ -1892,15 +2117,25 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "additionalProperties": {
-                "value": {}
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
                 "# value": ""
               },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -1911,22 +2146,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -1935,18 +2155,18 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK, SSL/TLS",
+      "label": "Kafka, AWS MSK (TLS/SSL)",
       "body": {
-        "## Template": "Kafka, AWS MSK, SSL/TLS",
+        "## Template": "Kafka, AWS MSK (TLS/SSL)",
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "AWS MSK, SSL/TLS",
+            "editorTag": "AWS MSK, SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -1957,39 +2177,12 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsType": {
                 "# value": "AWS"
               },
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
+                "# value": 60000
               }
             }
           }
@@ -1997,21 +2190,27 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK, mutal SSL/TLS",
+      "label": "Kafka, AWS MSK (mutal TLS/SSL)",
       "body": {
-        "## Template": "Kafka, AWS MSK, mutal SSL/TLS",
+        "## Template": "Kafka, AWS MSK (mutal TLS/SSL)",
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "AWS MSK, mutal SSL/TLS",
+            "editorTag": "AWS MSK, mutal TLS/SSL",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
               },
               "sslKeystore": {
                 "file": "kafka-keystore.jks"
@@ -2022,45 +2221,12 @@
               "sslKeystorePassword": {
                 "value": ""
               },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsType": {
                 "# value": "AWS"
               },
-              "# metricsPort": {
-                "# value": 9581
-              },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
+                "# value": 60000
               }
             }
           }
@@ -2068,18 +2234,21 @@
       }
     },
     {
-      "label": "Kafka, AWS MSK, IAM",
+      "label": "Kafka, AWS MSK (IAM)",
       "body": {
-        "## Template": "Kafka, AWS MSK, IAM",
+        "## Template": "Kafka, AWS MSK (IAM)",
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "AWS MSK, IAM",
+            "editorTag": "AWS MSK, IAM",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2095,36 +2264,12 @@
                   "sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
                 }
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsType": {
                 "# value": "AWS"
               },
-              "# metricsSsl": {
-                "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
+                "# value": 60000
               }
             }
           }
@@ -2138,12 +2283,15 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "Azure Eventhubs",
+            "editorTag": "Azure Eventhubs",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2166,27 +2314,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "Confluent",
+            "editorTag": "Confluent",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": "kafka-keystore.jks"
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "PLAIN"
@@ -2194,12 +2333,26 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "## Optional SSL/TLS": "Uncomment the properties below",
+              "# sslTruststore": {
+                "# file": "kafka-truststore.jks"
+              },
+              "# sslTruststorePassword": {
                 "# value": ""
               },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
+                "# value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2210,22 +2363,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2240,12 +2378,15 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "IBM Event Streams",
+            "editorTag": "IBM Event Streams",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2256,12 +2397,12 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"token\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2271,24 +2412,6 @@
               },
               "# metricsPassword": {
                 "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -2302,30 +2425,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "Redpanda",
+            "editorTag": "Redpanda",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": "kafka-keystore.jks"
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslKeyPassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "SCRAM-SHA-256"
@@ -2333,12 +2444,25 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
                 "# value": ""
               },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2349,22 +2473,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2379,49 +2488,34 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "PLAINTEXT",
+            "editorTag": "PLAINTEXT",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "PLAINTEXT://<broker1>:9092",
+                  "PLAINTEXT://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "PLAINTEXT"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
               },
+              "# metricsType": {
+                "# value": ""
+              },
               "# metricsSsl": {
-                "# value": true
+                "# value": false
               },
               "# metricsUsername": {
                 "# value": ""
               },
               "# metricsPassword": {
                 "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -2435,12 +2529,15 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_PLAINTEXT, PLAIN",
+            "editorTag": "SASL_PLAINTEXT, PLAIN",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_PLAINTEXT://<broker1>:9092",
+                  "SASL_PLAINTEXT://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2451,15 +2548,15 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
               },
+              "# metricsType": {
+                "# value": ""
+              },
               "# metricsSsl": {
-                "# value": true
+                "# value": false
               },
               "# metricsUsername": {
                 "# value": ""
@@ -2467,22 +2564,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2497,12 +2579,15 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_PLAINTEXT, SCRAM-SHA-256",
+            "editorTag": "SASL_PLAINTEXT, SCRAM-SHA-256",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_PLAINTEXT://<broker1>:9092",
+                  "SASL_PLAINTEXT://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2513,15 +2598,15 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
               },
+              "# metricsType": {
+                "# value": ""
+              },
               "# metricsSsl": {
-                "# value": true
+                "# value": false
               },
               "# metricsUsername": {
                 "# value": ""
@@ -2529,22 +2614,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2559,12 +2629,15 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_PLAINTEXT, SCRAM-SHA-512",
+            "editorTag": "SASL_PLAINTEXT, SCRAM-SHA-512",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_PLAINTEXT://<broker1>:9092",
+                  "SASL_PLAINTEXT://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2575,15 +2648,15 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
               },
+              "# metricsType": {
+                "# value": ""
+              },
               "# metricsSsl": {
-                "# value": true
+                "# value": false
               },
               "# metricsUsername": {
                 "# value": ""
@@ -2591,22 +2664,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2621,30 +2679,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_SSL, PLAIN",
+            "editorTag": "SASL_SSL, PLAIN",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": "kafka-keystore.jks"
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslKeyPassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "PLAIN"
@@ -2652,12 +2698,28 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
                 "# value": ""
               },
+              "# sslKeyPassword": {
+                "# value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2668,22 +2730,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2698,30 +2745,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_SSL, SCRAM-SHA-256",
+            "editorTag": "SASL_SSL, SCRAM-SHA-256",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": "kafka-keystore.jks"
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslKeyPassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "SCRAM-SHA-256"
@@ -2729,12 +2764,28 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
                 "# value": ""
               },
+              "# sslKeyPassword": {
+                "# value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2745,22 +2796,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -2775,30 +2811,18 @@
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SASL_SSL, SCRAM-SHA-512",
+            "editorTag": "SASL_SSL, SCRAM-SHA-512",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "SASL_SSL://<broker1>:9092",
+                  "SASL_SSL://<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
-              },
-              "sslKeystore": {
-                "file": "kafka-keystore.jks"
-              },
-              "sslKeystorePassword": {
-                "value": ""
-              },
-              "sslKeyPassword": {
-                "value": ""
-              },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
               },
               "saslMechanism": {
                 "value": "SCRAM-SHA-512"
@@ -2806,12 +2830,28 @@
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
+              "# sslKeystore": {
+                "# file": "kafka-keystore.jks"
+              },
+              "# sslKeystorePassword": {
                 "# value": ""
               },
+              "# sslKeyPassword": {
+                "# value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2821,24 +2861,6 @@
               },
               "# metricsPassword": {
                 "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -2846,18 +2868,18 @@
       }
     },
     {
-      "label": "Kafka, SSL/TLS",
+      "label": "Kafka, SSL",
       "body": {
-        "## Template": "Kafka, SSL/TLS",
+        "## Template": "Kafka, SSL",
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "SSL/TLS",
+            "editorTag": "SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
@@ -2868,12 +2890,12 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2883,24 +2905,6 @@
               },
               "# metricsPassword": {
                 "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -2908,21 +2912,27 @@
       }
     },
     {
-      "label": "Kafka, Mutal SSL/TLS",
+      "label": "Kafka, mutal SSL/TLS",
       "body": {
-        "## Template": "Kafka, Mutal SSL/TLS",
+        "## Template": "Kafka, mutal SSL/TLS",
         "kafka": [
           {
             "name": "kafka",
-            "x-lenses-ui-tag": "Mutual SSL/TLS",
+            "editorTag": "Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": ["SSL://<broker1>:9092", "SSL://<broker2>:9092"]
               },
               "protocol": {
                 "value": "SSL"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
               },
               "sslKeystore": {
                 "file": "kafka-keystore.jks"
@@ -2933,18 +2943,12 @@
               "sslKeystorePassword": {
                 "value": ""
               },
-              "sslTruststore": {
-                "file": "kafka-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -2954,24 +2958,6 @@
               },
               "# metricsPassword": {
                 "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -2985,15 +2971,12 @@
         "zookeeper": [
           {
             "name": "zookeeper",
-            "x-lenses-ui-tag": "Zookeeper",
+            "editorTag": "Zookeeper",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "zookeeperUrls": {
                 "value": ["<host1>:8080", "<host2>:8080"]
-              },
-              "# zookeeperChrootPath": {
-                "# value": ""
               },
               "zookeeperSessionTimeout": {
                 "value": 10000
@@ -3001,39 +2984,18 @@
               "zookeeperConnectionTimeout": {
                 "value": 10000
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "# zookeeperChrootPath": {
                 "# value": ""
               },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
               },
+              "# metricsType": {
+                "# value": ""
+              },
               "# metricsSsl": {
                 "# value": true
-              },
-              "# metricsUsername": {
-                "# value": ""
-              },
-              "# metricsPassword": {
-                "# value": ""
-              },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
-              "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# zookeeper:8080": "zookeeper_jmx_metrics:9581",
-                  "# zookeeper2:8080": "zookeeper2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
-                "# value": 30000
               }
             }
           }
@@ -3041,26 +3003,40 @@
       }
     },
     {
-      "label": "Kafka Connect, No Auth",
+      "label": "Kafka Connect",
       "body": {
-        "## Template": "Kafka Connect, No Auth",
+        "## Template": "Kafka Connect",
         "connect": [
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "x-lenses-ui-tag": "No Auth",
+            "editorTag": "No Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "workers": {
                 "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
+              "## Optional Basic Auth": "Uncomment the properties below to enable basic auth",
+              "# username": {
                 "# value": ""
               },
+              "# password": {
+                "# value": ""
+              },
+              "## Optional SSL": "Uncomment the properties below to enable SSL",
+              "# sslTruststore": {
+                "# file": "connect-truststore.jks"
+              },
+              "# sslTruststorePassword": {
+                "# value": ""
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3071,22 +3047,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka_connect_1:8083": "kafka_connect_1_jmx_metrics:9581",
-                  "# kafka_connect_2:8083": "kafka_connect_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3102,7 +3063,7 @@
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "x-lenses-ui-tag": "HTTP Basic Auth",
+            "editorTag": "HTTP Basic Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3115,12 +3076,12 @@
               "password": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3131,22 +3092,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka_connect_1:8083": "kafka_connect_1_jmx_metrics:9581",
-                  "# kafka_connect_2:8083": "kafka_connect_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3162,12 +3108,12 @@
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "x-lenses-ui-tag": "HTTP Basic Auth, SSL/TLS",
+            "editorTag": "HTTP Basic Auth, SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["https://<host1>:8083", "https://<host2>:8083"]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "username": {
                 "value": ""
@@ -3181,12 +3127,12 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3197,22 +3143,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka_connect_1:8083": "kafka_connect_1_jmx_metrics:9581",
-                  "# kafka_connect_2:8083": "kafka_connect_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3228,17 +3159,23 @@
           {
             "## Repeat": "for more clusters",
             "name": "connect",
-            "x-lenses-ui-tag": "HTTP Basic Auth, Mutual SSL/TLS",
+            "editorTag": "HTTP Basic Auth, Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["https://<host1>:8083", "https://<host2>:8083"]
+                "value": ["http://<host1>:8083", "http://<host2>:8083"]
               },
               "username": {
                 "value": ""
               },
               "password": {
+                "value": ""
+              },
+              "sslTruststore": {
+                "file": "connect-truststore.jks"
+              },
+              "sslTruststorePassword": {
                 "value": ""
               },
               "sslKeystore": {
@@ -3250,18 +3187,12 @@
               "sslKeyPassword": {
                 "value": ""
               },
-              "sslTruststore": {
-                "file": "connect-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3272,22 +3203,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# kafka_connect_1:8083": "kafka_connect_1_jmx_metrics:9581",
-                  "# kafka_connect_2:8083": "kafka_connect_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3302,19 +3218,19 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "Confluent No Auth",
+            "editorTag": "Confluent No Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
                 "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3325,22 +3241,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3355,7 +3256,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "Confluent Basic Auth",
+            "editorTag": "Confluent Basic Auth",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3369,12 +3270,12 @@
               "password": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3385,22 +3286,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3409,18 +3295,18 @@
       }
     },
     {
-      "label": "Schema Registry, Confluent Basic Auth, SSL/TLS",
+      "label": "Schema Registry, Confluent",
       "body": {
-        "## Template": "Schema Registry, Confluent Basic Auth, SSL/TLS",
+        "## Template": "Schema Registry, Confluent",
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "Confluent Basic Auth, SSL/TLS",
+            "editorTag": "Confluent Basic Auth, SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3435,12 +3321,12 @@
               "sslTruststorePassword": {
                 "value": ""
               },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3451,22 +3337,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3481,18 +3352,24 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "Confluent Basic Auth, Mutual SSL/TLS",
+            "editorTag": "Confluent Basic Auth, Mutual SSL/TLS",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
                 "value": ""
               },
               "password": {
+                "value": ""
+              },
+              "sslTruststore": {
+                "file": "schema-registry-truststore.jks"
+              },
+              "sslTruststorePassword": {
                 "value": ""
               },
               "sslKeystore": {
@@ -3504,18 +3381,12 @@
               "sslKeyPassword": {
                 "value": ""
               },
-              "sslTruststore": {
-                "file": "schema-registry-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3526,22 +3397,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3556,18 +3412,24 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "Aiven (Karpace)",
+            "editorTag": "Aiven (Karpace)",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": ["http://<host1>:8081", "http://<host2>:8081"]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
                 "value": ""
               },
               "password": {
+                "value": ""
+              },
+              "sslTruststore": {
+                "file": "schema-registry-truststore.jks"
+              },
+              "sslTruststorePassword": {
                 "value": ""
               },
               "sslKeystore": {
@@ -3579,18 +3441,12 @@
               "sslKeyPassword": {
                 "value": ""
               },
-              "sslTruststore": {
-                "file": "schema-registry-truststore.jks"
-              },
-              "sslTruststorePassword": {
-                "value": ""
-              },
-              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3601,22 +3457,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3631,10 +3472,13 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "AWS Glue (Access Keys)",
+            "editorTag": "AWS Glue (Access Keys)",
             "version": 1,
             "tags": "[]",
             "configuration": {
+              "authMode": {
+                "reference": "my-aws-connection-name"
+              },
               "accessKeyId": {
                 "reference": "my-aws-connection-name"
               },
@@ -3647,9 +3491,6 @@
               "## Optional": "Session token",
               "# sessionToken": {
                 "# value": ""
-              },
-              "authMode": {
-                "reference": "my-aws-connection-name"
               },
               "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
@@ -3673,19 +3514,19 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "AWS Glue (Credentials chain)",
+            "editorTag": "AWS Glue (Credentials chain)",
             "version": 1,
             "tags": "[]",
             "configuration": {
+              "authMode": {
+                "reference": "my-aws-connection-name"
+              },
               "glueRegistryArn": {
                 "value": ""
               },
               "## Optional": "Session token",
               "# sessionToken": {
                 "# value": ""
-              },
-              "authMode": {
-                "reference": "my-aws-connection-name"
               },
               "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
@@ -3709,10 +3550,13 @@
         "glueSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "AWS Glue (Assume Role)",
+            "editorTag": "AWS Glue (Assume Role)",
             "version": 1,
             "tags": "[]",
             "configuration": {
+              "authMode": {
+                "reference": "my-aws-connection-name"
+              },
               "assumeRoleArn": {
                 "reference": "my-aws-connection-name"
               },
@@ -3725,9 +3569,6 @@
               "## Optional": "Session token",
               "# sessionToken": {
                 "# value": ""
-              },
-              "authMode": {
-                "reference": "my-aws-connection-name"
               },
               "## Optional Cache settings": "If ttl (milliseconds) not set default is 24 hours",
               "# glueRegistryCacheTtl": {
@@ -3751,7 +3592,7 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "IBM Event Streams Registry",
+            "editorTag": "IBM Event Streams Registry",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3770,12 +3611,19 @@
         "confluentSchemaRegistry": [
           {
             "name": "schema-registry",
-            "x-lenses-ui-tag": "ApiCurio",
+            "editorTag": "ApiCurio",
             "version": 1,
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
                 "value": ["http://<hostname>:<port>/apis/compact/v6"]
+              },
+              "## Optional SSL/TLS": "Uncomment the properties below",
+              "# sslTruststore": {
+                "# file": "schema-registry-truststore.jks"
+              },
+              "# sslTruststorePassword": {
+                "# value": ""
               },
               "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
@@ -3787,19 +3635,12 @@
               "# sslKeyPassword": {
                 "# value": ""
               },
-              "## Optional SSL/TLS": "Uncomment the properties below",
-              "# sslTruststore": {
-                "# file": "schema-registry-truststore.jks"
-              },
-              "# sslTruststorePassword": {
-                "# value": ""
-              },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
-              "# metricsType": {
-                "# value": ""
-              },
               "# metricsPort": {
                 "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
               },
               "# metricsSsl": {
                 "# value": true
@@ -3810,22 +3651,7 @@
               "# metricsPassword": {
                 "# value": ""
               },
-              "# metricsHttpSuffix": {
-                "# value": 30000
-              },
               "# metricsHttpTimeout": {
-                "# value": 30000
-              },
-              "# metricsCustomUrlMappings": {
-                "# value": {
-                  "# schema_registry_1:8081": "schema_registry_1_jmx_metrics:9581",
-                  "# schema_registry_2:8081": "schema_registry_2_jmx_metrics:9581"
-                }
-              },
-              "# metricsRateLimitingMaxRetries": {
-                "# value": 5
-              },
-              "# metricsRateLimitingBackoff": {
                 "# value": 30000
               }
             }
@@ -3834,36 +3660,21 @@
       }
     },
     {
-      "label": "Alerts, AWS Connection for Glue & CloudWatchn",
+      "label": "Alerts, AWS Connection",
       "body": {
         "## Template": "Alerts, AWS Connection",
         "aws": [
           {
             "## Repeat": "for more connections",
             "name": "my-aws-connection-name",
-            "x-lenses-ui-tag": "AWS Connection for Glue & CloudWatch",
+            "editorTag": "AWS Connection for Glue & CloudWatch",
             "version": 1,
             "tags": "[]",
             "configuration": {
-              "accessKeyId": {
-                "value": ""
-              },
-              "secretAccessKey": {
-                "value": ""
-              },
-              "region": {
-                "value": ""
-              },
-              "sessionToken": {
-                "value": ""
-              },
               "authMode": {
                 "value": ""
               },
-              "assumeRoleArn": {
-                "value": ""
-              },
-              "assumeRoleSessionName": {
+              "region": {
                 "value": ""
               }
             }
@@ -3879,7 +3690,7 @@
           {
             "## Repeat": "for more connections",
             "name": "webhook",
-            "x-lenses-ui-tag": "Webhook",
+            "editorTag": "Webhook",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3908,7 +3719,7 @@
           {
             "## Repeat": "for more connections",
             "name": "datadog",
-            "x-lenses-ui-tag": "DataDog",
+            "editorTag": "DataDog",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3934,7 +3745,7 @@
           {
             "## Repeat": "for more connections",
             "name": "pagerduty",
-            "x-lenses-ui-tag": "PagerDuty",
+            "editorTag": "PagerDuty",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3954,7 +3765,7 @@
           {
             "## Repeat": "for more connections",
             "name": "slack",
-            "x-lenses-ui-tag": "Slack",
+            "editorTag": "Slack",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -3974,7 +3785,7 @@
           {
             "## Repeat": "for more connections",
             "name": "splunk",
-            "x-lenses-ui-tag": "Splunk",
+            "editorTag": "Splunk",
             "version": 1,
             "tags": "[]",
             "configuration": {
@@ -4006,7 +3817,7 @@
           {
             "## Repeat": "for more connections",
             "name": "my-alertmanager-connection",
-            "x-lenses-ui-tag": "Alert Manager",
+            "editorTag": "Alert Manager",
             "version": 1,
             "tags": "[]",
             "configuration": {
