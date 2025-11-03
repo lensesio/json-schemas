@@ -933,7 +933,14 @@
                     "saslJaasConfig": {
                       "properties": {
                         "value": {
-                          "pattern": "^org\\.apache\\.kafka\\.common\\.security\\.plain\\.PlainLoginModule required username=\\\"[^\\\"]+\\\" password=\\\"[^\\\"]+\\\";$"
+                          "anyOf": [
+                            {
+                              "pattern": "^org\\.apache\\.kafka\\.common\\.security\\.plain\\.PlainLoginModule required username=\\\"[^\\\"]+\\\" password=\\\"[^\\\"]+\\\";$"
+                            },
+                            {
+                              "const": "[secret hidden by Lenses]"
+                            }
+                          ]
                         }
                       }
                     }
@@ -996,7 +1003,14 @@
                     "saslJaasConfig": {
                       "properties": {
                         "value": {
-                          "pattern": "^org\\.apache\\.kafka\\.common\\.security\\.scram\\.ScramLoginModule required username=\\\"[^\\\"]+\\\" password=\\\"[^\\\"]+\\\";$"
+                          "anyOf": [
+                            {
+                              "pattern": "^org\\.apache\\.kafka\\.common\\.security\\.scram\\.ScramLoginModule required username=\\\"[^\\\"]+\\\" password=\\\"[^\\\"]+\\\";$"
+                            },
+                            {
+                              "const": "[secret hidden by Lenses]"
+                            }
+                          ]
                         }
                       }
                     }
@@ -1024,7 +1038,14 @@
                     "saslJaasConfig": {
                       "properties": {
                         "value": {
-                          "const": "software.amazon.msk.auth.iam.IAMLoginModule required;"
+                          "anyOf": [
+                            {
+                              "const": "software.amazon.msk.auth.iam.IAMLoginModule required;"
+                            },
+                            {
+                              "const": "[secret hidden by Lenses]"
+                            }
+                          ]
                         }
                       }
                     }
