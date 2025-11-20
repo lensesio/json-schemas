@@ -1,138 +1,595 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "Kafka Connector Converter Overrides with Schema Converter Options",
-    "type": "object",
-    "properties": {
-      "key.converter": {
-        "type": "string",
-        "description": "Fully qualified class name of the key converter"
-      },
-      "value.converter": {
-        "type": "string",
-        "description": "Fully qualified class name of the value converter"
-      },
-      "header.converter": {
-        "type": "string",
-        "description": "Fully qualified class name of the header converter"
-      },
-      "key.converter.schemas.enable": {
-        "type": "boolean",
-        "description": "Enable schemas in the key converter"
-      },
-      "value.converter.schemas.enable": {
-        "type": "boolean",
-        "description": "Enable schemas in the value converter"
-      },
-      "header.converter.schemas.enable": {
-        "type": "boolean",
-        "description": "Enable schemas in the header converter"
-      },
-  
-      "key.converter.schema.registry.url": {
-        "type": "string",
-        "description": "Schema Registry URL used by the key converter"
-      },
-      "value.converter.schema.registry.url": {
-        "type": "string",
-        "description": "Schema Registry URL used by the value converter"
-      },
-      "header.converter.schema.registry.url": {
-        "type": "string",
-        "description": "Schema Registry URL used by the header converter"
-      },
-  
-      "key.converter.basic.auth.credentials.source": {
-        "type": "string",
-        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
-        "description": "Auth credentials source for the key converter"
-      },
-      "value.converter.basic.auth.credentials.source": {
-        "type": "string",
-        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
-        "description": "Auth credentials source for the value converter"
-      },
-      "header.converter.basic.auth.credentials.source": {
-        "type": "string",
-        "enum": ["USER_INFO", "SASL_INHERIT", "URL"],
-        "description": "Auth credentials source for the header converter"
-      },
-  
-      "key.converter.schema.registry.basic.auth.user.info": {
-        "type": "string",
-        "description": "Username and password (user:pass) for schema registry used by key converter"
-      },
-      "value.converter.schema.registry.basic.auth.user.info": {
-        "type": "string",
-        "description": "Username and password (user:pass) for schema registry used by value converter"
-      },
-      "header.converter.schema.registry.basic.auth.user.info": {
-        "type": "string",
-        "description": "Username and password (user:pass) for schema registry used by header converter"
-      },
-  
-      "key.converter.use.latest.version": {
-        "type": "boolean",
-        "description": "If true, use latest schema version in schema registry (key converter)"
-      },
-      "value.converter.use.latest.version": {
-        "type": "boolean",
-        "description": "If true, use latest schema version in schema registry (value converter)"
-      },
-      "header.converter.use.latest.version": {
-        "type": "boolean",
-        "description": "If true, use latest schema version in schema registry (header converter)"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Kafka Connector Converter Overrides with Schema Converter Options",
+  "type": "object",
+  "$defs": {
+    "converterClass": {
+      "description": "Valid Kafka Connect converter implementation classes",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.json.JsonConverter",
+        "org.apache.kafka.connect.storage.StringConverter",
+        "org.apache.kafka.connect.converters.ByteArrayConverter",
+        "io.confluent.connect.avro.AvroConverter",
+        "io.confluent.connect.protobuf.ProtobufConverter",
+        "io.confluent.connect.json.JsonSchemaConverter"
+      ]
+    }
+  },
+  "properties": {
+    "key.converter": {
+      "$ref": "#/$defs/converterClass"
+    },
+    "value.converter": {
+      "$ref": "#/$defs/converterClass"
+    },
+    "header.converter": {
+      "$ref": "#/$defs/converterClass"
+    },
+    "header.auto.register.schemas": {
+      "type": "boolean",
+      "description": "Specify if the Serializer should attempt to register the Schema with Schema Registry.",
+      "default": true
+    },
+    "key.auto.register.schemas": {
+      "type": "boolean",
+      "description": "Specify if the Serializer should attempt to register the Schema with Schema Registry.",
+      "default": true
+    },
+    "value.auto.register.schemas": {
+      "type": "boolean",
+      "description": "Specify if the Serializer should attempt to register the Schema with Schema Registry.",
+      "default": true
+    },
+    "header.latest.compatibility.strict": {
+      "type": "boolean",
+      "description": "Only applies when use.latest.version is set to true. Verify that the latest subject version is backward compatible with the schema of the object being serialized. If the check fails, then an error results. If the check succeeds, then serialization is performed.",
+      "default": true
+    },
+    "key.latest.compatibility.strict": {
+      "type": "boolean",
+      "description": "Only applies when use.latest.version is set to true. Verify that the latest subject version is backward compatible with the schema of the object being serialized. If the check fails, then an error results. If the check succeeds, then serialization is performed.",
+      "default": true
+    },
+    "value.latest.compatibility.strict": {
+      "type": "boolean",
+      "description": "Only applies when use.latest.version is set to true. Verify that the latest subject version is backward compatible with the schema of the object being serialized. If the check fails, then an error results. If the check succeeds, then serialization is performed.",
+      "default": true
+    },
+    "header.max.schemas.per.subject": {
+      "type": "integer",
+      "description": "Maximum number of schemas to create or cache locally.",
+      "default": true
+    },
+    "key.max.schemas.per.subject": {
+      "type": "integer",
+      "description": "Maximum number of schemas to create or cache locally.",
+      "default": true
+    },
+    "value.max.schemas.per.subject": {
+      "type": "integer",
+      "description": "Maximum number of schemas to create or cache locally.",
+      "default": true
+    },
+    "key.subject.name.strategy": {
+      "type": "string",
+      "description": "Determines how to construct the subject name under which the key schema is registered with Schema Registry.",
+      "default": "io.confluent.kafka.serializers.subject.TopicNameStrategy"
+    },
+    "value.subject.name.strategy": {
+      "type": "string",
+      "description": "Determines how to construct the subject name under which the value schema is registered with Schema Registry.",
+      "default": "io.confluent.kafka.serializers.subject.TopicNameStrategy"
+    },
+    "key.converter.schemas.enable": {
+      "type": "boolean",
+      "description": "Enable schemas in the key converter",
+      "default": true
+    },
+    "value.converter.schemas.enable": {
+      "type": "boolean",
+      "description": "Enable schemas in the value converter",
+      "default": true
+    },
+    "header.converter.schemas.enable": {
+      "type": "boolean",
+      "description": "Enable schemas in the header converter",
+      "default": true
+    },
+    "key.converter.schema.registry.url": {
+      "type": "string",
+      "description": "Schema Registry URL used by the key converter"
+    },
+    "value.converter.schema.registry.url": {
+      "type": "string",
+      "description": "Schema Registry URL used by the value converter"
+    },
+    "header.converter.schema.registry.url": {
+      "type": "string",
+      "description": "Schema Registry URL used by the header converter"
+    },
+    "key.converter.basic.auth.credentials.source": {
+      "type": "string",
+      "enum": [
+        "USER_INFO",
+        "SASL_INHERIT",
+        "URL"
+      ],
+      "description": "Auth credentials source for the key converter for schema registry support"
+    },
+    "value.converter.basic.auth.credentials.source": {
+      "type": "string",
+      "enum": [
+        "USER_INFO",
+        "SASL_INHERIT",
+        "URL"
+      ],
+      "description": "Auth credentials source for the value converter for schema registry support"
+    },
+    "header.converter.basic.auth.credentials.source": {
+      "type": "string",
+      "enum": [
+        "USER_INFO",
+        "SASL_INHERIT",
+        "URL"
+      ],
+      "description": "Auth credentials source for the header converter for schema registry support"
+    },
+    "key.converter.schema.registry.basic.auth.user.info": {
+      "type": "string",
+      "description": "Username and password (user:pass) for schema registry used by key converter"
+    },
+    "value.converter.schema.registry.basic.auth.user.info": {
+      "type": "string",
+      "description": "Username and password (user:pass) for schema registry used by value converter"
+    },
+    "header.converter.schema.registry.basic.auth.user.info": {
+      "type": "string",
+      "description": "Username and password (user:pass) for schema registry used by header converter"
+    },
+    "key.converter.use.latest.version": {
+      "type": "boolean",
+      "description": "Schema Registry will use the latest version of the schema in the subject for serialization, only if auto.register.schemas is false.",
+      "default": false
+    },
+    "value.converter.use.latest.version": {
+      "type": "boolean",
+      "description": "Schema Registry will use the latest version of the schema in the subject for serialization, only if auto.register.schemas is false.",
+      "default": false
+    },
+    "header.converter.use.latest.version": {
+      "type": "boolean",
+      "description": "Schema Registry will use the latest version of the schema in the subject for serialization, only if auto.register.schemas is false.",
+      "default": false
+    },
+    "header.converter.scrub.invalid.names": {
+      "type": "boolean",
+      "description": "Whether to scrub invalid names by replacing invalid characters with valid characters",
+      "default": false
+    },
+    "key.converter.scrub.invalid.names": {
+      "type": "boolean",
+      "description": "Whether to scrub invalid names by replacing invalid characters with valid characters",
+      "default": false
+    },
+    "value.converter.scrub.invalid.names": {
+      "type": "boolean",
+      "description": "Whether to scrub invalid names by replacing invalid characters with valid characters",
+      "default": false
+    },
+    "header.converter.schemas.cache.config": {
+      "type": "integer",
+      "description": "The size of the schema cache used in the Avro converter.",
+      "default": 1000
+    },
+    "key.converter.schemas.cache.config": {
+      "type": "integer",
+      "description": "The size of the schema cache used in the Avro converter.",
+      "default": 1000
+    },
+    "value.converter.schemas.cache.config": {
+      "type": "integer",
+      "description": "The size of the schema cache used in the Avro converter.",
+      "default": 1000
+    },
+    "header.converter.enhanced.avro.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Avro schema support in the Avro Converter. When set to true, this property preserves Avro schema package information and Enums when going from Avro schema to Connect schema. This information is added back in when going from Connect schema to Avro schema.",
+      "default": false
+    },
+    "key.converter.enhanced.avro.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Avro schema support in the Avro Converter. When set to true, this property preserves Avro schema package information and Enums when going from Avro schema to Connect schema. This information is added back in when going from Connect schema to Avro schema.",
+      "default": false
+    },
+    "value.converter.enhanced.avro.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Avro schema support in the Avro Converter. When set to true, this property preserves Avro schema package information and Enums when going from Avro schema to Connect schema. This information is added back in when going from Connect schema to Avro schema.",
+      "default": false
+    },
+    "header.converter.connect.meta.data": {
+      "type": "boolean",
+      "description": "Allow the Connect converter to add its metadata to the output schema. The following metadata is added back in when going from Avro schema to Connect schema, doc, version, parameters, default value, name, type",
+      "default": true
+    },
+    "key.converter.connect.meta.data": {
+      "type": "boolean",
+      "description": "Allow the Connect converter to add its metadata to the output schema. The following metadata is added back in when going from Avro schema to Connect schema, doc, version, parameters, default value, name, type",
+      "default": true
+    },
+    "value.converter.connect.meta.data": {
+      "type": "boolean",
+      "description": "Allow the Connect converter to add its metadata to the output schema. The following metadata is added back in when going from Avro schema to Connect schema, doc, version, parameters, default value, name, type",
+      "default": true
+    },
+    "header.converter.enhanced.protobuf.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Protobuf schema support in the Avro Converter. When set to true, this property preserves Protobuf schema package information when going from Protobuf schema to Connect schema. This information is added back in when going from Connect schema to Protobuf schema.",
+      "default": false
+    },
+    "key.converter.enhanced.protobuf.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Protobuf schema support in the Avro Converter. When set to true, this property preserves Protobuf schema package information when going from Protobuf schema to Connect schema. This information is added back in when going from Connect schema to Protobuf schema.",
+      "default": false
+    },
+    "value.converter.enhanced.protobuf.schema.support": {
+      "type": "boolean",
+      "description": "Enable enhanced Protobuf schema support in the Avro Converter. When set to true, this property preserves Protobuf schema package information when going from Protobuf schema to Connect schema. This information is added back in when going from Connect schema to Protobuf schema.",
+      "default": false
+    },
+    "header.converter.generate.index.for.unions": {
+      "type": "boolean",
+      "description": "Protobuf: Whether to generate an index suffix for unions. By default, oneOf messages have their field names suffixed with an index (for example _0), which results in a column name of value_0.thing. To configure oneOf message field names without this suffix, set generate.index.for.unions to false",
+      "default": true
+    },
+    "key.converter.generate.index.for.unions": {
+      "type": "boolean",
+      "description": "Protobuf: Whether to generate an index suffix for unions. By default, oneOf messages have their field names suffixed with an index (for example _0), which results in a column name of value_0.thing. To configure oneOf message field names without this suffix, set generate.index.for.unions to false",
+      "default": true
+    },
+    "value.converter.generate.index.for.unions": {
+      "type": "boolean",
+      "description": "Protobuf: Whether to generate an index suffix for unions. By default, oneOf messages have their field names suffixed with an index (for example _0), which results in a column name of value_0.thing. To configure oneOf message field names without this suffix, set generate.index.for.unions to false",
+      "default": true
+    },
+    "header.converter.int.for.enums": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to represent enums as integers."
+    },
+    "header.converter.optional.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should be specified with an optional label."
+    },
+    "header.converter.generate.struct.for.nulls": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to generate a struct variable for null values."
+    },
+    "header.converter.wrapper.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should use primitive wrapper messages."
+    },
+    "header.converter.wrapper.for.raw.primitives": {
+      "type": "boolean",
+      "default": true,
+      "description": "Protobuf: Whether a wrapper message should be interpreted as a raw primitive at the root level."
+    },
+    "key.converter.int.for.enums": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to represent enums as integers."
+    },
+    "key.converter.optional.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should be specified with an optional label."
+    },
+    "key.converter.generate.struct.for.nulls": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to generate a struct variable for null values."
+    },
+    "key.converter.wrapper.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should use primitive wrapper messages."
+    },
+    "key.converter.wrapper.for.raw.primitives": {
+      "type": "boolean",
+      "default": true,
+      "description": "Protobuf: Whether a wrapper message should be interpreted as a raw primitive at the root level."
+    },
+    "value.converter.int.for.enums": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to represent enums as integers."
+    },
+    "value.converter.optional.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should be specified with an optional label."
+    },
+    "value.converter.generate.struct.for.nulls": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether to generate a struct variable for null values."
+    },
+    "value.converter.wrapper.for.nullables": {
+      "type": "boolean",
+      "default": false,
+      "description": "Protobuf: Whether nullable fields should use primitive wrapper messages."
+    },
+    "value.converter.wrapper.for.raw.primitives": {
+      "type": "boolean",
+      "default": true,
+      "description": "Protobuf: Whether a wrapper message should be interpreted as a raw primitive at the root level."
+    },
+    "header.object.additional.properties": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to allow additional properties for object schemas."
+    },
+    "header.use.optional.for.nonrequired": {
+      "type": "boolean",
+      "default": false,
+      "description": "JSON: Whether to set non-required properties to be optional."
+    },
+    "header.decimal.format": {
+      "type": "string",
+      "enum": [
+        "BASE64",
+        "NUMERIC"
+      ],
+      "default": "BASE64",
+      "description": "JSON: Controls which format this converter will serialize decimals in. Case-insensitive."
+    },
+    "header.replace.null.with.default": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to replace null fields with their default value. If true, default value is used; otherwise null remains."
+    },
+    "key.object.additional.properties": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to allow additional properties for object schemas."
+    },
+    "key.use.optional.for.nonrequired": {
+      "type": "boolean",
+      "default": false,
+      "description": "JSON: Whether to set non-required properties to be optional."
+    },
+    "key.decimal.format": {
+      "type": "string",
+      "enum": [
+        "BASE64",
+        "NUMERIC"
+      ],
+      "default": "BASE64",
+      "description": "JSON: Controls which format this converter will serialize decimals in. Case-insensitive."
+    },
+    "key.replace.null.with.default": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to replace null fields with their default value. If true, default value is used; otherwise null remains."
+    },
+    "value.object.additional.properties": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to allow additional properties for object schemas."
+    },
+    "value.use.optional.for.nonrequired": {
+      "type": "boolean",
+      "default": false,
+      "description": "JSON: Whether to set non-required properties to be optional."
+    },
+    "value.decimal.format": {
+      "type": "string",
+      "enum": [
+        "BASE64",
+        "NUMERIC"
+      ],
+      "default": "BASE64",
+      "description": "JSON: Controls which format this converter will serialize decimals in. Case-insensitive."
+    },
+    "value.replace.null.with.default": {
+      "type": "boolean",
+      "default": true,
+      "description": "JSON: Whether to replace null fields with their default value. If true, default value is used; otherwise null remains."
+    }
+  },
+  "additionalProperties": true,
+  "defaultSnippets": [
+    {
+      "label": "Converter Header: Avro with Schema Registry",
+      "x-lenses-io-ui": "Avro with Schema Registry",
+      "body": {
+        "header.converter": "io.confluent.connect.avro.AvroConverter",
+        "header.converter.schema.registry.url": "http://localhost:8081",
+        "header.converter.schemas.enable": true,
+        "# header.converter.basic.auth.credentials.source": "USER_INFO",
+        "# header.converter.schema.registry.basic.auth.user.info": "user:pass"
       }
     },
-    "additionalProperties": true,
-    "defaultSnippets": [
-      {
-        "label": "Converter Overrides: Avro with Schema Registry",
-        "description": "Configure Avro converters with Schema Registry integration",
-        "body": {
-          "key.converter": "io.confluent.connect.avro.AvroConverter",
-          "value.converter": "io.confluent.connect.avro.AvroConverter",
-          "key.converter.schema.registry.url": "http://localhost:8081",
-          "value.converter.schema.registry.url": "http://localhost:8081",
-          "key.converter.schemas.enable": true,
-          "value.converter.schemas.enable": true
-        }
-      },
-      {
-        "label": "Converter Overrides: JSON with Schema",
-        "description": "Configure JSON converters with schema support",
-        "body": {
-          "key.converter": "org.apache.kafka.connect.json.JsonConverter",
-          "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-          "key.converter.schemas.enable": true,
-          "value.converter.schemas.enable": true
-        }
-      },
-      {
-        "label": "Converter Overrides: String",
-        "description": "Configure String converters without schema",
-        "body": {
-          "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-          "value.converter": "org.apache.kafka.connect.storage.StringConverter",
-          "key.converter.schemas.enable": false,
-          "value.converter.schemas.enable": false
-        }
-      },
-      {
-        "label": "Converter Overrides: Avro with Schema Registry Auth",
-        "description": "Configure Avro converters with Schema Registry authentication",
-        "body": {
-          "key.converter": "io.confluent.connect.avro.AvroConverter",
-          "value.converter": "io.confluent.connect.avro.AvroConverter",
-          "key.converter.schema.registry.url": "http://localhost:8081",
-          "value.converter.schema.registry.url": "http://localhost:8081",
-          "key.converter.basic.auth.credentials.source": "USER_INFO",
-          "value.converter.basic.auth.credentials.source": "USER_INFO",
-          "key.converter.schema.registry.basic.auth.user.info": "user:pass",
-          "value.converter.schema.registry.basic.auth.user.info": "user:pass",
-          "key.converter.schemas.enable": true,
-          "value.converter.schemas.enable": true
-        }
+    {
+      "label": "Converter Key: Avro with Schema Registry",
+      "x-lenses-io-ui": "Avro with Schema Registry",
+      "body": {
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "# key.converter.basic.auth.credentials.source": "USER_INFO",
+        "# key.converter.schema.registry.basic.auth.user.info": "user:pass"
       }
-    ]
-  }
-  
+    },
+    {
+      "label": "Converter Value: Avro with Schema Registry",
+      "x-lenses-io-ui": "Avro with Schema Registry",
+      "body": {
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schemas.enable": true,
+        "# value.converter.basic.auth.credentials.source": "USER_INFO",
+        "# value.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Header: JSON with Schema Registry",
+      "x-lenses-io-ui": "JSON with Schema Registry",
+      "body": {
+        "header.converter": "io.confluent.connect.json.JsonSchemaConverter",
+        "header.converter.schema.registry.url": "http://localhost:8081",
+        "header.converter.schemas.enable": true,
+        "# header.converter.basic.auth.credentials.source": "USER_INFO",
+        "# header.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Key: JSON with Schema Registry",
+      "x-lenses-io-ui": "JSON with Schema Registry",
+      "body": {
+        "key.converter": "io.confluent.connect.json.JsonSchemaConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "# key.converter.basic.auth.credentials.source": "USER_INFO",
+        "# key.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Value: JSON with Schema Registry",
+      "x-lenses-io-ui": "JSON with Schema Registry",
+      "body": {
+        "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schemas.enable": true,
+        "# value.converter.basic.auth.credentials.source": "USER_INFO",
+        "# value.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Header: Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "body": {
+        "header.converter": "io.confluent.connect.protobuf.ProtobufConverter",
+        "header.converter.schema.registry.url": "http://localhost:8081",
+        "header.converter.schemas.enable": true,
+        "# header.converter.basic.auth.credentials.source": "USER_INFO",
+        "# header.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Key: Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "body": {
+        "key.converter": "io.confluent.connect.protobuf.ProtobufConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "key.converter.schemas.enable": true,
+        "# key.converter.basic.auth.credentials.source": "USER_INFO",
+        "# key.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+    {
+      "label": "Converter Value: Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "body": {
+        "value.converter": "io.confluent.connect.protobuf.ProtobufConverter",
+        "value.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter.schemas.enable": true,
+        "# value.converter.basic.auth.credentials.source": "USER_INFO",
+        "# value.converter.schema.registry.basic.auth.user.info": "user:pass"
+      }
+    },
+        {
+      "label": "Converter Header: JSON with embedded schema",
+      "x-lenses-io-ui": "JSON with embedded schema",
+      "body": {
+        "header.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "header.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Key: JSON with embedded schema",
+      "x-lenses-io-ui": "JSON with embedded schema",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Value: JSON with embedded schema",
+      "x-lenses-io-ui": "JSON with embedded schema",
+      "body": {
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": true
+      }
+    },
+    {
+      "label": "Converter Header: JSON no schema",
+      "x-lenses-io-ui": "JSON no embedded schema",
+      "body": {
+        "header.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "header.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Key: JSON no embedded schema",
+      "x-lenses-io-ui": "JSON no embedded schema",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Value: JSON no embedded schema",
+      "x-lenses-io-ui": "JSON no embedded schema",
+      "body": {
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": false
+      }
+    },
+    {
+      "label": "Converter Header: String",
+      "x-lenses-io-ui": "String",
+      "body": {
+        "header.converter": "org.apache.kafka.connect.storage.StringConverter"
+      }
+    },
+    {
+      "label": "Converter Key: String",
+      "x-lenses-io-ui": "String",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter"
+      }
+    },
+    {
+      "label": "Converter Value: String",
+      "x-lenses-io-ui": "String",
+      "body": {
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter"
+      }
+    },
+    {
+      "label": "Converter Header: Bytes passthrough",
+      "x-lenses-io-ui": "Bytes",
+      "body": {
+        "header.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
+      }
+    },
+    {
+      "label": "Converter Key: Bytes passthrough",
+      "x-lenses-io-ui": "Bytes",
+      "body": {
+        "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
+      }
+    },
+    {
+      "label": "Converter Value: Bytes passthrough",
+      "x-lenses-io-ui": "Bytes",
+      "body": {
+        "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
+      }
+    }
+  ]
+}
