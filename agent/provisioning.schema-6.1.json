@@ -1294,8 +1294,6 @@
                 }
               }
             ],
-            "title": "Basic Authentication Requirement",
-            "description": "When basicAuthCredentialsSource is set to USER_INFO or URL, basicAuthUserInfo is required",
             "if": {
               "properties": {
                 "basicAuthCredentialsSource": {
