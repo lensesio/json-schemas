@@ -404,8 +404,9 @@
   "defaultSnippets": [
     {
       "label": "Converter Header: Avro with Schema Registry",
-      "x-lenses-io-ui": "Avro with Schema Registry",
+      "x-lenses-io-ui": "Header: Avro with Schema Registry",
       "body": {
+        "##": "Converter Header: Avro with Schema Registry",
         "header.converter": "io.confluent.connect.avro.AvroConverter",
         "header.converter.schema.registry.url": "http://localhost:8081",
         "header.converter.schemas.enable": true,
@@ -415,8 +416,9 @@
     },
     {
       "label": "Converter Key: Avro with Schema Registry",
-      "x-lenses-io-ui": "Avro with Schema Registry",
+      "x-lenses-io-ui": "Key: Avro with Schema Registry",
       "body": {
+        "##": "Converter Key: Avro with Schema Registry",
         "key.converter": "io.confluent.connect.avro.AvroConverter",
         "key.converter.schema.registry.url": "http://localhost:8081",
         "key.converter.schemas.enable": true,
@@ -426,8 +428,9 @@
     },
     {
       "label": "Converter Value: Avro with Schema Registry",
-      "x-lenses-io-ui": "Avro with Schema Registry",
+      "x-lenses-io-ui": "Value: Avro with Schema Registry",
       "body": {
+        "##": "Converter Value: Avro with Schema Registry",
         "value.converter": "io.confluent.connect.avro.AvroConverter",
         "value.converter.schema.registry.url": "http://localhost:8081",
         "value.converter.schemas.enable": true,
@@ -437,8 +440,9 @@
     },
     {
       "label": "Converter Header: JSON with Schema Registry",
-      "x-lenses-io-ui": "JSON with Schema Registry",
+      "x-lenses-io-ui": "Header: JSON with Schema Registry",
       "body": {
+        "##": "Converter Header: JSON with Schema Registry",
         "header.converter": "io.confluent.connect.json.JsonSchemaConverter",
         "header.converter.schema.registry.url": "http://localhost:8081",
         "header.converter.schemas.enable": true,
@@ -448,8 +452,9 @@
     },
     {
       "label": "Converter Key: JSON with Schema Registry",
-      "x-lenses-io-ui": "JSON with Schema Registry",
+      "x-lenses-io-ui": "Key: JSON with Schema Registry",
       "body": {
+        "##": "Converter Key: JSON with Schema Registry",
         "key.converter": "io.confluent.connect.json.JsonSchemaConverter",
         "key.converter.schema.registry.url": "http://localhost:8081",
         "key.converter.schemas.enable": true,
@@ -459,8 +464,9 @@
     },
     {
       "label": "Converter Value: JSON with Schema Registry",
-      "x-lenses-io-ui": "JSON with Schema Registry",
+      "x-lenses-io-ui": "Value: JSON with Schema Registry",
       "body": {
+        "##": "Converter Value: JSON with Schema Registry",
         "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
         "value.converter.schema.registry.url": "http://localhost:8081",
         "value.converter.schemas.enable": true,
@@ -470,8 +476,9 @@
     },
     {
       "label": "Converter Header: Protobuf with Schema Registry",
-      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Header: Protobuf with Schema Registry",
       "body": {
+        "##": "Converter Header: Protobuf with Schema Registry",
         "header.converter": "io.confluent.connect.protobuf.ProtobufConverter",
         "header.converter.schema.registry.url": "http://localhost:8081",
         "header.converter.schemas.enable": true,
@@ -481,8 +488,9 @@
     },
     {
       "label": "Converter Key: Protobuf with Schema Registry",
-      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Key: Protobuf with Schema Registry",
       "body": {
+        "##": "Converter Key: Protobuf with Schema Registry",
         "key.converter": "io.confluent.connect.protobuf.ProtobufConverter",
         "key.converter.schema.registry.url": "http://localhost:8081",
         "key.converter.schemas.enable": true,
@@ -492,8 +500,9 @@
     },
     {
       "label": "Converter Value: Protobuf with Schema Registry",
-      "x-lenses-io-ui": "Protobuf with Schema Registry",
+      "x-lenses-io-ui": "Value: Protobuf with Schema Registry",
       "body": {
+        "##": "Converter Value: Protobuf with Schema Registry",
         "value.converter": "io.confluent.connect.protobuf.ProtobufConverter",
         "value.converter.schema.registry.url": "http://localhost:8081",
         "value.converter.schemas.enable": true,
@@ -503,91 +512,103 @@
     },
         {
       "label": "Converter Header: JSON with embedded schema",
-      "x-lenses-io-ui": "JSON with embedded schema",
+      "x-lenses-io-ui": "Header: JSON with embedded schema",
       "body": {
+        "##": "Converter Header: JSON with embedded schema",
         "header.converter": "org.apache.kafka.connect.json.JsonConverter",
         "header.converter.schemas.enable": true
       }
     },
     {
       "label": "Converter Key: JSON with embedded schema",
-      "x-lenses-io-ui": "JSON with embedded schema",
+      "x-lenses-io-ui": "Key: JSON with embedded schema",
       "body": {
+        "##": "Converter Key: JSON with embedded schema",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
         "key.converter.schemas.enable": true
       }
     },
     {
       "label": "Converter Value: JSON with embedded schema",
-      "x-lenses-io-ui": "JSON with embedded schema",
+      "x-lenses-io-ui": "Value: JSON with embedded schema",
       "body": {
+        "##": "Converter Value: JSON with embedded schema",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": true
       }
     },
     {
       "label": "Converter Header: JSON no schema",
-      "x-lenses-io-ui": "JSON no embedded schema",
+      "x-lenses-io-ui": "Header: JSON no embedded schema",
       "body": {
+        "##": "Converter Header: JSON no embedded schema",
         "header.converter": "org.apache.kafka.connect.json.JsonConverter",
         "header.converter.schemas.enable": false
       }
     },
     {
       "label": "Converter Key: JSON no embedded schema",
-      "x-lenses-io-ui": "JSON no embedded schema",
+      "x-lenses-io-ui": "Key: JSON no embedded schema",
       "body": {
+        "##": "Converter Key: JSON no embedded schema",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
         "key.converter.schemas.enable": false
       }
     },
     {
       "label": "Converter Value: JSON no embedded schema",
-      "x-lenses-io-ui": "JSON no embedded schema",
+      "x-lenses-io-ui": "Value: JSON no embedded schema",
       "body": {
+        "##": "Converter Value: JSON no embedded schema",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": false
       }
     },
     {
       "label": "Converter Header: String",
-      "x-lenses-io-ui": "String",
+      "x-lenses-io-ui": "Header: String",
       "body": {
+        "##": "Converter Header: String",
         "header.converter": "org.apache.kafka.connect.storage.StringConverter"
       }
     },
     {
       "label": "Converter Key: String",
-      "x-lenses-io-ui": "String",
+      "x-lenses-io-ui": "Key: String",
       "body": {
+        "##": "Converter Key: String",
         "key.converter": "org.apache.kafka.connect.storage.StringConverter"
       }
     },
     {
       "label": "Converter Value: String",
-      "x-lenses-io-ui": "String",
+      "x-lenses-io-ui": "Value: String",
       "body": {
+        "##": "Converter Value: String",
         "value.converter": "org.apache.kafka.connect.storage.StringConverter"
       }
     },
     {
       "label": "Converter Header: Bytes passthrough",
-      "x-lenses-io-ui": "Bytes",
+      "x-lenses-io-ui": "Header: Bytes",
       "body": {
+        "##": "Converter Header: Bytes passthrough",
         "header.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
       }
     },
     {
       "label": "Converter Key: Bytes passthrough",
-      "x-lenses-io-ui": "Bytes",
+      "x-lenses-io-ui": "Key: Bytes",
       "body": {
+        "##": "Converter Key: Bytes passthrough",
         "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
       }
     },
     {
       "label": "Converter Value: Bytes passthrough",
-      "x-lenses-io-ui": "Bytes",
+      "x-lenses-io-ui": "Value: Bytes",
       "body": {
+        "##": "Converter Value: Bytes passthrough",
         "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
       }
     }
