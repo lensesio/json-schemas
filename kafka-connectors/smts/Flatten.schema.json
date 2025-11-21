@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/Flatten",
+  "type": "object",
+  "title": "Flatten Single Message Transform",
+  "description": "Configuration schema for Flatten transformation. Flattens nested structures by concatenating field names with a delimiter.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.Flatten$Key' for key transformation or 'org.apache.kafka.connect.transforms.Flatten$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.Flatten$Key",
+        "org.apache.kafka.connect.transforms.Flatten$Value"
+      ],
+      "title": "type"
+    },
+    "delimiter": {
+      "description": "The delimiter used to concatenate nested field names. Default is '.'",
+      "type": "string",
+      "default": ".",
+      "title": "delimiter"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "Flatten - Flatten nested structures with default delimiter",
+      "description": "Flatten nested structures using dot (.) as the delimiter. Nested fields like 'user.name' become 'user.name' at the top level.",
+      "markdownDescription": "**Flatten** - Flatten nested structures using dot (`.`) as the delimiter.\n\nNested fields like `user.name` become `user.name` at the top level.\n\n**Example:** `{user: {name: \"John\"}}` → `{user.name: \"John\"}`",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Flatten$Value"
+      }
+    },
+    {
+      "label": "Flatten - Flatten with custom delimiter",
+      "description": "Flatten nested structures using a custom delimiter. Replace '_' with your preferred delimiter (e.g., '_', '-', etc.).",
+      "markdownDescription": "**Flatten** - Flatten nested structures using a custom delimiter.\n\nReplace `_` with your preferred delimiter (e.g., `_`, `-`, etc.).\n\n**Example:** With delimiter `_`, `{user: {name: \"John\"}}` → `{user_name: \"John\"}`",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Flatten$Value",
+        "delimiter": "_"
+      }
+    }
+  ]
+}
+

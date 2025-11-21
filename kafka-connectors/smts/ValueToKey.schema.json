@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/ValueToKey",
+  "type": "object",
+  "title": "ValueToKey Single Message Transform",
+  "description": "Configuration schema for ValueToKey transformation. Extracts fields from the value and uses them as the key.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.ValueToKey'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.ValueToKey"
+      ],
+      "title": "type"
+    },
+    "fields": {
+      "description": "Comma-separated list of field names to extract from the value and use as the key.",
+      "type": "string",
+      "title": "fields"
+    }
+  },
+  "required": ["type", "fields"],
+  "defaultSnippets": [
+    {
+      "label": "ValueToKey - Extract single field as key",
+      "description": "Extract a single field from the value to use as the record key. Replace 'id' with your actual field name.",
+      "markdownDescription": "**ValueToKey** - Extract a single field from the value to use as the record key.\n\nReplace `id` with your actual field name.\n\n**Use case:** When records have no key but you need to extract a key from the value for partitioning or deduplication.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ValueToKey",
+        "fields": "id"
+      }
+    },
+    {
+      "label": "ValueToKey - Extract multiple fields as composite key",
+      "description": "Extract multiple fields from the value to create a composite key. Replace field names with your actual fields.",
+      "markdownDescription": "**ValueToKey** - Extract multiple fields from the value to create a composite key.\n\nReplace field names with your actual fields.\n\n**Use case:** Create a composite key from multiple value fields (e.g., `userId` + `timestamp` for unique identification).",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ValueToKey",
+        "fields": "userId,timestamp"
+      }
+    }
+  ]
+}
+

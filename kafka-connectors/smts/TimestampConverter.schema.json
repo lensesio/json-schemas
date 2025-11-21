@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/TimestampConverter",
+  "type": "object",
+  "title": "TimestampConverter Single Message Transform",
+  "description": "Configuration schema for TimestampConverter transformation. Converts timestamps between different formats.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.TimestampConverter$Key' for key transformation or 'org.apache.kafka.connect.transforms.TimestampConverter$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.TimestampConverter$Key",
+        "org.apache.kafka.connect.transforms.TimestampConverter$Value"
+      ],
+      "title": "type"
+    },
+    "target.type": {
+      "description": "The target timestamp type. Options: 'unix', 'Date', 'Time', 'Timestamp'.",
+      "type": "string",
+      "enum": [
+        "unix",
+        "Date",
+        "Time",
+        "Timestamp"
+      ],
+      "title": "target.type"
+    },
+    "field": {
+      "description": "The field name containing the timestamp to convert. If not specified, converts the record timestamp.",
+      "type": "string",
+      "title": "field"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for parsing string timestamps. Required when source is a string.",
+      "type": "string",
+      "title": "format"
+    }
+  },
+  "required": ["type", "target.type"],
+  "defaultSnippets": [
+    {
+      "label": "TimestampConverter - Convert record timestamp to Unix",
+      "description": "Convert the record timestamp to Unix epoch time (milliseconds since 1970-01-01). No field specified means it converts the record timestamp itself.",
+      "markdownDescription": "**TimestampConverter** - Convert the record timestamp to Unix epoch time.\n\nNo field specified means it converts the record timestamp itself (Kafka's internal timestamp).\n\n**Target types:** `unix` (epoch milliseconds), `Date` (date only), `Time` (time only), `Timestamp` (date + time)\n\n**Use case:** Standardize timestamp formats for downstream systems that expect Unix timestamps.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "target.type": "unix"
+      }
+    },
+    {
+      "label": "TimestampConverter - Convert field to Date",
+      "description": "Convert a timestamp field to Date type. Replace 'timestamp' with your actual field name. Target types: unix, Date, Time, Timestamp.",
+      "markdownDescription": "**TimestampConverter** - Convert a timestamp field to Date type.\n\nReplace `timestamp` with your actual field name.\n\n**Target types:**\n- `unix` - Unix epoch milliseconds\n- `Date` - Date only (no time)\n- `Time` - Time only (no date)\n- `Timestamp` - Full date and time\n\n**Use case:** Extract just the date portion from a timestamp field for date-based partitioning or filtering.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "target.type": "Date",
+        "field": "timestamp"
+      }
+    },
+    {
+      "label": "TimestampConverter - Convert string field with format",
+      "description": "Convert a string field containing a timestamp to Timestamp type. Format is required when source is a string. Replace field name and format pattern as needed.",
+      "markdownDescription": "**TimestampConverter** - Convert a string field containing a timestamp to Timestamp type.\n\nFormat is required when source is a string. Use SimpleDateFormat patterns (e.g., `yyyy-MM-dd HH:mm:ss`). Replace field name and format pattern as needed.\n\n**Common formats:**\n- `yyyy-MM-dd HH:mm:ss` - Standard datetime\n- `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'` - ISO 8601\n- `MM/dd/yyyy` - US date format\n\n**Use case:** Parse string timestamps from external systems into proper timestamp types for processing.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "target.type": "Timestamp",
+        "field": "dateString",
+        "format": "yyyy-MM-dd HH:mm:ss"
+      }
+    }
+  ]
+}
+

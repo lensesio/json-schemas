@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertSourcePartitionOrOffsetValue",
+  "type": "object",
+  "title": "InsertSourcePartitionOrOffsetValue Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertSourcePartitionOrOffsetValue transformation. Inserts source partition or offset information into a field in the record value.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertSourcePartitionOrOffsetValue$Value'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertSourcePartitionOrOffsetValue$Value"
+      ],
+      "title": "type"
+    },
+    "field.name": {
+      "description": "The name of the field to insert the partition or offset into.",
+      "type": "string",
+      "title": "field.name"
+    },
+    "source.type": {
+      "description": "The type of source information to insert. Options: 'partition' or 'offset'.",
+      "type": "string",
+      "enum": [
+        "partition",
+        "offset"
+      ],
+      "title": "source.type"
+    }
+  },
+  "required": ["type", "field.name", "source.type"],
+  "defaultSnippets": [
+    {
+      "label": "InsertSourcePartitionOrOffsetValue - Insert partition",
+      "description": "Insert the source partition number into a field in the record value. Useful for tracking which partition a record came from. Replace 'kafka_partition' with your desired field name.",
+      "markdownDescription": "**InsertSourcePartitionOrOffsetValue** (Lenses) - Insert the source partition number into a field in the record value.\n\nUseful for tracking which partition a record came from. Replace `kafka_partition` with your desired field name.\n\n**What it does:** Adds the Kafka partition number (0, 1, 2, etc.) to the record payload.\n\n**Use case:** Track partition information for debugging, data lineage, or partitioning logic in downstream systems. Essential for understanding data distribution across Kafka partitions.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertSourcePartitionOrOffsetValue$Value",
+        "field.name": "kafka_partition",
+        "source.type": "partition"
+      }
+    },
+    {
+      "label": "InsertSourcePartitionOrOffsetValue - Insert offset",
+      "description": "Insert the source offset into a field in the record value. Useful for tracking the exact position of a record. Replace 'kafka_offset' with your desired field name.",
+      "markdownDescription": "**InsertSourcePartitionOrOffsetValue** (Lenses) - Insert the source offset into a field in the record value.\n\nUseful for tracking the exact position of a record. Replace `kafka_offset` with your desired field name.\n\n**What it does:** Adds the Kafka offset (message position within the partition) to the record payload.\n\n**Use case:** Track exact message position for debugging, reprocessing, or audit trails. Useful for identifying specific messages or implementing idempotency.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertSourcePartitionOrOffsetValue$Value",
+        "field.name": "kafka_offset",
+        "source.type": "offset"
+      }
+    }
+  ]
+}
+

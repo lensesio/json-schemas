@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/TimestampRouter",
+  "type": "object",
+  "title": "TimestampRouter Single Message Transform",
+  "description": "Configuration schema for TimestampRouter transformation. Routes messages to topics with names based on the record timestamp.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.TimestampRouter'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.TimestampRouter"
+      ],
+      "title": "type"
+    },
+    "topic.format": {
+      "description": "Format string for the topic name. Use ${topic} as a placeholder for the original topic name and ${timestamp} for the formatted timestamp. Default is '${topic}-${timestamp}'.",
+      "type": "string",
+      "default": "${topic}-${timestamp}",
+      "title": "topic.format"
+    },
+    "timestamp.format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. Default is 'yyyyMMdd'.",
+      "type": "string",
+      "default": "yyyyMMdd",
+      "title": "timestamp.format"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "TimestampRouter - Default format (yyyyMMdd)",
+      "description": "Route messages to topics with format '${topic}-yyyyMMdd' based on record timestamp. Uses default date format.",
+      "markdownDescription": "**TimestampRouter** - Route messages to topics with format `${topic}-yyyyMMdd` based on record timestamp.\n\nUses default date format `yyyyMMdd`.\n\n**Example:** Topic `events` with timestamp 2024-01-15 → `events-20240115`\n\n**Use case:** Daily partitioning of topics by date.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.TimestampRouter"
+      }
+    },
+    {
+      "label": "TimestampRouter - Custom format with time",
+      "description": "Route messages with custom topic and timestamp format. Adjust timestamp.format to match your partitioning needs (e.g., 'yyyy-MM-dd-HH' for hourly partitions).",
+      "markdownDescription": "**TimestampRouter** - Route messages with custom topic and timestamp format.\n\nAdjust `timestamp.format` to match your partitioning needs:\n- `yyyy-MM-dd-HH` for hourly partitions\n- `yyyy-MM-dd` for daily partitions\n- `yyyy-MM` for monthly partitions\n\n**Example:** Topic `events` with timestamp 2024-01-15 14:30 → `events-2024-01-15-14`",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.TimestampRouter",
+        "topic.format": "${topic}-${timestamp}",
+        "timestamp.format": "yyyy-MM-dd-HH"
+      }
+    }
+  ]
+}
+

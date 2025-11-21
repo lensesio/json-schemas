@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/HoistField",
+  "type": "object",
+  "title": "HoistField Single Message Transform",
+  "description": "Configuration schema for HoistField transformation. Hoists a nested field to the top level of the record.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.HoistField$Key' for key transformation or 'org.apache.kafka.connect.transforms.HoistField$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.HoistField$Key",
+        "org.apache.kafka.connect.transforms.HoistField$Value"
+      ],
+      "title": "type"
+    },
+    "field": {
+      "description": "The nested field name to hoist to the top level. Use dot notation for nested fields (e.g., 'user.name').",
+      "type": "string",
+      "title": "field"
+    }
+  },
+  "required": ["type", "field"],
+  "defaultSnippets": [
+    {
+      "label": "HoistField - Hoist nested field",
+      "description": "Move a nested field to the top level. Use dot notation for nested fields (e.g., 'user.name'). Replace with your actual nested field path.",
+      "markdownDescription": "**HoistField** - Move a nested field to the top level of the record.\n\nUse dot notation for nested fields (e.g., `user.name`). Replace with your actual nested field path.\n\n**Example:** `{user: {name: \"John\"}}` → `{name: \"John\"}`\n\n**Use case:** Simplify record structure when you only need a specific nested field.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.HoistField$Value",
+        "field": "user.name"
+      }
+    },
+    {
+      "label": "HoistField - Hoist deeply nested field",
+      "description": "Move a deeply nested field to the top level. Supports multiple levels of nesting. Replace with your actual nested field path.",
+      "markdownDescription": "**HoistField** - Move a deeply nested field to the top level.\n\nSupports multiple levels of nesting. Replace with your actual nested field path.\n\n**Example:** `{metadata: {timestamp: {created: 1234567890}}}` → `{created: 1234567890}`\n\n**Use case:** Extract deeply nested fields for easier access in downstream systems.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.HoistField$Value",
+        "field": "metadata.timestamp.created"
+      }
+    }
+  ]
+}
+

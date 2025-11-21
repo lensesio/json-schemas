@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/ExtractField",
+  "type": "object",
+  "title": "ExtractField Single Message Transform",
+  "description": "Configuration schema for ExtractField transformation. Extracts a field from a struct and uses it as the key or value.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.ExtractField$Key' for key transformation or 'org.apache.kafka.connect.transforms.ExtractField$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "org.apache.kafka.connect.transforms.ExtractField$Value"
+      ],
+      "title": "type"
+    },
+    "field": {
+      "description": "The field name to extract from the struct.",
+      "type": "string",
+      "title": "field"
+    }
+  },
+  "required": ["type", "field"],
+  "defaultSnippets": [
+    {
+      "label": "ExtractField - Extract value field",
+      "description": "Extract a field from the record value and use it as the new value. Replace 'id' with your actual field name.",
+      "markdownDescription": "**ExtractField** - Extract a field from the record value and use it as the new value.\n\nReplace `id` with your actual field name.\n\n**Use case:** When you need to simplify a record by extracting a single field.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ExtractField$Value",
+        "field": "id"
+      }
+    },
+    {
+      "label": "ExtractField - Extract key field",
+      "description": "Extract a field from the record key and use it as the new key. Replace 'userId' with your actual key field name.",
+      "markdownDescription": "**ExtractField** - Extract a field from the record key and use it as the new key.\n\nReplace `userId` with your actual key field name.\n\n**Use case:** When you need to simplify a composite key by extracting a single field.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+        "field": "userId"
+      }
+    }
+  ]
+}
+

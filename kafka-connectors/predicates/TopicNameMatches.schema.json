@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/predicates/TopicNameMatches",
+  "type": "object",
+  "title": "TopicNameMatches Predicate",
+  "description": "Configuration schema for TopicNameMatches predicate. Evaluates to true if the topic name matches the specified regex pattern.",
+  "properties": {
+    "type": {
+      "description": "The predicate type. Use 'org.apache.kafka.connect.transforms.predicates.TopicNameMatches'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.predicates.TopicNameMatches"
+      ],
+      "title": "type"
+    },
+    "pattern": {
+      "description": "Regular expression pattern to match against the topic name. The predicate evaluates to true if the topic name matches this pattern.",
+      "type": "string",
+      "title": "pattern"
+    }
+  },
+  "required": ["type", "pattern"],
+  "defaultSnippets": [
+    {
+      "label": "TopicNameMatches - Match topics with prefix",
+      "description": "Predicate that evaluates to true if the topic name matches the regex pattern. Replace 'user-.*' with your pattern.",
+      "markdownDescription": "**TopicNameMatches** - Evaluates to `true` if the topic name matches the specified regex pattern.\n\nReplace `user-.*` with your pattern.\n\n**Use case:**\n- Filter or route messages from topics matching a pattern (e.g., `user-.*`, `order-.*`)\n- Apply transforms only to specific topic groups\n- Route messages to different sinks based on topic naming conventions\n\n**Example:** Filter records from topics starting with 'user-':\n```\ntransforms=filterUserTopics\npredicates=isUserTopic\npredicates.isUserTopic.type=org.apache.kafka.connect.transforms.predicates.TopicNameMatches\npredicates.isUserTopic.pattern=user-.*\ntransforms.filterUserTopics.type=org.apache.kafka.connect.transforms.Filter\ntransforms.filterUserTopics.predicate=isUserTopic\n```\n\n**Common patterns:**\n- `user-.*` - Topics starting with 'user-'\n- `.*-production` - Topics ending with '-production'\n- `order-[0-9]+` - Topics matching 'order-' followed by digits",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+        "pattern": "user-.*"
+      }
+    },
+    {
+      "label": "TopicNameMatches - Match production topics",
+      "description": "Match topics ending with '-production'. Replace pattern as needed.",
+      "markdownDescription": "**TopicNameMatches** - Match topics ending with '-production'.\n\nReplace pattern as needed.\n\n**Use case:** Apply transforms only to production topics, filtering out test/dev topics.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+        "pattern": ".*-production"
+      }
+    }
+  ]
+}
+

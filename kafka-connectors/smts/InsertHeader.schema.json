@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertHeader",
+  "type": "object",
+  "title": "InsertHeader Single Message Transform",
+  "description": "Configuration schema for InsertHeader transformation. Inserts a header with a static value or metadata.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.InsertHeader'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.InsertHeader"
+      ],
+      "title": "type"
+    },
+    "header": {
+      "description": "The name of the header to insert.",
+      "type": "string",
+      "title": "header"
+    },
+    "value.literal": {
+      "description": "Static literal value to insert into the header.",
+      "type": "string",
+      "title": "value.literal"
+    },
+    "value": {
+      "description": "Value to insert into the header. Can be a literal string or a reference to metadata (e.g., '${topic}', '${partition}', '${offset}').",
+      "type": "string",
+      "title": "value"
+    }
+  },
+  "required": ["type", "header"],
+  "defaultSnippets": [
+    {
+      "label": "InsertHeader - Insert static header value",
+      "description": "Insert a header with a static literal value. Replace header name and value with your desired values.",
+      "markdownDescription": "**InsertHeader** - Insert a header with a static literal value.\n\nReplace header name and value with your desired values.\n\n**Use case:** Add metadata like source system name, environment, or version to all records for routing, filtering, or auditing.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.InsertHeader",
+        "header": "X-Source",
+        "value.literal": "kafka-connect"
+      }
+    },
+    {
+      "label": "InsertHeader - Insert topic name as header",
+      "description": "Insert a header with metadata. Use ${topic}, ${partition}, or ${offset} as placeholders. Replace header name as needed.",
+      "markdownDescription": "**InsertHeader** - Insert a header with Kafka metadata.\n\nUse `${topic}`, `${partition}`, or `${offset}` as placeholders. Replace header name as needed.\n\n**Available placeholders:**\n- `${topic}` - Source topic name\n- `${partition}` - Partition number\n- `${offset}` - Record offset\n\n**Use case:** Track message origin for debugging, routing, or audit trails.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.InsertHeader",
+        "header": "X-Source-Topic",
+        "value": "${topic}"
+      }
+    }
+  ]
+}
+

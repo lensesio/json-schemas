@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/ReplaceHeader",
+  "type": "object",
+  "title": "ReplaceHeader Single Message Transform",
+  "description": "Configuration schema for ReplaceHeader transformation. Renames or removes headers from records.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.ReplaceHeader'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.ReplaceHeader"
+      ],
+      "title": "type"
+    },
+    "renames": {
+      "description": "Comma-separated list of header rename mappings in the format 'old:new'. Example: 'oldHeader1:newHeader1,oldHeader2:newHeader2'",
+      "type": "string",
+      "title": "renames"
+    },
+    "exclude": {
+      "description": "Comma-separated list of headers to exclude (remove) from the output.",
+      "type": "string",
+      "title": "exclude"
+    },
+    "include": {
+      "description": "Comma-separated list of headers to include in the output. If specified, only these headers will be included.",
+      "type": "string",
+      "title": "include"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "ReplaceHeader - Rename headers",
+      "description": "Rename headers using the format 'oldName:newName'. Multiple renames are comma-separated. Replace with your actual header names.",
+      "markdownDescription": "**ReplaceHeader** - Rename headers using the format `oldName:newName`.\n\nMultiple renames are comma-separated. Replace with your actual header names.\n\n**Use case:** Standardize header naming conventions or rename headers to match downstream system requirements.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceHeader",
+        "renames": "oldHeader1:newHeader1,oldHeader2:newHeader2"
+      }
+    },
+    {
+      "label": "ReplaceHeader - Exclude headers",
+      "description": "Remove specified headers from records. Replace header names with the headers you want to exclude.",
+      "markdownDescription": "**ReplaceHeader** - Remove specified headers from records.\n\nReplace header names with the headers you want to exclude.\n\n**Use case:** Remove sensitive headers (auth tokens, API keys) or unnecessary headers before sending to downstream systems.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceHeader",
+        "exclude": "sensitiveHeader1,sensitiveHeader2"
+      }
+    },
+    {
+      "label": "ReplaceHeader - Include only specific headers",
+      "description": "Keep only the specified headers. All other headers will be removed. Replace with your actual header names.",
+      "markdownDescription": "**ReplaceHeader** - Keep only the specified headers.\n\nAll other headers will be removed. Replace with your actual header names.\n\n**Use case:** Whitelist only necessary headers for security or to reduce message size.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceHeader",
+        "include": "header1,header2,header3"
+      }
+    }
+  ]
+}
+

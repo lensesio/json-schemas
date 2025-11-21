@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/predicates/HasHeaderKey",
+  "type": "object",
+  "title": "HasHeaderKey Predicate",
+  "description": "Configuration schema for HasHeaderKey predicate. Evaluates to true if the record has a header with the specified key.",
+  "properties": {
+    "type": {
+      "description": "The predicate type. Use 'org.apache.kafka.connect.transforms.predicates.HasHeaderKey'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.predicates.HasHeaderKey"
+      ],
+      "title": "type"
+    },
+    "name": {
+      "description": "The name of the header key to check for. The predicate evaluates to true if a header with this key exists.",
+      "type": "string",
+      "title": "name"
+    }
+  },
+  "required": ["type", "name"],
+  "defaultSnippets": [
+    {
+      "label": "HasHeaderKey - Check for correlation ID header",
+      "description": "Predicate that evaluates to true if the record has a header with the specified key. Replace 'correlationId' with your header name.",
+      "markdownDescription": "**HasHeaderKey** - Evaluates to `true` if the record has a header with the specified key.\n\nReplace `correlationId` with your header name.\n\n**Use case:**\n- Filter records that have required headers (e.g., correlation IDs, trace IDs)\n- Route messages based on header presence\n- Process only records with specific metadata headers\n\n**Example:** Filter records that have a correlation ID header:\n```\ntransforms=filterWithCorrelationId\npredicates=hasCorrelationId\npredicates.hasCorrelationId.type=org.apache.kafka.connect.transforms.predicates.HasHeaderKey\npredicates.hasCorrelationId.name=correlationId\ntransforms.filterWithCorrelationId.type=org.apache.kafka.connect.transforms.Filter\ntransforms.filterWithCorrelationId.predicate=hasCorrelationId\n```",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.HasHeaderKey",
+        "name": "correlationId"
+      }
+    },
+    {
+      "label": "HasHeaderKey - Check for trace ID header",
+      "description": "Check if record has a trace ID header. Replace 'traceId' with your header name.",
+      "markdownDescription": "**HasHeaderKey** - Check if record has a trace ID header.\n\nReplace `traceId` with your header name.\n\n**Use case:** Filter or route messages based on distributed tracing headers for observability.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.HasHeaderKey",
+        "name": "traceId"
+      }
+    }
+  ]
+}
+

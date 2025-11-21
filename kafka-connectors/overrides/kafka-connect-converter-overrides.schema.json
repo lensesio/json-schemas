@@ -404,6 +404,8 @@
   "defaultSnippets": [
     {
       "label": "Converter Header: Avro with Schema Registry",
+      "description": "Configure header converter to use Avro format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Avro provides efficient binary serialization with schema evolution support.",
+      "markdownDescription": "**Avro Converter with Schema Registry** - Configure header converter to use Avro format.\n\n**What is Avro?** A binary serialization format that's compact, fast, and supports schema evolution. Headers are smaller than JSON and deserialization is faster.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- Production environments requiring efficient serialization\n- When you need schema evolution (changing schemas over time)\n- High-throughput scenarios where message size matters\n- Multi-language environments (Avro works across Java, Python, Go, etc.)\n\n**Replace:** Schema Registry URL and uncomment authentication if needed.",
       "x-lenses-io-ui": "Header: Avro with Schema Registry",
       "body": {
         "##": "Converter Header: Avro with Schema Registry",
@@ -416,6 +418,8 @@
     },
     {
       "label": "Converter Key: Avro with Schema Registry",
+      "description": "Configure key converter to use Avro format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Avro provides efficient binary serialization with schema evolution support.",
+      "markdownDescription": "**Avro Converter with Schema Registry** - Configure key converter to use Avro format.\n\n**What is Avro?** A binary serialization format that's compact, fast, and supports schema evolution. Keys are smaller than JSON strings.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- Complex key structures (not just strings)\n- When keys need schema evolution\n- High-throughput scenarios\n- Multi-language environments\n\n**Replace:** Schema Registry URL and uncomment authentication if needed.",
       "x-lenses-io-ui": "Key: Avro with Schema Registry",
       "body": {
         "##": "Converter Key: Avro with Schema Registry",
@@ -428,6 +432,8 @@
     },
     {
       "label": "Converter Value: Avro with Schema Registry",
+      "description": "Configure value converter to use Avro format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Avro provides efficient binary serialization with schema evolution support. Most commonly used converter for production Kafka Connect deployments.",
+      "markdownDescription": "**Avro Converter with Schema Registry** - Configure value converter to use Avro format.\n\n**What is Avro?** A binary serialization format that's compact (typically 50-70% smaller than JSON), fast, and supports schema evolution. Messages are smaller and deserialization is faster than JSON.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference (typically 5 bytes)\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**Schema evolution:** Enables adding/removing fields while maintaining backward/forward compatibility. Schema Registry validates compatibility.\n\n**When to use:**\n- ✅ **Production environments** - Industry standard for Kafka\n- ✅ **High-throughput scenarios** - Smaller messages = better performance\n- ✅ **Schema evolution** - Change schemas over time safely\n- ✅ **Multi-language environments** - Works across Java, Python, Go, C#, etc.\n- ✅ **Type safety** - Strong typing prevents data errors\n\n**Trade-offs:**\n- Requires Schema Registry infrastructure\n- Less human-readable than JSON\n- Slightly more complex setup\n\n**Most commonly used converter for production Kafka Connect deployments.**\n\n**Note:** Converters control how data is serialized in Kafka topics, not the format written to your target system. You can use Avro in Kafka but write JSON to your target (the connector handles conversion).",
       "x-lenses-io-ui": "Value: Avro with Schema Registry",
       "body": {
         "##": "Converter Value: Avro with Schema Registry",
@@ -440,6 +446,8 @@
     },
     {
       "label": "Converter Header: JSON with Schema Registry",
+      "description": "Configure header converter to use JSON Schema format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. JSON Schema provides human-readable format with schema validation.",
+      "markdownDescription": "**JSON Schema Converter with Schema Registry** - Configure header converter to use JSON Schema format.\n\n**What is JSON Schema?** Human-readable JSON format with schema validation. Headers are JSON objects validated against schemas stored in Schema Registry.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- When you need human-readable JSON headers\n- REST APIs or web services that expect JSON\n- When you want schema validation but prefer JSON over Avro\n- Development/debugging (easier to read than Avro)\n\n**Trade-offs:**\n- Larger message size than Avro (~2-3x)\n- Slower serialization/deserialization than Avro\n- But more readable and easier to debug",
       "x-lenses-io-ui": "Header: JSON with Schema Registry",
       "body": {
         "##": "Converter Header: JSON with Schema Registry",
@@ -452,6 +460,8 @@
     },
     {
       "label": "Converter Key: JSON with Schema Registry",
+      "description": "Configure key converter to use JSON Schema format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. JSON Schema provides human-readable format with schema validation.",
+      "markdownDescription": "**JSON Schema Converter with Schema Registry** - Configure key converter to use JSON Schema format.\n\n**What is JSON Schema?** Human-readable JSON format with schema validation. Keys are JSON objects validated against schemas stored in Schema Registry.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- Complex key structures that need to be human-readable\n- When keys are JSON objects (not simple strings)\n- Development/debugging scenarios\n- REST APIs that expect JSON keys\n\n**Trade-offs:** Larger than Avro but more readable.",
       "x-lenses-io-ui": "Key: JSON with Schema Registry",
       "body": {
         "##": "Converter Key: JSON with Schema Registry",
@@ -464,6 +474,8 @@
     },
     {
       "label": "Converter Value: JSON with Schema Registry",
+      "description": "Configure value converter to use JSON Schema format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. JSON Schema provides human-readable format with schema validation. Good choice when you need readable JSON messages with schema management.",
+      "markdownDescription": "**JSON Schema Converter with Schema Registry** - Configure value converter to use JSON Schema format.\n\n**What is JSON Schema?** Human-readable JSON format with schema validation. Messages are JSON objects validated against schemas stored in Schema Registry.\n\n**How Schema Registry works:**\n- Schema is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**Schema evolution:** Enables changing schemas over time while maintaining compatibility. Schema Registry validates compatibility.\n\n**When to use:**\n- ✅ **Human-readable messages** - Easy to debug and inspect\n- ✅ **REST APIs/web services** - Standard JSON format\n- ✅ **Schema validation** - Catch data errors early\n- ✅ **Schema evolution** - Change schemas over time\n- ✅ **Development** - Easier to work with than Avro\n\n**Trade-offs:**\n- Larger message size than Avro (~2-3x)\n- Slower serialization/deserialization\n- But more readable and easier to debug\n\n**Good choice when you need readable JSON messages with schema management.**\n\n**Note:** Converters control how data is serialized in Kafka topics, not the format written to your target system. You can use JSON Schema in Kafka but write to any target format (the connector handles conversion).",
       "x-lenses-io-ui": "Value: JSON with Schema Registry",
       "body": {
         "##": "Converter Value: JSON with Schema Registry",
@@ -476,6 +488,8 @@
     },
     {
       "label": "Converter Header: Protobuf with Schema Registry",
+      "description": "Configure header converter to use Protocol Buffers format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Protobuf provides compact binary serialization with strong typing and schema evolution.",
+      "markdownDescription": "**Protobuf Converter with Schema Registry** - Configure header converter to use Protocol Buffers format.\n\n**What is Protobuf?** Google's binary serialization format. Very compact, fast, and supports schema evolution. Similar to Avro but with different type system.\n\n**How Schema Registry works:**\n- Schema (.proto file) is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- gRPC services (Protobuf is gRPC's native format)\n- Microservices using Protobuf\n- When you need compact binary format\n- Google Cloud Platform integrations\n\n**Trade-offs:**\n- Requires .proto schema definitions\n- Less common than Avro in Kafka ecosystem\n- But excellent for gRPC-based architectures",
       "x-lenses-io-ui": "Header: Protobuf with Schema Registry",
       "body": {
         "##": "Converter Header: Protobuf with Schema Registry",
@@ -488,6 +502,8 @@
     },
     {
       "label": "Converter Key: Protobuf with Schema Registry",
+      "description": "Configure key converter to use Protocol Buffers format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Protobuf provides compact binary serialization with strong typing and schema evolution.",
+      "markdownDescription": "**Protobuf Converter with Schema Registry** - Configure key converter to use Protocol Buffers format.\n\n**What is Protobuf?** Google's binary serialization format. Very compact, fast, and supports schema evolution.\n\n**How Schema Registry works:**\n- Schema (.proto file) is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**When to use:**\n- Complex key structures in gRPC/microservices environments\n- When keys need Protobuf format\n- Google Cloud Platform integrations\n\n**Trade-offs:** Requires .proto schema definitions but provides excellent performance.",
       "x-lenses-io-ui": "Key: Protobuf with Schema Registry",
       "body": {
         "##": "Converter Key: Protobuf with Schema Registry",
@@ -500,6 +516,8 @@
     },
     {
       "label": "Converter Value: Protobuf with Schema Registry",
+      "description": "Configure value converter to use Protocol Buffers format with Schema Registry. Replace Schema Registry URL and uncomment authentication if needed. Protobuf provides compact binary serialization with strong typing and schema evolution. Ideal for microservices using gRPC.",
+      "markdownDescription": "**Protobuf Converter with Schema Registry** - Configure value converter to use Protocol Buffers format.\n\n**What is Protobuf?** Google's binary serialization format. Very compact (often smaller than Avro), fast, and supports schema evolution. Uses .proto schema definitions.\n\n**How Schema Registry works:**\n- Schema (.proto file) is stored **once** in Schema Registry (not in each message)\n- Messages contain only a small schema ID reference\n- Consumers fetch schema from Schema Registry using the ID\n- Much more efficient than embedding schema in every message\n\n**Schema evolution:** Enables changing schemas over time while maintaining compatibility. Schema Registry validates compatibility.\n\n**When to use:**\n- ✅ **gRPC services** - Protobuf is gRPC's native format\n- ✅ **Microservices** - Common in microservices architectures\n- ✅ **Google Cloud Platform** - Native Protobuf support\n- ✅ **High performance** - Very fast serialization/deserialization\n- ✅ **Compact messages** - Often smaller than Avro\n\n**Trade-offs:**\n- Requires .proto schema definitions\n- Less common than Avro in Kafka ecosystem\n- But excellent for gRPC-based architectures\n\n**Ideal for microservices using gRPC.**\n\n**Note:** Converters control how data is serialized in Kafka topics, not the format written to your target system. You can use Protobuf in Kafka but write to any target format (the connector handles conversion).",
       "x-lenses-io-ui": "Value: Protobuf with Schema Registry",
       "body": {
         "##": "Converter Value: Protobuf with Schema Registry",
@@ -512,6 +530,8 @@
     },
         {
       "label": "Converter Header: JSON with embedded schema",
+      "description": "Configure header converter to use JSON format with embedded schema. The schema is included in each message payload. Useful for development and testing, but less efficient than Schema Registry-based converters.",
+      "markdownDescription": "**JSON Converter with Embedded Schema** - Configure header converter to use JSON format with embedded schema.\n\n**Configuration:** `header.converter.schemas.enable=true`\n\n**What it does:** Each message includes both the schema and payload. Format: `{\"schema\": {...}, \"payload\": {...}}`\n\n**⚠️ Important:** The schema is **repeated in every single message**. This is inefficient because the same schema is stored thousands/millions of times, making messages larger.\n\n**When to use:**\n- ✅ **Development/Testing** - No Schema Registry needed\n- ✅ **Standalone deployments** - When Schema Registry isn't available\n- ✅ **Debugging** - Schema is visible in each message\n\n**Trade-offs:**\n- ❌ **Inefficient** - Schema repeated in every message (wastes space)\n- ❌ **No schema evolution** - Can't evolve schemas safely\n- ❌ **Larger messages** - Schema overhead in every message\n\n**Not recommended for production** - Use Schema Registry-based converters instead. Schema Registry stores schemas once and references them.",
       "x-lenses-io-ui": "Header: JSON with embedded schema",
       "body": {
         "##": "Converter Header: JSON with embedded schema",
@@ -521,6 +541,8 @@
     },
     {
       "label": "Converter Key: JSON with embedded schema",
+      "description": "Configure key converter to use JSON format with embedded schema. The schema is included in each message payload. Useful for development and testing, but less efficient than Schema Registry-based converters.",
+      "markdownDescription": "**JSON Converter with Embedded Schema** - Configure key converter to use JSON format with embedded schema.\n\n**Configuration:** `key.converter.schemas.enable=true`\n\n**What it does:** Each message key includes both the schema and payload. Format: `{\"schema\": {...}, \"payload\": {...}}`\n\n**⚠️ Important:** The schema is **repeated in every single message key**. This is inefficient because the same schema is stored thousands/millions of times, making keys larger.\n\n**When to use:**\n- ✅ **Development/Testing** - No Schema Registry needed\n- ✅ **Standalone deployments** - When Schema Registry isn't available\n- ✅ **Debugging** - Schema is visible in each message\n\n**Trade-offs:**\n- ❌ **Inefficient** - Schema repeated in every message (wastes space)\n- ❌ **No schema evolution** - Can't evolve schemas safely\n- ❌ **Larger keys** - Schema overhead in every message\n\n**Not recommended for production** - Use Schema Registry-based converters instead. Schema Registry stores schemas once and references them.",
       "x-lenses-io-ui": "Key: JSON with embedded schema",
       "body": {
         "##": "Converter Key: JSON with embedded schema",
@@ -530,6 +552,8 @@
     },
     {
       "label": "Converter Value: JSON with embedded schema",
+      "description": "Configure value converter to use JSON format with embedded schema. The schema is included in each message payload. Useful for development and testing, but less efficient than Schema Registry-based converters. Messages will have a 'schema' and 'payload' structure.",
+      "markdownDescription": "**JSON Converter with Embedded Schema** - Configure value converter to use JSON format with embedded schema.\n\n**Configuration:** `value.converter.schemas.enable=true`\n\n**What it does:** Each message includes both the schema and payload. Format: `{\"schema\": {...}, \"payload\": {...}}`\n\n**Message structure:**\n```json\n{\n  \"schema\": {\n    \"type\": \"struct\",\n    \"fields\": [{\"field\": \"name\", \"type\": \"string\"}]\n  },\n  \"payload\": {\"name\": \"John\"}\n}\n```\n\n**⚠️ Important:** The schema is **repeated in every single message**. This is inefficient because:\n- The same schema is stored thousands/millions of times\n- Messages are significantly larger (often 2-5x the size)\n- Wastes storage and network bandwidth\n- No schema reuse across messages\n\n**When to use:**\n- ✅ **Development/Testing** - No Schema Registry needed\n- ✅ **Standalone deployments** - When Schema Registry isn't available\n- ✅ **Debugging** - Schema is visible in each message\n- ✅ **Quick prototyping** - Fast to set up\n\n**Trade-offs:**\n- ❌ **Inefficient** - Schema repeated in every message (wastes space)\n- ❌ **No schema evolution** - Can't evolve schemas safely\n- ❌ **Larger messages** - Schema overhead in every message\n- ❌ **No schema reuse** - Each message carries full schema\n\n**Not recommended for production** - Use Schema Registry-based converters (Avro, JSON Schema, Protobuf) instead. Schema Registry stores schemas once and references them, making messages much smaller.",
       "x-lenses-io-ui": "Value: JSON with embedded schema",
       "body": {
         "##": "Converter Value: JSON with embedded schema",
@@ -539,6 +563,8 @@
     },
     {
       "label": "Converter Header: JSON no schema",
+      "description": "Configure header converter to use JSON format without embedded schema. Messages are pure JSON without schema information. Simple and lightweight, but no schema validation or evolution support.",
+      "markdownDescription": "**JSON Converter (No Schema)** - Configure header converter to use pure JSON format.\n\n**Configuration:** `header.converter.schemas.enable=false`\n\n**What it does:** Messages are pure JSON objects without any schema information. Format: `{\"field1\": \"value1\", \"field2\": 123}`\n\n**Difference from `schemas.enable=true`:**\n- ❌ **No schema wrapper** - No `{\"schema\": {...}, \"payload\": {...}}` structure\n- ✅ **Pure JSON** - Just the data itself: `{\"field1\": \"value1\"}`\n- ✅ **Smaller messages** - No schema overhead\n- ❌ **No schema validation** - Can't validate data structure\n\n**When to use:**\n- ✅ **Simple integrations** - REST APIs, webhooks\n- ✅ **Development/Testing** - Quick and easy\n- ✅ **No schema needed** - When schema validation isn't required\n- ✅ **Human-readable** - Easy to debug and inspect\n\n**Trade-offs:**\n- ❌ **No schema validation** - Can't catch data errors\n- ❌ **No schema evolution** - Schema changes break consumers\n- ❌ **No type safety** - Type errors only discovered at runtime\n- ❌ **Larger than binary formats** - But readable\n\n**Use when:** Schema management isn't needed and simplicity is preferred.",
       "x-lenses-io-ui": "Header: JSON no embedded schema",
       "body": {
         "##": "Converter Header: JSON no embedded schema",
@@ -548,6 +574,8 @@
     },
     {
       "label": "Converter Key: JSON no embedded schema",
+      "description": "Configure key converter to use JSON format without embedded schema. Messages are pure JSON without schema information. Simple and lightweight, but no schema validation or evolution support.",
+      "markdownDescription": "**JSON Converter (No Schema)** - Configure key converter to use pure JSON format.\n\n**Configuration:** `key.converter.schemas.enable=false`\n\n**What it does:** Keys are pure JSON objects without schema information. Format: `{\"id\": 123}` or `\"simple-key\"`\n\n**Difference from `schemas.enable=true`:**\n- ❌ **No schema wrapper** - No `{\"schema\": {...}, \"payload\": {...}}` structure\n- ✅ **Pure JSON** - Just the data itself: `{\"id\": 123}` or `\"simple-key\"`\n- ✅ **Smaller keys** - No schema overhead\n- ❌ **No schema validation** - Can't validate key structure\n\n**When to use:**\n- ✅ **Simple string keys** - Most common use case\n- ✅ **JSON object keys** - When keys are structured data\n- ✅ **Development/Testing** - Quick and easy\n- ✅ **REST APIs** - Standard JSON format\n\n**Trade-offs:**\n- ❌ **No schema validation** - Can't catch data errors\n- ❌ **No schema evolution** - Schema changes break consumers\n- ❌ **Larger than binary** - But human-readable\n\n**Common for:** Simple integrations where schema management isn't needed.",
       "x-lenses-io-ui": "Key: JSON no embedded schema",
       "body": {
         "##": "Converter Key: JSON no embedded schema",
@@ -557,6 +585,8 @@
     },
     {
       "label": "Converter Value: JSON no embedded schema",
+      "description": "Configure value converter to use JSON format without embedded schema. Messages are pure JSON without schema information. Simple and lightweight, but no schema validation or evolution support. Commonly used for simple integrations and REST APIs.",
+      "markdownDescription": "**JSON Converter (No Schema)** - Configure value converter to use pure JSON format.\n\n**Configuration:** `value.converter.schemas.enable=false`\n\n**What it does:** Messages are pure JSON objects without any schema information. Format: `{\"name\": \"John\", \"age\": 30}`\n\n**Difference from `schemas.enable=true`:**\n- ❌ **No schema wrapper** - No `{\"schema\": {...}, \"payload\": {...}}` structure\n- ✅ **Pure JSON** - Just the data itself: `{\"name\": \"John\", \"age\": 30}`\n- ✅ **Smaller messages** - No schema overhead (messages are 2-5x smaller than with embedded schema)\n- ❌ **No schema validation** - Can't validate data structure\n\n**Comparison:**\n- **`schemas.enable=true`**: `{\"schema\": {...}, \"payload\": {\"name\": \"John\"}}` (larger, includes schema)\n- **`schemas.enable=false`**: `{\"name\": \"John\"}` (smaller, no schema)\n\n**When to use:**\n- ✅ **REST APIs** - Standard JSON format for web services\n- ✅ **Simple integrations** - Webhooks, HTTP endpoints\n- ✅ **Development/Testing** - Quick and easy setup\n- ✅ **Human-readable** - Easy to debug and inspect\n- ✅ **No infrastructure** - No Schema Registry needed\n\n**Trade-offs:**\n- ❌ **No schema validation** - Can't catch data errors early\n- ❌ **No schema evolution** - Schema changes break consumers\n- ❌ **No type safety** - Type errors only discovered at runtime\n- ❌ **Larger than binary formats** - But readable\n- ❌ **Slower than Avro/Protobuf** - But simpler\n\n**Commonly used for simple integrations and REST APIs.**\n\n**Best for:** Low-volume integrations where simplicity matters more than performance or schema management.\n\n**Note:** Converters control how data is serialized in Kafka topics, not the format written to your target system. You can use JSON in Kafka but write to a database, file, or any other format (the connector handles conversion).",
       "x-lenses-io-ui": "Value: JSON no embedded schema",
       "body": {
         "##": "Converter Value: JSON no embedded schema",
@@ -566,6 +596,8 @@
     },
     {
       "label": "Converter Header: String",
+      "description": "Configure header converter to use String format. Converts data to/from UTF-8 encoded strings. Simple text-based format, useful for headers containing plain text values.",
+      "markdownDescription": "**String Converter** - Configure header converter to use UTF-8 string format.\n\n**What it does:** Converts data to/from UTF-8 encoded strings. Headers are plain text.\n\n**When to use:**\n- ✅ **Text headers** - Correlation IDs, trace IDs, user IDs\n- ✅ **Simple values** - When headers are just strings\n- ✅ **Human-readable** - Easy to inspect and debug\n\n**Use case:** Headers containing plain text values like `X-Correlation-Id: abc123` or `X-User-Id: user-456`",
       "x-lenses-io-ui": "Header: String",
       "body": {
         "##": "Converter Header: String",
@@ -574,6 +606,8 @@
     },
     {
       "label": "Converter Key: String",
+      "description": "Configure key converter to use String format. Converts data to/from UTF-8 encoded strings. Simple text-based format, useful when keys are plain text identifiers.",
+      "markdownDescription": "**String Converter** - Configure key converter to use UTF-8 string format.\n\n**What it does:** Converts keys to/from UTF-8 encoded strings. Keys are plain text.\n\n**When to use:**\n- ✅ **Simple string keys** - Most common use case (e.g., `\"user-123\"`, `\"order-456\"`)\n- ✅ **Text identifiers** - User IDs, order IDs, document IDs\n- ✅ **Human-readable** - Easy to inspect and debug\n- ✅ **Simple partitioning** - Kafka partitions by string hash\n\n**Use case:** When keys are simple text identifiers like `\"user-123\"` or `\"order-456\"`. This is the most common key format in Kafka.",
       "x-lenses-io-ui": "Key: String",
       "body": {
         "##": "Converter Key: String",
@@ -582,6 +616,8 @@
     },
     {
       "label": "Converter Value: String",
+      "description": "Configure value converter to use String format. Converts data to/from UTF-8 encoded strings. Simple text-based format, useful for plain text messages or when integrating with text-based systems.",
+      "markdownDescription": "**String Converter** - Configure value converter to use UTF-8 string format.\n\n**What it does:** Converts messages to/from UTF-8 encoded strings. Messages are plain text.\n\n**When to use:**\n- ✅ **Plain text messages** - Logs, text files, CSV data\n- ✅ **Text-based systems** - Email, SMS, chat systems\n- ✅ **Simple integrations** - When messages are just strings\n- ✅ **Human-readable** - Easy to inspect and debug\n- ✅ **No structure needed** - When you don't need structured data\n\n**Use case:**\n- Log messages: `\"2024-01-15 14:30:00 ERROR: Connection failed\"`\n- Text files: CSV lines, log lines\n- Simple text integrations\n\n**Trade-offs:**\n- No structure - Can't parse fields automatically\n- No schema - No validation or type safety\n- But simple and readable",
       "x-lenses-io-ui": "Value: String",
       "body": {
         "##": "Converter Value: String",
@@ -590,6 +626,8 @@
     },
     {
       "label": "Converter Header: Bytes passthrough",
+      "description": "Configure header converter to pass through raw bytes without conversion. No serialization/deserialization is performed. Useful when headers contain binary data or when you need to handle custom formats.",
+      "markdownDescription": "**ByteArray Converter** - Configure header converter to pass through raw bytes.\n\n**What it does:** No serialization/deserialization is performed. Headers are passed through as raw byte arrays.\n\n**When to use:**\n- ✅ **Binary headers** - Images, encrypted data, custom binary formats\n- ✅ **Custom formats** - When you handle serialization yourself\n- ✅ **Maximum control** - You manage the format completely\n\n**Use case:** Headers containing binary data like encrypted tokens, image thumbnails, or custom binary protocols.\n\n**Note:** You must handle serialization/deserialization in your application code.",
       "x-lenses-io-ui": "Header: Bytes",
       "body": {
         "##": "Converter Header: Bytes passthrough",
@@ -598,6 +636,8 @@
     },
     {
       "label": "Converter Key: Bytes passthrough",
+      "description": "Configure key converter to pass through raw bytes without conversion. No serialization/deserialization is performed. Useful when keys are binary data or when you need to handle custom formats.",
+      "markdownDescription": "**ByteArray Converter** - Configure key converter to pass through raw bytes.\n\n**What it does:** No serialization/deserialization is performed. Keys are passed through as raw byte arrays.\n\n**When to use:**\n- ✅ **Binary keys** - UUIDs, hashes, encrypted identifiers\n- ✅ **Custom formats** - When you handle serialization yourself\n- ✅ **Maximum control** - You manage the format completely\n\n**Use case:** Binary keys like UUIDs (`byte[]`), cryptographic hashes, or custom binary identifiers.\n\n**Note:** You must handle serialization/deserialization in your application code. Kafka will partition by the byte array hash.",
       "x-lenses-io-ui": "Key: Bytes",
       "body": {
         "##": "Converter Key: Bytes passthrough",
@@ -606,6 +646,8 @@
     },
     {
       "label": "Converter Value: Bytes passthrough",
+      "description": "Configure value converter to pass through raw bytes without conversion. No serialization/deserialization is performed. Useful for binary data, images, or when you need maximum control over the data format. Requires custom handling in your application code.",
+      "markdownDescription": "**ByteArray Converter** - Configure value converter to pass through raw bytes.\n\n**What it does:** No serialization/deserialization is performed. Messages are passed through as raw byte arrays (`byte[]`).\n\n**When to use:**\n- ✅ **Binary data** - Images, PDFs, audio, video files\n- ✅ **Custom formats** - When you handle serialization yourself\n- ✅ **Maximum control** - You manage the format completely\n- ✅ **Performance** - No conversion overhead\n- ✅ **Encrypted data** - When data is already encrypted\n\n**Use cases:**\n- Image files: JPEG, PNG, GIF\n- Documents: PDF, Word, Excel\n- Media: Audio, video files\n- Custom binary protocols\n- Already-serialized data from other systems\n\n**Trade-offs:**\n- ❌ **No automatic conversion** - You handle serialization\n- ❌ **Not human-readable** - Can't inspect messages easily\n- ❌ **No schema** - No validation or type safety\n- ✅ **Maximum flexibility** - Full control over format\n\n**Requires custom handling in your application code.**",
       "x-lenses-io-ui": "Value: Bytes",
       "body": {
         "##": "Converter Value: Bytes passthrough",

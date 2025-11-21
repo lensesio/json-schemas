@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertRollingWallclock",
+  "type": "object",
+  "title": "InsertRollingWallclock Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertRollingWallclock transformation. Inserts a rolling wall clock timestamp into a field, useful for partitioning by time windows.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertRollingWallclock$Value'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertRollingWallclock$Value"
+      ],
+      "title": "type"
+    },
+    "field.name": {
+      "description": "The name of the field to insert the rolling wall clock timestamp into.",
+      "type": "string",
+      "title": "field.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. Default is 'yyyy-MM-dd HH:mm:ss'.",
+      "type": "string",
+      "default": "yyyy-MM-dd HH:mm:ss",
+      "title": "format"
+    },
+    "window.size.ms": {
+      "description": "The size of the rolling time window in milliseconds. Timestamps are rounded down to the nearest window boundary.",
+      "type": "integer",
+      "minimum": 1,
+      "title": "window.size.ms"
+    }
+  },
+  "required": ["type", "field.name", "window.size.ms"],
+  "defaultSnippets": [
+    {
+      "label": "InsertRollingWallclock - 15 minute rolling window",
+      "description": "Insert rolling wall clock timestamp rounded to 15-minute intervals (900000 ms). Useful for partitioning by time windows. Adjust window.size.ms for different intervals (e.g., 3600000 for 1 hour).",
+      "markdownDescription": "**InsertRollingWallclock** (Lenses) - Insert rolling wall clock timestamp rounded to 15-minute intervals.\n\n**Window size:** 900000 ms (15 minutes). Timestamps are rounded down to the nearest window boundary.\n\n**Example:** Timestamps `14:23:45` and `14:29:12` both become `14:15:00`\n\n**Use case:** Partition data by time windows for storage systems like S3, HDFS, or data lakes. Groups records into time buckets for efficient querying and storage organization.\n\n**Common intervals:**\n- 15 min: `900000` ms\n- 1 hour: `3600000` ms\n- 1 day: `86400000` ms",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingWallclock$Value",
+        "field.name": "partition_time",
+        "window.size.ms": 900000
+      }
+    },
+    {
+      "label": "InsertRollingWallclock - 1 hour rolling window",
+      "description": "Insert rolling wall clock timestamp rounded to 1-hour intervals (3600000 ms) with custom format. Perfect for hourly partitioning in S3 or other storage systems. Replace field name and format as needed.",
+      "markdownDescription": "**InsertRollingWallclock** (Lenses) - Insert rolling wall clock timestamp rounded to 1-hour intervals.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partitions.\n\n**Example:** All records from `2024-01-15 14:00` to `14:59` get timestamp `2024-01-15-14`\n\n**Use case:** Perfect for hourly partitioning in S3, HDFS, or data lakes. Creates directory structures like `year=2024/month=01/day=15/hour=14/` for efficient time-based queries.\n\n**Storage pattern:** `s3://bucket/data/year=2024/month=01/day=15/hour=14/`",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingWallclock$Value",
+        "field.name": "hour_partition",
+        "format": "yyyy-MM-dd-HH",
+        "window.size.ms": 3600000
+      }
+    }
+  ]
+}
+

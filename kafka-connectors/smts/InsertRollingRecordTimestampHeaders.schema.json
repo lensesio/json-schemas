@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertRollingRecordTimestampHeaders",
+  "type": "object",
+  "title": "InsertRollingRecordTimestampHeaders Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertRollingRecordTimestampHeaders transformation. Inserts a rolling record timestamp into record headers, useful for partitioning by time windows.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertRollingRecordTimestampHeaders'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertRollingRecordTimestampHeaders"
+      ],
+      "title": "type"
+    },
+    "header.name": {
+      "description": "The name of the header to insert the rolling record timestamp into.",
+      "type": "string",
+      "title": "header.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. If not specified, the timestamp is used as-is.",
+      "type": "string",
+      "title": "format"
+    },
+    "window.size.ms": {
+      "description": "The size of the rolling time window in milliseconds. Timestamps are rounded down to the nearest window boundary.",
+      "type": "integer",
+      "minimum": 1,
+      "title": "window.size.ms"
+    }
+  },
+  "required": ["type", "header.name", "window.size.ms"],
+  "defaultSnippets": [
+    {
+      "label": "InsertRollingRecordTimestampHeaders - 15 minute rolling window",
+      "description": "Extract record timestamp, round to 15-minute intervals (900000 ms), and insert into header. Useful for partitioning by time windows. Replace header name and adjust window size as needed.",
+      "markdownDescription": "**InsertRollingRecordTimestampHeaders** (Lenses) - Extract record timestamp, round to 15-minute intervals, and insert into header.\n\n**Window size:** 900000 ms (15 minutes). Kafka record timestamps are rounded down to the nearest window boundary.\n\n**Use case:** Partition data by Kafka record timestamps in 15-minute buckets. Useful for partitioning based on when messages were produced to Kafka.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingRecordTimestampHeaders",
+        "header.name": "X-Partition-Time",
+        "window.size.ms": 900000
+      }
+    },
+    {
+      "label": "InsertRollingRecordTimestampHeaders - 1 hour rolling window",
+      "description": "Extract record timestamp, round to 1-hour intervals (3600000 ms) with custom format, and insert into header. Perfect for hourly partitioning. Replace header name, format, and window size as needed.",
+      "markdownDescription": "**InsertRollingRecordTimestampHeaders** (Lenses) - Extract record timestamp, round to 1-hour intervals, and insert into header.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partition headers.\n\n**Use case:** Partition data by Kafka record timestamps in hourly buckets. Perfect for organizing data by ingestion time for storage systems like S3 or data lakes.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingRecordTimestampHeaders",
+        "header.name": "X-Hour-Partition",
+        "format": "yyyy-MM-dd-HH",
+        "window.size.ms": 3600000
+      }
+    }
+  ]
+}
+

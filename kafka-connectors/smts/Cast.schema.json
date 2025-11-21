@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/Cast",
+  "type": "object",
+  "title": "Cast Single Message Transform",
+  "description": "Configuration schema for Cast transformation. Casts fields to different types (int8, int16, int32, int64, float32, float64, boolean, string).",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.Cast$Key' for key transformation or 'org.apache.kafka.connect.transforms.Cast$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.Cast$Key",
+        "org.apache.kafka.connect.transforms.Cast$Value"
+      ],
+      "title": "type"
+    },
+    "spec": {
+      "description": "Comma-separated list of field:type pairs. Example: 'field1:int8,field2:float64'",
+      "type": "string",
+      "title": "spec"
+    }
+  },
+  "required": ["type", "spec"],
+  "defaultSnippets": [
+    {
+      "label": "Cast - Convert fields to int32 and float64",
+      "description": "Cast multiple fields in the record value to different types. Replace field1, field2 with your actual field names and adjust types as needed.",
+      "markdownDescription": "**Cast** multiple fields in the record value to different types.\n\nReplace `field1`, `field2` with your actual field names and adjust types as needed.\n\n**Supported types:** `int8`, `int16`, `int32`, `int64`, `float32`, `float64`, `boolean`, `string`",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Cast$Value",
+        "spec": "field1:int32,field2:float64"
+      }
+    },
+    {
+      "label": "Cast - Convert key fields to string",
+      "description": "Cast fields in the record key to string type. Replace 'id' with your actual key field name.",
+      "markdownDescription": "**Cast** fields in the record key to string type.\n\nReplace `id` with your actual key field name.\n\n**Note:** Use `Cast$Key` for key transformations and `Cast$Value` for value transformations.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Cast$Key",
+        "spec": "id:string"
+      }
+    }
+  ]
+}
+

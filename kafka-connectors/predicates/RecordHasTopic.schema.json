@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/predicates/RecordHasTopic",
+  "type": "object",
+  "title": "RecordHasTopic Predicate",
+  "description": "Configuration schema for RecordHasTopic predicate. Evaluates to true if the record's topic matches the specified topic name exactly.",
+  "properties": {
+    "type": {
+      "description": "The predicate type. Use 'org.apache.kafka.connect.transforms.predicates.RecordHasTopic'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.predicates.RecordHasTopic"
+      ],
+      "title": "type"
+    },
+    "topic": {
+      "description": "The exact topic name to match. The predicate evaluates to true if the record's topic equals this value exactly.",
+      "type": "string",
+      "title": "topic"
+    }
+  },
+  "required": ["type", "topic"],
+  "defaultSnippets": [
+    {
+      "label": "RecordHasTopic - Match specific topic",
+      "description": "Predicate that evaluates to true if the record's topic matches exactly. Replace 'orders' with your topic name.",
+      "markdownDescription": "**RecordHasTopic** - Evaluates to `true` if the record's topic matches the specified topic name exactly.\n\nReplace `orders` with your topic name.\n\n**Use case:**\n- Filter or route messages from a specific topic\n- Apply transforms only to one topic in a multi-topic connector\n- Route messages to different sinks based on exact topic name\n\n**Example:** Filter records from the 'orders' topic:\n```\ntransforms=filterOrders\npredicates=isOrdersTopic\npredicates.isOrdersTopic.type=org.apache.kafka.connect.transforms.predicates.RecordHasTopic\npredicates.isOrdersTopic.topic=orders\ntransforms.filterOrders.type=org.apache.kafka.connect.transforms.Filter\ntransforms.filterOrders.predicate=isOrdersTopic\n```\n\n**Note:** For pattern matching, use `TopicNameMatches` instead.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.RecordHasTopic",
+        "topic": "orders"
+      }
+    },
+    {
+      "label": "RecordHasTopic - Match user events topic",
+      "description": "Match records from 'user-events' topic. Replace with your topic name.",
+      "markdownDescription": "**RecordHasTopic** - Match records from 'user-events' topic.\n\nReplace with your topic name.\n\n**Use case:** Apply specific transformations only to user events while processing multiple topics.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.predicates.RecordHasTopic",
+        "topic": "user-events"
+      }
+    }
+  ]
+}
+

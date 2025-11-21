@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/Filter",
+  "type": "object",
+  "title": "Filter Single Message Transform",
+  "description": "Configuration schema for Filter transformation. Filters records based on a predicate. Records that don't match the predicate are dropped.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.Filter'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.Filter"
+      ],
+      "title": "type"
+    },
+    "predicate": {
+      "description": "The name of a predicate to use for filtering. The predicate must be defined separately in the connector configuration.",
+      "type": "string",
+      "title": "predicate"
+    }
+  },
+  "required": ["type", "predicate"],
+  "defaultSnippets": [
+    {
+      "label": "Filter - Filter with predicate",
+      "description": "Filter records using a predicate. The predicate must be defined separately in the connector config. Replace 'isValid' with your predicate name.",
+      "markdownDescription": "**Filter** - Filter records using a predicate.\n\nThe predicate must be defined separately in the connector config. Replace `isValid` with your predicate name.\n\n**Example predicate config:**\n```\npredicates=isValid\npredicates.isValid.type=org.apache.kafka.connect.transforms.predicates.HasHeaderKey\npredicates.isValid.name=correlationId\n```\n\n**Use case:** Drop records that don't meet certain criteria (e.g., missing required fields, invalid data, wrong topic).",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Filter",
+        "predicate": "isValid"
+      }
+    },
+    {
+      "label": "Filter - Filter with custom predicate",
+      "description": "Filter records using a custom predicate. Define the predicate in your connector config (e.g., predicates.nonNullValue.type=org.apache.kafka.connect.transforms.predicates.RecordHasTopic).",
+      "markdownDescription": "**Filter** - Filter records using a custom predicate.\n\nDefine the predicate in your connector config. Common predicate types:\n- `RecordHasTopic` - Filter by topic name\n- `HasHeaderKey` - Filter by header presence\n- `TopicNameMatches` - Filter by topic pattern\n\n**Use case:** Route or filter messages based on topic, headers, or other metadata without processing the payload.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.Filter",
+        "predicate": "nonNullValue"
+      }
+    }
+  ]
+}
+

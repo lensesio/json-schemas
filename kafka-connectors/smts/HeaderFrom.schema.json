@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/HeaderFrom",
+  "type": "object",
+  "title": "HeaderFrom Single Message Transform",
+  "description": "Configuration schema for HeaderFrom transformation. Copies a field from the key or value to a header.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.HeaderFrom$Key' to copy from key or 'org.apache.kafka.connect.transforms.HeaderFrom$Value' to copy from value.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.HeaderFrom$Key",
+        "org.apache.kafka.connect.transforms.HeaderFrom$Value"
+      ],
+      "title": "type"
+    },
+    "fields": {
+      "description": "Comma-separated list of field names to copy to headers. The header name will be the same as the field name unless 'headers' is specified.",
+      "type": "string",
+      "title": "fields"
+    },
+    "headers": {
+      "description": "Comma-separated list of header names. Must match the number of fields specified. If not provided, header names will match field names.",
+      "type": "string",
+      "title": "headers"
+    }
+  },
+  "required": ["type", "fields"],
+  "defaultSnippets": [
+    {
+      "label": "HeaderFrom - Copy field from value to header",
+      "description": "Copy a field from the record value to a header with the same name. Replace 'correlationId' with your actual field name.",
+      "markdownDescription": "**HeaderFrom** - Copy a field from the record value to a header.\n\nThe header name will be the same as the field name. Replace `correlationId` with your actual field name.\n\n**Use case:** Move correlation IDs, trace IDs, or other metadata from the payload to headers for easier access without parsing the value.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.HeaderFrom$Value",
+        "fields": "correlationId"
+      }
+    },
+    {
+      "label": "HeaderFrom - Copy multiple fields with custom header names",
+      "description": "Copy multiple fields to headers with custom names. Field and header lists must match in order. Replace with your actual field and header names.",
+      "markdownDescription": "**HeaderFrom** - Copy multiple fields to headers with custom names.\n\nField and header lists must match in order. Replace with your actual field and header names.\n\n**Use case:** Standardize header naming (e.g., add `X-` prefix) or rename fields when moving to headers.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.HeaderFrom$Value",
+        "fields": "userId,traceId",
+        "headers": "X-User-Id,X-Trace-Id"
+      }
+    }
+  ]
+}
+
