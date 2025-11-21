@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/RegexRouter",
+  "type": "object",
+  "title": "RegexRouter Single Message Transform",
+  "description": "Configuration schema for RegexRouter transformation. Routes messages to different topics based on a regex pattern applied to the topic name.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.RegexRouter'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.RegexRouter"
+      ],
+      "title": "type"
+    },
+    "regex": {
+      "description": "Regular expression pattern to match against the topic name. Must include at least one capturing group.",
+      "type": "string",
+      "title": "regex"
+    },
+    "replacement": {
+      "description": "Replacement string for the regex pattern. Can reference capturing groups using $1, $2, etc.",
+      "type": "string",
+      "title": "replacement"
+    }
+  },
+  "required": ["type", "regex", "replacement"],
+  "defaultSnippets": [
+    {
+      "label": "RegexRouter - Route by topic prefix",
+      "description": "Add a prefix to all topic names. The regex captures the entire topic name ($1), and replacement adds 'transformed-' prefix. Adjust the replacement pattern as needed.",
+      "markdownDescription": "**RegexRouter** - Add a prefix to all topic names.\n\nThe regex `^(.*)$` captures the entire topic name (`$1`), and replacement adds `transformed-` prefix.\n\n**Example:** Topic `my-topic` → `transformed-my-topic`\n\nAdjust the replacement pattern as needed.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "regex": "^(.*)$",
+        "replacement": "transformed-$1"
+      }
+    },
+    {
+      "label": "RegexRouter - Route by environment prefix",
+      "description": "Transform topics with 'prod-' prefix to 'production-' prefix. Adjust regex and replacement to match your topic naming pattern.",
+      "markdownDescription": "**RegexRouter** - Transform topics with `prod-` prefix to `production-` prefix.\n\nThe regex `^prod-(.*)$` matches topics starting with `prod-` and captures the rest (`$1`).\n\n**Example:** Topic `prod-user-events` → `production-user-events`\n\nAdjust regex and replacement to match your topic naming pattern.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "regex": "^prod-(.*)$",
+        "replacement": "production-$1"
+      }
+    }
+  ]
+}
+

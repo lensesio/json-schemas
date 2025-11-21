@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertField",
+  "type": "object",
+  "title": "InsertField Single Message Transform",
+  "description": "Configuration schema for InsertField transformation. Inserts a field with a static value or metadata into records.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.InsertField$Key' for key transformation or 'org.apache.kafka.connect.transforms.InsertField$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.InsertField$Key",
+        "org.apache.kafka.connect.transforms.InsertField$Value"
+      ],
+      "title": "type"
+    },
+    "static.field": {
+      "description": "Field name to insert with a static value.",
+      "type": "string",
+      "title": "static.field"
+    },
+    "static.value": {
+      "description": "Static value to insert into the specified field.",
+      "type": "string",
+      "title": "static.value"
+    },
+    "timestamp.field": {
+      "description": "Field name to insert the record timestamp into.",
+      "type": "string",
+      "title": "timestamp.field"
+    },
+    "topic.field": {
+      "description": "Field name to insert the topic name into.",
+      "type": "string",
+      "title": "topic.field"
+    },
+    "partition.field": {
+      "description": "Field name to insert the partition number into.",
+      "type": "string",
+      "title": "partition.field"
+    },
+    "offset.field": {
+      "description": "Field name to insert the record offset into.",
+      "type": "string",
+      "title": "offset.field"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "InsertField - Insert static field",
+      "description": "Insert a field with a static value. Replace 'source' with your field name and 'kafka-connect' with your desired value.",
+      "markdownDescription": "**InsertField** - Insert a field with a static value.\n\nReplace `source` with your field name and `kafka-connect` with your desired value.\n\n**Use case:** Add metadata like source system name, environment, or version to all records.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.InsertField$Value",
+        "static.field": "source",
+        "static.value": "kafka-connect"
+      }
+    },
+    {
+      "label": "InsertField - Insert timestamp and topic",
+      "description": "Insert record timestamp and topic name as fields. Replace field names with your preferred names.",
+      "markdownDescription": "**InsertField** - Insert record timestamp and topic name as fields.\n\nReplace field names with your preferred names.\n\n**Available metadata fields:**\n- `timestamp.field` - Record timestamp\n- `topic.field` - Topic name\n- `partition.field` - Partition number\n- `offset.field` - Record offset",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.InsertField$Value",
+        "timestamp.field": "ingestion_time",
+        "topic.field": "source_topic"
+      }
+    },
+    {
+      "label": "InsertField - Insert partition and offset",
+      "description": "Insert Kafka partition and offset as fields. Useful for tracking message origin. Replace field names as needed.",
+      "markdownDescription": "**InsertField** - Insert Kafka partition and offset as fields.\n\nUseful for tracking message origin and debugging. Replace field names as needed.\n\n**Use case:** Track which partition and offset a record came from for audit or debugging purposes.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.InsertField$Value",
+        "partition.field": "kafka_partition",
+        "offset.field": "kafka_offset"
+      }
+    }
+  ]
+}
+

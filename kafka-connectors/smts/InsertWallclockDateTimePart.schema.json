@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertWallclockDateTimePart",
+  "type": "object",
+  "title": "InsertWallclockDateTimePart Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertWallclockDateTimePart transformation. Inserts specific parts of the current date and time (year, month, day, hour, etc.) into record headers.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart"
+      ],
+      "title": "type"
+    },
+    "header.name": {
+      "description": "The name of the header to insert the date/time part into.",
+      "type": "string",
+      "title": "header.name"
+    },
+    "date.time.part": {
+      "description": "The part of the date/time to extract. Options: 'year', 'month', 'day', 'hour', 'minute', 'second', 'dayOfWeek', 'dayOfYear'.",
+      "type": "string",
+      "enum": [
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "dayOfWeek",
+        "dayOfYear"
+      ],
+      "title": "date.time.part"
+    }
+  },
+  "required": ["type", "header.name", "date.time.part"],
+  "defaultSnippets": [
+    {
+      "label": "InsertWallclockDateTimePart - Insert year",
+      "description": "Insert the current year into a header. Available parts: year, month, day, hour, minute, second, dayOfWeek, dayOfYear. Replace header name as needed.",
+      "markdownDescription": "**InsertWallclockDateTimePart** (Lenses) - Insert the current year into a header.\n\n**Available parts:** `year`, `month`, `day`, `hour`, `minute`, `second`, `dayOfWeek`, `dayOfYear`\n\n**Use case:** Extract specific date/time components for routing, partitioning, or filtering. Year is useful for multi-year data partitioning.\n\n**Example:** Year `2024` inserted as header value.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart",
+        "header.name": "X-Year",
+        "date.time.part": "year"
+      }
+    },
+    {
+      "label": "InsertWallclockDateTimePart - Insert hour",
+      "description": "Insert the current hour (0-23) into a header. Useful for hourly partitioning or filtering. Replace header name as needed.",
+      "markdownDescription": "**InsertWallclockDateTimePart** (Lenses) - Insert the current hour (0-23) into a header.\n\nUseful for hourly partitioning or filtering. Replace header name as needed.\n\n**Use case:** Extract hour component for time-based routing or partitioning. Sink connectors can use this header to organize data into hourly directories.\n\n**Example:** Hour `14` (2 PM) inserted as header value.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart",
+        "header.name": "X-Hour",
+        "date.time.part": "hour"
+      }
+    },
+    {
+      "label": "InsertWallclockDateTimePart - Insert day of week",
+      "description": "Insert the day of week (1-7, where 1 is Monday) into a header. Useful for day-based routing or filtering. Replace header name as needed.",
+      "markdownDescription": "**InsertWallclockDateTimePart** (Lenses) - Insert the day of week (1-7, where 1 is Monday) into a header.\n\nUseful for day-based routing or filtering. Replace header name as needed.\n\n**Use case:** Route messages differently on weekdays vs weekends, or filter data by day of week for reporting.\n\n**Values:** 1=Monday, 2=Tuesday, ..., 7=Sunday",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart",
+        "header.name": "X-Day-Of-Week",
+        "date.time.part": "dayOfWeek"
+      }
+    }
+  ]
+}
+

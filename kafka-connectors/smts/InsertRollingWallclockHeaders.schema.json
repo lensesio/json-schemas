@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertRollingWallclockHeaders",
+  "type": "object",
+  "title": "InsertRollingWallclockHeaders Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertRollingWallclockHeaders transformation. Inserts a rolling wall clock timestamp into record headers, useful for partitioning by time windows.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertRollingWallclockHeaders'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertRollingWallclockHeaders"
+      ],
+      "title": "type"
+    },
+    "header.name": {
+      "description": "The name of the header to insert the rolling wall clock timestamp into.",
+      "type": "string",
+      "title": "header.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. Default is 'yyyy-MM-dd HH:mm:ss'.",
+      "type": "string",
+      "default": "yyyy-MM-dd HH:mm:ss",
+      "title": "format"
+    },
+    "window.size.ms": {
+      "description": "The size of the rolling time window in milliseconds. Timestamps are rounded down to the nearest window boundary.",
+      "type": "integer",
+      "minimum": 1,
+      "title": "window.size.ms"
+    }
+  },
+  "required": ["type", "header.name", "window.size.ms"],
+  "defaultSnippets": [
+    {
+      "label": "InsertRollingWallclockHeaders - 15 minute rolling window",
+      "description": "Insert rolling wall clock timestamp header rounded to 15-minute intervals (900000 ms). Useful for partitioning by time windows. Adjust window.size.ms for different intervals.",
+      "markdownDescription": "**InsertRollingWallclockHeaders** (Lenses) - Insert rolling wall clock timestamp header rounded to 15-minute intervals.\n\n**Window size:** 900000 ms (15 minutes). Timestamps are rounded down to the nearest window boundary.\n\n**Use case:** Add time-based partition information to headers for routing or partitioning logic in sink connectors (e.g., S3 sink can use headers for directory structure).",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingWallclockHeaders",
+        "header.name": "X-Partition-Time",
+        "window.size.ms": 900000
+      }
+    },
+    {
+      "label": "InsertRollingWallclockHeaders - 1 hour rolling window",
+      "description": "Insert rolling wall clock timestamp header rounded to 1-hour intervals (3600000 ms) with custom format. Perfect for hourly partitioning. Replace header name and format as needed.",
+      "markdownDescription": "**InsertRollingWallclockHeaders** (Lenses) - Insert rolling wall clock timestamp header rounded to 1-hour intervals.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partition headers.\n\n**Use case:** Perfect for hourly partitioning in S3 or other storage systems. Sink connectors can read this header to organize data into hourly directories without parsing the payload.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRollingWallclockHeaders",
+        "header.name": "X-Hour-Partition",
+        "format": "yyyy-MM-dd-HH",
+        "window.size.ms": 3600000
+      }
+    }
+  ]
+}
+

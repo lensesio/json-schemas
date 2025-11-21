@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/SetSchemaMetadata",
+  "type": "object",
+  "title": "SetSchemaMetadata Single Message Transform",
+  "description": "Configuration schema for SetSchemaMetadata transformation. Sets schema name and version metadata.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.SetSchemaMetadata$Key' for key transformation or 'org.apache.kafka.connect.transforms.SetSchemaMetadata$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.SetSchemaMetadata$Key",
+        "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value"
+      ],
+      "title": "type"
+    },
+    "schema.name": {
+      "description": "The name to set for the schema.",
+      "type": "string",
+      "title": "schema.name"
+    },
+    "schema.version": {
+      "description": "The version to set for the schema. Must be a positive integer.",
+      "type": "integer",
+      "minimum": 1,
+      "title": "schema.version"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "SetSchemaMetadata - Set schema name",
+      "description": "Set the schema name for records. Replace 'com.example.MyRecord' with your actual schema name (typically a fully qualified class name).",
+      "markdownDescription": "**SetSchemaMetadata** - Set the schema name for records.\n\nReplace `com.example.MyRecord` with your actual schema name (typically a fully qualified class name).\n\n**Use case:** Standardize schema names across connectors or set schema names when they're missing. Required for Schema Registry integration.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
+        "schema.name": "com.example.MyRecord"
+      }
+    },
+    {
+      "label": "SetSchemaMetadata - Set schema name and version",
+      "description": "Set both schema name and version. Useful for schema evolution tracking. Replace schema name and version number as needed.",
+      "markdownDescription": "**SetSchemaMetadata** - Set both schema name and version.\n\nUseful for schema evolution tracking. Replace schema name and version number as needed.\n\n**Use case:** Track schema versions for evolution management. Higher versions indicate newer schema formats. Essential when using Schema Registry with versioning.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
+        "schema.name": "com.example.MyRecord",
+        "schema.version": 1
+      }
+    }
+  ]
+}
+

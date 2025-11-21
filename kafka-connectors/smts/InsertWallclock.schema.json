@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertWallclock",
+  "type": "object",
+  "title": "InsertWallclock Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertWallclock transformation. Inserts the current system wall clock timestamp into a field in the record value.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertWallclock$Value'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertWallclock$Value"
+      ],
+      "title": "type"
+    },
+    "field.name": {
+      "description": "The name of the field to insert the wall clock timestamp into.",
+      "type": "string",
+      "title": "field.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. Default is 'yyyy-MM-dd HH:mm:ss'.",
+      "type": "string",
+      "default": "yyyy-MM-dd HH:mm:ss",
+      "title": "format"
+    }
+  },
+  "required": ["type", "field.name"],
+  "defaultSnippets": [
+    {
+      "label": "InsertWallclock - Insert timestamp with default format",
+      "description": "Insert the current system wall clock timestamp into a field. Uses default format 'yyyy-MM-dd HH:mm:ss'. Replace 'wallclock_timestamp' with your desired field name.",
+      "markdownDescription": "**InsertWallclock** (Lenses) - Insert the current system wall clock timestamp into a field.\n\nUses default format `yyyy-MM-dd HH:mm:ss`. Replace `wallclock_timestamp` with your desired field name.\n\n**What it does:** Adds the current system time (when the message is processed) to each record, not the Kafka record timestamp.\n\n**Use case:** Track when records were ingested/processed by Kafka Connect, useful for ETL pipelines and data lineage.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclock$Value",
+        "field.name": "wallclock_timestamp"
+      }
+    },
+    {
+      "label": "InsertWallclock - Insert timestamp with custom format",
+      "description": "Insert wall clock timestamp with a custom SimpleDateFormat pattern. Useful for ISO 8601 or other timestamp formats. Replace field name and format as needed.",
+      "markdownDescription": "**InsertWallclock** (Lenses) - Insert wall clock timestamp with a custom SimpleDateFormat pattern.\n\nUseful for ISO 8601 or other timestamp formats. Replace field name and format as needed.\n\n**Common formats:**\n- `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'` - ISO 8601 with timezone\n- `yyyy-MM-dd HH:mm:ss` - Standard datetime\n- `yyyyMMddHHmmss` - Compact format\n\n**Use case:** Standardize timestamp formats for downstream systems that require specific formats.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclock$Value",
+        "field.name": "ingestion_time",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      }
+    }
+  ]
+}
+

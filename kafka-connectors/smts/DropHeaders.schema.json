@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/DropHeaders",
+  "type": "object",
+  "title": "DropHeaders Single Message Transform",
+  "description": "Configuration schema for DropHeaders transformation. Drops specified headers from records.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.DropHeaders'.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.DropHeaders"
+      ],
+      "title": "type"
+    },
+    "headers": {
+      "description": "Comma-separated list of header names to drop from records.",
+      "type": "string",
+      "title": "headers"
+    }
+  },
+  "required": ["type", "headers"],
+  "defaultSnippets": [
+    {
+      "label": "DropHeaders - Drop specific headers",
+      "description": "Remove specified headers from records. Replace header names with the headers you want to drop.",
+      "markdownDescription": "**DropHeaders** - Remove specified headers from records.\n\nReplace header names with the headers you want to drop.\n\n**Use case:** Clean up headers before sending to systems that don't need them, or remove temporary headers added during processing.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.DropHeaders",
+        "headers": "header1,header2"
+      }
+    },
+    {
+      "label": "DropHeaders - Drop sensitive headers",
+      "description": "Remove sensitive headers like authentication tokens. Replace with your actual sensitive header names.",
+      "markdownDescription": "**DropHeaders** - Remove sensitive headers like authentication tokens.\n\nReplace with your actual sensitive header names.\n\n**Use case:** Security - remove authentication tokens, API keys, or other sensitive data from headers before forwarding to external systems or logging.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.DropHeaders",
+        "headers": "X-Auth-Token,X-API-Key"
+      }
+    }
+  ]
+}
+

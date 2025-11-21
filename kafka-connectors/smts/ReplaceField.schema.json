@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/ReplaceField",
+  "type": "object",
+  "title": "ReplaceField Single Message Transform",
+  "description": "Configuration schema for ReplaceField transformation. Renames or removes fields from records.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.ReplaceField$Key' for key transformation or 'org.apache.kafka.connect.transforms.ReplaceField$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.ReplaceField$Key",
+        "org.apache.kafka.connect.transforms.ReplaceField$Value"
+      ],
+      "title": "type"
+    },
+    "renames": {
+      "description": "Comma-separated list of field rename mappings in the format 'old:new'. Example: 'oldField1:newField1,oldField2:newField2'",
+      "type": "string",
+      "title": "renames"
+    },
+    "exclude": {
+      "description": "Comma-separated list of fields to exclude from the output.",
+      "type": "string",
+      "title": "exclude"
+    },
+    "include": {
+      "description": "Comma-separated list of fields to include in the output. If specified, only these fields will be included.",
+      "type": "string",
+      "title": "include"
+    }
+  },
+  "required": ["type"],
+  "defaultSnippets": [
+    {
+      "label": "ReplaceField - Rename fields",
+      "description": "Rename fields using the format 'oldName:newName'. Multiple renames are comma-separated. Replace field names with your actual field names.",
+      "markdownDescription": "**ReplaceField** - Rename fields using the format `oldName:newName`.\n\nMultiple renames are comma-separated. Replace field names with your actual field names.\n\n**Format:** `oldField1:newField1,oldField2:newField2`",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "renames": "oldField1:newField1,oldField2:newField2"
+      }
+    },
+    {
+      "label": "ReplaceField - Exclude fields",
+      "description": "Remove specified fields from the output. Replace field names with the fields you want to exclude.",
+      "markdownDescription": "**ReplaceField** - Remove specified fields from the output.\n\nReplace field names with the fields you want to exclude.\n\n**Use case:** Remove sensitive or unnecessary fields from records.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "exclude": "sensitiveField1,sensitiveField2"
+      }
+    },
+    {
+      "label": "ReplaceField - Include only specific fields",
+      "description": "Keep only the specified fields in the output. All other fields will be removed. Replace with your actual field names.",
+      "markdownDescription": "**ReplaceField** - Keep only the specified fields in the output.\n\nAll other fields will be removed. Replace with your actual field names.\n\n**Use case:** Whitelist only necessary fields for downstream systems.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "include": "field1,field2,field3"
+      }
+    }
+  ]
+}
+

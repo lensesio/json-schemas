@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertRecordTimestampHeaders",
+  "type": "object",
+  "title": "InsertRecordTimestampHeaders Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertRecordTimestampHeaders transformation. Inserts the record's timestamp into record headers.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertRecordTimestampHeaders'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertRecordTimestampHeaders"
+      ],
+      "title": "type"
+    },
+    "header.name": {
+      "description": "The name of the header to insert the record timestamp into.",
+      "type": "string",
+      "title": "header.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. If not specified, the timestamp is used as-is.",
+      "type": "string",
+      "title": "format"
+    }
+  },
+  "required": ["type", "header.name"],
+  "defaultSnippets": [
+    {
+      "label": "InsertRecordTimestampHeaders - Insert record timestamp",
+      "description": "Insert the record's Kafka timestamp into a header. The timestamp is inserted as-is without formatting. Replace header name with your desired header name.",
+      "markdownDescription": "**InsertRecordTimestampHeaders** (Lenses) - Insert the record's Kafka timestamp into a header.\n\nThe timestamp is inserted as-is without formatting (Unix epoch milliseconds). Replace header name with your desired header name.\n\n**What it does:** Extracts Kafka's internal record timestamp (when the producer sent the message) to a header.\n\n**Use case:** Access Kafka record timestamps in headers for routing, partitioning, or audit trails without parsing the payload.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRecordTimestampHeaders",
+        "header.name": "X-Record-Timestamp"
+      }
+    },
+    {
+      "label": "InsertRecordTimestampHeaders - Insert formatted record timestamp",
+      "description": "Insert the record's Kafka timestamp into a header with custom formatting. Useful for ISO 8601 or other timestamp formats. Replace header name and format as needed.",
+      "markdownDescription": "**InsertRecordTimestampHeaders** (Lenses) - Insert the record's Kafka timestamp into a header with custom formatting.\n\nUseful for ISO 8601 or other timestamp formats. Replace header name and format as needed.\n\n**Use case:** Format Kafka record timestamps for human-readable headers or systems that require specific timestamp formats.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertRecordTimestampHeaders",
+        "header.name": "X-Kafka-Timestamp",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      }
+    }
+  ]
+}
+

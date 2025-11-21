@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/InsertWallclockHeaders",
+  "type": "object",
+  "title": "InsertWallclockHeaders Single Message Transform (Lenses)",
+  "description": "Configuration schema for InsertWallclockHeaders transformation. Inserts the current system wall clock timestamp into record headers.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'io.lenses.streamreactor.connect.transforms.InsertWallclockHeaders'.",
+      "type": "string",
+      "enum": [
+        "io.lenses.streamreactor.connect.transforms.InsertWallclockHeaders"
+      ],
+      "title": "type"
+    },
+    "header.name": {
+      "description": "The name of the header to insert the wall clock timestamp into.",
+      "type": "string",
+      "title": "header.name"
+    },
+    "format": {
+      "description": "SimpleDateFormat pattern for formatting the timestamp. Default is 'yyyy-MM-dd HH:mm:ss'.",
+      "type": "string",
+      "default": "yyyy-MM-dd HH:mm:ss",
+      "title": "format"
+    }
+  },
+  "required": ["type", "header.name"],
+  "defaultSnippets": [
+    {
+      "label": "InsertWallclockHeaders - Insert timestamp header with default format",
+      "description": "Insert the current system wall clock timestamp into a header. Uses default format 'yyyy-MM-dd HH:mm:ss'. Replace header name with your desired header name.",
+      "markdownDescription": "**InsertWallclockHeaders** (Lenses) - Insert the current system wall clock timestamp into a header.\n\nUses default format `yyyy-MM-dd HH:mm:ss`. Replace header name with your desired header name.\n\n**What it does:** Adds the current system time (when processed) to record headers, not the Kafka record timestamp.\n\n**Use case:** Add processing timestamps to headers for routing, filtering, or audit trails without modifying the payload.",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclockHeaders",
+        "header.name": "X-Wallclock-Timestamp"
+      }
+    },
+    {
+      "label": "InsertWallclockHeaders - Insert timestamp header with custom format",
+      "description": "Insert wall clock timestamp header with a custom SimpleDateFormat pattern. Useful for ISO 8601 or other timestamp formats. Replace header name and format as needed.",
+      "markdownDescription": "**InsertWallclockHeaders** (Lenses) - Insert wall clock timestamp header with a custom SimpleDateFormat pattern.\n\nUseful for ISO 8601 or other timestamp formats. Replace header name and format as needed.\n\n**Use case:** Standardize timestamp formats in headers for downstream systems or APIs that require specific formats (e.g., ISO 8601 for REST APIs).",
+      "body": {
+        "type": "io.lenses.streamreactor.connect.transforms.InsertWallclockHeaders",
+        "header.name": "X-Ingestion-Time",
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+      }
+    }
+  ]
+}
+

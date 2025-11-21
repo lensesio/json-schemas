@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lensesio/json-schemas/kafka-connectors/smts/MaskField",
+  "type": "object",
+  "title": "MaskField Single Message Transform",
+  "description": "Configuration schema for MaskField transformation. Masks field values with null or a replacement value.",
+  "properties": {
+    "type": {
+      "description": "The transformation type. Use 'org.apache.kafka.connect.transforms.MaskField$Key' for key transformation or 'org.apache.kafka.connect.transforms.MaskField$Value' for value transformation.",
+      "type": "string",
+      "enum": [
+        "org.apache.kafka.connect.transforms.MaskField$Key",
+        "org.apache.kafka.connect.transforms.MaskField$Value"
+      ],
+      "title": "type"
+    },
+    "fields": {
+      "description": "Comma-separated list of field names to mask.",
+      "type": "string",
+      "title": "fields"
+    },
+    "replacement": {
+      "description": "Replacement value to use when masking fields. If not specified, fields will be masked with null.",
+      "type": "string",
+      "title": "replacement"
+    }
+  },
+  "required": ["type", "fields"],
+  "defaultSnippets": [
+    {
+      "label": "MaskField - Mask with null",
+      "description": "Mask sensitive fields by setting them to null. Replace field names with the fields you want to mask (e.g., password, SSN, credit card).",
+      "markdownDescription": "**MaskField** - Mask sensitive fields by setting them to `null`.\n\nReplace field names with the fields you want to mask (e.g., `password`, `ssn`, `creditCard`).\n\n**Use case:** Remove sensitive data before sending to downstream systems or logs.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.MaskField$Value",
+        "fields": "password,ssn,creditCard"
+      }
+    },
+    {
+      "label": "MaskField - Mask with replacement value",
+      "description": "Mask fields with a custom replacement value instead of null. Replace 'sensitiveField' and '***MASKED***' with your field name and replacement value.",
+      "markdownDescription": "**MaskField** - Mask fields with a custom replacement value instead of `null`.\n\nReplace `sensitiveField` and `***MASKED***` with your field name and replacement value.\n\n**Use case:** Replace sensitive data with a placeholder to indicate masking occurred.",
+      "body": {
+        "type": "org.apache.kafka.connect.transforms.MaskField$Value",
+        "fields": "sensitiveField",
+        "replacement": "***MASKED***"
+      }
+    }
+  ]
+}
+
