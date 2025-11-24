@@ -620,6 +620,193 @@
       }
     },
     {
+      "label": "Transform: RegexRouter - Route by topic prefix",
+      "description": "Route messages to different topics based on regex pattern matching the topic name. Replace 'routerTransform', pattern, and replacement with your values.",
+      "markdownDescription": "**RegexRouter Transform** - Route messages to different topics based on regex pattern.\n\nReplace `routerTransform`, pattern, and replacement with your values.\n\n**What it does:** Changes the destination topic name based on a regex pattern. Use capturing groups (`()`) in the regex and reference them with `$1`, `$2`, etc. in the replacement.\n\n**Example:** Route `user-events-prod` → `user-events-archive`\n\n**Use case:**\n- Route messages to different topics based on naming conventions\n- Add prefixes/suffixes to topic names\n- Reorganize topics during migration\n\n**Note:** This transform only works for sink connectors (changes where messages are written).",
+      "body": {
+        "transforms": "routerTransform",
+        "transforms.routerTransform.type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.routerTransform.regex": "user-events-(.*)",
+        "transforms.routerTransform.replacement": "user-events-archive-$1"
+      }
+    },
+    {
+      "label": "Transform: TimestampRouter - Route by date",
+      "description": "Route messages to topics with names based on the record timestamp. Default format creates daily partitions. Replace 'timestampRouter' with your alias.",
+      "markdownDescription": "**TimestampRouter Transform** - Route messages to topics with names based on the record timestamp.\n\nReplace `timestampRouter` with your alias.\n\n**What it does:** Appends a formatted timestamp to the topic name. Default format is `${topic}-${timestamp}` with `yyyyMMdd` (daily partitions).\n\n**Example:** `orders` → `orders-20240115` (for messages from Jan 15, 2024)\n\n**Use case:**\n- Create time-based partitions for data lakes (S3, HDFS)\n- Archive data by date\n- Organize topics by ingestion date\n\n**Common formats:**\n- `yyyyMMdd` - Daily (default)\n- `yyyyMM` - Monthly\n- `yyyy-MM-dd` - ISO date format\n\n**Note:** This transform only works for sink connectors (changes where messages are written).",
+      "body": {
+        "transforms": "timestampRouter",
+        "transforms.timestampRouter.type": "org.apache.kafka.connect.transforms.TimestampRouter",
+        "transforms.timestampRouter.topic.format": "${topic}-${timestamp}",
+        "transforms.timestampRouter.timestamp.format": "yyyyMMdd"
+      }
+    },
+    {
+      "label": "Transform: HoistField - Hoist nested field",
+      "description": "Hoist a nested field to the top level of the record. Replace 'hoistTransform' and 'user.name' with your alias and nested field path.",
+      "markdownDescription": "**HoistField Transform** - Hoist a nested field to the top level of the record.\n\nReplace `hoistTransform` and `user.name` with your alias and nested field path.\n\n**What it does:** Moves a nested field up to the root level. Use dot notation for nested fields (e.g., `user.name`, `address.city`).\n\n**Example:** `{user: {name: \"John\"}}` → `{name: \"John\"}` (hoisting `user.name`)\n\n**Use case:**\n- Extract nested fields for simpler processing\n- Flatten specific nested structures\n- Prepare data for systems that don't support nested fields\n\n**Note:** The original nested structure is removed. Use Flatten transform if you want to keep the full structure.",
+      "body": {
+        "transforms": "hoistTransform",
+        "transforms.hoistTransform.type": "org.apache.kafka.connect.transforms.HoistField$Value",
+        "transforms.hoistTransform.field": "user.name"
+      }
+    },
+    {
+      "label": "Transform: HeaderFrom - Copy field to header",
+      "description": "Copy a field from the key or value to a header. Replace 'headerFromTransform' and 'correlationId' with your alias and field name.",
+      "markdownDescription": "**HeaderFrom Transform** - Copy a field from the key or value to a header.\n\nReplace `headerFromTransform` and `correlationId` with your alias and field name.\n\n**What it does:** Copies field values from the record key or value into headers. Useful for routing, filtering, or metadata propagation.\n\n**Use case:**\n- Copy correlation IDs from payload to headers for tracing\n- Extract routing keys for downstream systems\n- Propagate metadata without modifying the payload\n\n**Note:** Use `$Key` to copy from key, `$Value` to copy from value.",
+      "body": {
+        "transforms": "headerFromTransform",
+        "transforms.headerFromTransform.type": "org.apache.kafka.connect.transforms.HeaderFrom$Value",
+        "transforms.headerFromTransform.fields": "correlationId"
+      }
+    },
+    {
+      "label": "Transform: InsertHeader - Insert static header",
+      "description": "Insert a header with a static value or metadata. Replace 'insertHeaderTransform', header name, and value with your values.",
+      "markdownDescription": "**InsertHeader Transform** - Insert a header with a static value or metadata.\n\nReplace `insertHeaderTransform`, header name, and value with your values.\n\n**What it does:** Adds a header with a static value or references to metadata like `${topic}`, `${partition}`, `${offset}`.\n\n**Use case:**\n- Add environment tags (`env: production`)\n- Add processing metadata (`source: kafka-connect`)\n- Add routing information for downstream systems\n\n**Metadata references:** `${topic}`, `${partition}`, `${offset}`",
+      "body": {
+        "transforms": "insertHeaderTransform",
+        "transforms.insertHeaderTransform.type": "org.apache.kafka.connect.transforms.InsertHeader",
+        "transforms.insertHeaderTransform.header": "X-Environment",
+        "transforms.insertHeaderTransform.value.literal": "production"
+      }
+    },
+    {
+      "label": "Transform: ReplaceHeader - Rename headers",
+      "description": "Rename headers using the format 'oldName:newName'. Replace 'replaceHeaderTransform' and header mappings with your values.",
+      "markdownDescription": "**ReplaceHeader Transform** - Rename headers using the format `oldName:newName`.\n\nReplace `replaceHeaderTransform` and header mappings with your values.\n\n**What it does:** Renames headers or removes them using `exclude` or `include` lists.\n\n**Use case:**\n- Standardize header names across systems\n- Remove sensitive headers\n- Rename headers for downstream compatibility\n\n**Options:**\n- `renames` - Rename headers (format: `old:new`)\n- `exclude` - Remove specific headers\n- `include` - Keep only specified headers",
+      "body": {
+        "transforms": "replaceHeaderTransform",
+        "transforms.replaceHeaderTransform.type": "org.apache.kafka.connect.transforms.ReplaceHeader",
+        "transforms.replaceHeaderTransform.renames": "oldHeader1:newHeader1,oldHeader2:newHeader2"
+      }
+    },
+    {
+      "label": "Transform: DropHeaders - Drop specific headers",
+      "description": "Drop specified headers from records. Replace 'dropHeadersTransform' and header names with your values.",
+      "markdownDescription": "**DropHeaders Transform** - Drop specified headers from records.\n\nReplace `dropHeadersTransform` and header names with your values.\n\n**What it does:** Removes specific headers from records. Useful for cleaning up headers before sending to downstream systems.\n\n**Use case:**\n- Remove sensitive headers (tokens, passwords)\n- Clean up temporary headers\n- Remove headers not needed by downstream systems\n\n**Security:** Prevents sensitive header data from reaching downstream systems.",
+      "body": {
+        "transforms": "dropHeadersTransform",
+        "transforms.dropHeadersTransform.type": "org.apache.kafka.connect.transforms.DropHeaders",
+        "transforms.dropHeadersTransform.headers": "X-Auth-Token,X-Debug-Info"
+      }
+    },
+    {
+      "label": "Transform: SetSchemaMetadata - Set schema name and version",
+      "description": "Set schema name and version metadata. Replace 'schemaTransform', schema name, and version with your values.",
+      "markdownDescription": "**SetSchemaMetadata Transform** - Set schema name and version metadata.\n\nReplace `schemaTransform`, schema name, and version with your values.\n\n**What it does:** Updates the schema name and version in the record metadata. Used with Schema Registry to control schema evolution.\n\n**Use case:**\n- Version schemas for backward compatibility\n- Rename schemas during migration\n- Control schema evolution in Schema Registry\n\n**Note:** Requires Schema Registry and schema-enabled converters (Avro, JSON Schema, Protobuf).",
+      "body": {
+        "transforms": "schemaTransform",
+        "transforms.schemaTransform.type": "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
+        "transforms.schemaTransform.schema.name": "com.example.User",
+        "transforms.schemaTransform.schema.version": 1
+      }
+    },
+    {
+      "label": "Transform: TimestampConverter - Convert to Unix timestamp",
+      "description": "Convert timestamps to Unix format (milliseconds since epoch). Replace 'timestampConverter' and field name with your values.",
+      "markdownDescription": "**TimestampConverter Transform** - Convert timestamps to Unix format (milliseconds since epoch).\n\nReplace `timestampConverter` and field name with your values.\n\n**What it does:** Converts timestamp fields between different formats. If `field` is not specified, converts the record timestamp.\n\n**Target types:**\n- `unix` - Milliseconds since epoch (Unix timestamp)\n- `Date` - Date only (no time)\n- `Time` - Time only (no date)\n- `Timestamp` - Date and time\n\n**Use case:**\n- Standardize timestamp formats\n- Convert string timestamps to Unix format\n- Normalize timestamps for downstream systems\n\n**Note:** Use `format` parameter when source is a string timestamp.",
+      "body": {
+        "transforms": "timestampConverter",
+        "transforms.timestampConverter.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "transforms.timestampConverter.field": "created_at",
+        "transforms.timestampConverter.target.type": "unix"
+      }
+    },
+    {
+      "label": "Transform: Filter - Filter records with predicate",
+      "description": "Filter records using a predicate. Records that don't match are dropped. Replace 'filterTransform' and predicate name with your values.",
+      "markdownDescription": "**Filter Transform** - Filter records using a predicate. Records that don't match are dropped.\n\nReplace `filterTransform` and predicate name with your values.\n\n**What it does:** Uses a predicate to determine which records to keep. Records that don't match the predicate are dropped.\n\n**Use case:**\n- Filter out invalid records\n- Remove records based on conditions\n- Route records based on predicates\n\n**Note:** You must define the predicate separately using the `predicates` property. See predicate examples below.",
+      "body": {
+        "transforms": "filterTransform",
+        "transforms.filterTransform.type": "org.apache.kafka.connect.transforms.Filter",
+        "transforms.filterTransform.predicate": "isValid"
+      }
+    },
+    {
+      "label": "Transform: InsertRollingWallclockHeaders - Hourly rolling timestamp header (Lenses)",
+      "description": "Insert rolling wall clock timestamp into headers, rounded to 1-hour intervals. Perfect for hourly partitioning. Replace 'rollingHeaderTransform' and adjust window size as needed.",
+      "markdownDescription": "**InsertRollingWallclockHeaders Transform** (Lenses) - Insert rolling wall clock timestamp into headers, rounded to 1-hour intervals.\n\nReplace `rollingHeaderTransform` and adjust window size as needed.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partitions.\n\n**Use case:** Perfect for hourly partitioning in S3, HDFS, or data lakes. Creates directory structures like `year=2024/month=01/day=15/hour=14/` for efficient time-based queries.\n\n**Storage pattern:** `s3://bucket/data/year=2024/month=01/day=15/hour=14/`\n\n**Difference from InsertRollingWallclock:** This adds the timestamp to headers instead of the payload, keeping the payload unchanged.",
+      "body": {
+        "transforms": "rollingHeaderTransform",
+        "transforms.rollingHeaderTransform.type": "io.lenses.streamreactor.connect.transforms.InsertRollingWallclockHeaders",
+        "transforms.rollingHeaderTransform.header.name": "X-Hour-Partition",
+        "transforms.rollingHeaderTransform.format": "yyyy-MM-dd-HH",
+        "transforms.rollingHeaderTransform.window.size.ms": 3600000
+      }
+    },
+    {
+      "label": "Transform: InsertFieldTimestampHeaders - Copy field timestamp to header (Lenses)",
+      "description": "Copy a timestamp from a field in the record value to a header. Replace 'fieldTimestampHeaderTransform', field name, and header name with your values.",
+      "markdownDescription": "**InsertFieldTimestampHeaders Transform** (Lenses) - Copy a timestamp from a field in the record value to a header.\n\nReplace `fieldTimestampHeaderTransform`, field name, and header name with your values.\n\n**What it does:** Extracts a timestamp field from the payload and adds it to a header. Optionally formats the timestamp.\n\n**Use case:**\n- Copy timestamps to headers for routing\n- Add formatted timestamps to headers without modifying payload\n- Extract timestamps for partitioning logic\n\n**Note:** The timestamp field must exist in the record value. Use `format` to format the timestamp.",
+      "body": {
+        "transforms": "fieldTimestampHeaderTransform",
+        "transforms.fieldTimestampHeaderTransform.type": "io.lenses.streamreactor.connect.transforms.InsertFieldTimestampHeaders",
+        "transforms.fieldTimestampHeaderTransform.field.name": "created_at",
+        "transforms.fieldTimestampHeaderTransform.header.name": "X-Created-Timestamp",
+        "transforms.fieldTimestampHeaderTransform.format": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "label": "Transform: InsertRecordTimestampHeaders - Copy record timestamp to header (Lenses)",
+      "description": "Copy the record's Kafka timestamp to a header. Replace 'recordTimestampHeaderTransform' and header name with your values.",
+      "markdownDescription": "**InsertRecordTimestampHeaders Transform** (Lenses) - Copy the record's Kafka timestamp to a header.\n\nReplace `recordTimestampHeaderTransform` and header name with your values.\n\n**What it does:** Extracts the Kafka record timestamp and adds it to a header. Optionally formats the timestamp.\n\n**Use case:**\n- Add Kafka timestamps to headers for routing\n- Track when messages were produced to Kafka\n- Use timestamps for partitioning without modifying payload\n\n**Note:** This uses the Kafka record timestamp (when the message was produced), not the processing time.",
+      "body": {
+        "transforms": "recordTimestampHeaderTransform",
+        "transforms.recordTimestampHeaderTransform.type": "io.lenses.streamreactor.connect.transforms.InsertRecordTimestampHeaders",
+        "transforms.recordTimestampHeaderTransform.header.name": "X-Kafka-Timestamp",
+        "transforms.recordTimestampHeaderTransform.format": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "label": "Transform: InsertRollingFieldTimestampHeaders - Hourly rolling field timestamp header (Lenses)",
+      "description": "Copy a timestamp field to a header, rounded to 1-hour intervals. Perfect for hourly partitioning. Replace 'rollingFieldHeaderTransform' and adjust window size as needed.",
+      "markdownDescription": "**InsertRollingFieldTimestampHeaders Transform** (Lenses) - Copy a timestamp field to a header, rounded to 1-hour intervals.\n\nReplace `rollingFieldHeaderTransform` and adjust window size as needed.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partitions.\n\n**What it does:** Extracts a timestamp from a field, rounds it to the nearest hour window, and adds it to a header.\n\n**Use case:** Perfect for hourly partitioning in S3, HDFS, or data lakes based on a timestamp field in the payload.\n\n**Storage pattern:** `s3://bucket/data/year=2024/month=01/day=15/hour=14/`",
+      "body": {
+        "transforms": "rollingFieldHeaderTransform",
+        "transforms.rollingFieldHeaderTransform.type": "io.lenses.streamreactor.connect.transforms.InsertRollingFieldTimestampHeaders",
+        "transforms.rollingFieldHeaderTransform.field.name": "created_at",
+        "transforms.rollingFieldHeaderTransform.header.name": "X-Hour-Partition",
+        "transforms.rollingFieldHeaderTransform.format": "yyyy-MM-dd-HH",
+        "transforms.rollingFieldHeaderTransform.window.size.ms": 3600000
+      }
+    },
+    {
+      "label": "Transform: InsertRollingRecordTimestampHeaders - Hourly rolling record timestamp header (Lenses)",
+      "description": "Copy the Kafka record timestamp to a header, rounded to 1-hour intervals. Perfect for hourly partitioning. Replace 'rollingRecordHeaderTransform' and adjust window size as needed.",
+      "markdownDescription": "**InsertRollingRecordTimestampHeaders Transform** (Lenses) - Copy the Kafka record timestamp to a header, rounded to 1-hour intervals.\n\nReplace `rollingRecordHeaderTransform` and adjust window size as needed.\n\n**Window size:** 3600000 ms (1 hour). Format `yyyy-MM-dd-HH` creates hourly partitions.\n\n**What it does:** Extracts the Kafka record timestamp, rounds it to the nearest hour window, and adds it to a header.\n\n**Use case:** Perfect for hourly partitioning in S3, HDFS, or data lakes based on when messages were produced to Kafka.\n\n**Storage pattern:** `s3://bucket/data/year=2024/month=01/day=15/hour=14/`",
+      "body": {
+        "transforms": "rollingRecordHeaderTransform",
+        "transforms.rollingRecordHeaderTransform.type": "io.lenses.streamreactor.connect.transforms.InsertRollingRecordTimestampHeaders",
+        "transforms.rollingRecordHeaderTransform.header.name": "X-Hour-Partition",
+        "transforms.rollingRecordHeaderTransform.format": "yyyy-MM-dd-HH",
+        "transforms.rollingRecordHeaderTransform.window.size.ms": 3600000
+      }
+    },
+    {
+      "label": "Transform: InsertSourcePartitionOrOffsetValue - Insert partition/offset field (Lenses)",
+      "description": "Insert source partition or offset information into a field in the record value. Replace 'partitionOffsetTransform', field name, and source type with your values.",
+      "markdownDescription": "**InsertSourcePartitionOrOffsetValue Transform** (Lenses) - Insert source partition or offset information into a field in the record value.\n\nReplace `partitionOffsetTransform`, field name, and source type with your values.\n\n**What it does:** Adds the source partition number or offset to a field in the record value. Useful for tracking where records came from.\n\n**Source types:**\n- `partition` - Insert partition number\n- `offset` - Insert offset number\n\n**Use case:**\n- Track data lineage (which partition/offset records came from)\n- Debug data issues by tracking source location\n- Add metadata for auditing and compliance\n\n**Note:** This inserts the source partition/offset from the connector's source system, not the Kafka partition/offset.",
+      "body": {
+        "transforms": "partitionOffsetTransform",
+        "transforms.partitionOffsetTransform.type": "io.lenses.streamreactor.connect.transforms.InsertSourcePartitionOrOffsetValue$Value",
+        "transforms.partitionOffsetTransform.field.name": "source_partition",
+        "transforms.partitionOffsetTransform.source.type": "partition"
+      }
+    },
+    {
+      "label": "Transform: InsertWallclockDateTimePart - Insert year header (Lenses)",
+      "description": "Insert specific parts of the current date/time into headers. Replace 'dateTimePartTransform', header name, and date/time part with your values.",
+      "markdownDescription": "**InsertWallclockDateTimePart Transform** (Lenses) - Insert specific parts of the current date/time into headers.\n\nReplace `dateTimePartTransform`, header name, and date/time part with your values.\n\n**What it does:** Extracts specific parts of the current system date/time and adds them to headers. Useful for partitioning by year, month, day, hour, etc.\n\n**Available parts:**\n- `year` - Year (e.g., 2024)\n- `month` - Month (1-12)\n- `day` - Day of month (1-31)\n- `hour` - Hour (0-23)\n- `minute` - Minute (0-59)\n- `second` - Second (0-59)\n- `dayOfWeek` - Day of week (1-7)\n- `dayOfYear` - Day of year (1-365)\n\n**Use case:**\n- Partition data by year/month/day/hour\n- Add time-based routing headers\n- Create hierarchical directory structures for data lakes\n\n**Example:** Add `year`, `month`, `day` headers for S3 partitioning: `s3://bucket/data/year=2024/month=01/day=15/`",
+      "body": {
+        "transforms": "dateTimePartTransform",
+        "transforms.dateTimePartTransform.type": "io.lenses.streamreactor.connect.transforms.InsertWallclockDateTimePart",
+        "transforms.dateTimePartTransform.header.name": "X-Year",
+        "transforms.dateTimePartTransform.date.time.part": "year"
+      }
+    },
+    {
       "label": "Predicate: RecordIsTombstone - Filter tombstone records",
       "description": "Predicate that evaluates to true for tombstone records (null values). Use with Filter transform to drop or process tombstone records separately.",
       "markdownDescription": "**RecordIsTombstone Predicate** - Evaluates to `true` if the record value is `null` (tombstone record).\n\nReplace `isTombstone` with your predicate alias.\n\n**Use case:**\n- Filter out tombstone records (deletes) from your pipeline\n- Process tombstone records separately from regular records\n- Prevent null values from reaching downstream systems\n\n**How to use:** Reference this predicate in a Filter transform:\n```\ntransforms=filterTombstones\ntransforms.filterTombstones.type=org.apache.kafka.connect.transforms.Filter\ntransforms.filterTombstones.predicate=isTombstone\n```",
@@ -681,6 +868,89 @@
         "predicates.isTombstone.type": "org.apache.kafka.connect.transforms.predicates.RecordIsTombstone",
         "transforms.filterTombstones.type": "org.apache.kafka.connect.transforms.Filter",
         "transforms.filterTombstones.predicate": "isTombstone"
+      }
+    },
+    {
+      "label": "Transform + Predicate: Filter by topic pattern, then Cast",
+      "description": "Complete example showing how to filter records from specific topics using TopicNameMatches predicate, then apply Cast transform. Replace aliases and values with your own.",
+      "markdownDescription": "**Multiple Transforms with Predicate** - Filter records from specific topics, then cast fields.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Defines a predicate that matches topics starting with 'user-'\n2. Filters to keep only records from matching topics\n3. Casts fields to different types\n\n**Use case:** Process only specific topics and transform their data. Common pattern: Filter → Transform → Transform.\n\n**Transform order:** Filters are applied first, then transforms are applied in sequence.",
+      "body": {
+        "transforms": "filterUserTopics,castTransform",
+        "predicates": "isUserTopic",
+        "predicates.isUserTopic.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+        "predicates.isUserTopic.pattern": "user-.*",
+        "transforms.filterUserTopics.type": "org.apache.kafka.connect.transforms.Filter",
+        "transforms.filterUserTopics.predicate": "isUserTopic",
+        "transforms.castTransform.type": "org.apache.kafka.connect.transforms.Cast$Value",
+        "transforms.castTransform.spec": "age:int32,score:float64"
+      }
+    },
+    {
+      "label": "Transform + Predicate: Filter by header, then InsertField",
+      "description": "Complete example showing how to filter records that have a correlation ID header, then add metadata fields. Replace aliases and values with your own.",
+      "markdownDescription": "**Filter with Predicate, then Insert Metadata** - Filter records with required headers, then add metadata.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Defines a predicate that checks for a `correlationId` header\n2. Filters to keep only records with this header\n3. Inserts timestamp and topic metadata\n\n**Use case:** Ensure data quality (only process records with required headers) and add tracking metadata for downstream systems.",
+      "body": {
+        "transforms": "filterWithHeader,insertMetadata",
+        "predicates": "hasCorrelationId",
+        "predicates.hasCorrelationId.type": "org.apache.kafka.connect.transforms.predicates.HasHeaderKey",
+        "predicates.hasCorrelationId.name": "correlationId",
+        "transforms.filterWithHeader.type": "org.apache.kafka.connect.transforms.Filter",
+        "transforms.filterWithHeader.predicate": "hasCorrelationId",
+        "transforms.insertMetadata.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+        "transforms.insertMetadata.timestamp.field": "ingestion_time",
+        "transforms.insertMetadata.topic.field": "source_topic"
+      }
+    },
+    {
+      "label": "Transform + Predicate: Filter by exact topic, then Flatten and Mask",
+      "description": "Complete example showing how to filter records from a specific topic, then flatten nested structures and mask sensitive fields. Replace aliases and values with your own.",
+      "markdownDescription": "**Multiple Transforms with Predicate** - Filter by exact topic, then flatten and mask sensitive data.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Defines a predicate that matches the exact topic 'orders'\n2. Filters to keep only records from this topic\n3. Flattens nested structures\n4. Masks sensitive fields\n\n**Use case:** Process specific topics with complex transformations. Common ETL pattern: Filter → Flatten → Mask → Transform.\n\n**Security:** Masks sensitive data before sending to downstream systems.",
+      "body": {
+        "transforms": "filterOrders,flattenTransform,maskTransform",
+        "predicates": "isOrdersTopic",
+        "predicates.isOrdersTopic.type": "org.apache.kafka.connect.transforms.predicates.RecordHasTopic",
+        "predicates.isOrdersTopic.topic": "orders",
+        "transforms.filterOrders.type": "org.apache.kafka.connect.transforms.Filter",
+        "transforms.filterOrders.predicate": "isOrdersTopic",
+        "transforms.flattenTransform.type": "org.apache.kafka.connect.transforms.Flatten$Value",
+        "transforms.maskTransform.type": "org.apache.kafka.connect.transforms.MaskField$Value",
+        "transforms.maskTransform.fields": "creditCard,ssn"
+      }
+    },
+    {
+      "label": "Transform: Cast and Flatten (no predicates)",
+      "description": "Simple example showing multiple transforms without predicates. Replace aliases and values with your own.",
+      "markdownDescription": "**Multiple Transforms (No Predicates)** - Apply multiple transforms in sequence without filtering.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Casts fields to different types\n2. Flattens nested structures\n\n**Use case:** Transform all records without filtering. Common pattern for data normalization: Cast → Flatten → ReplaceField.\n\n**Note:** All records are processed. Use predicates with Filter transform if you need conditional processing.",
+      "body": {
+        "transforms": "castTransform,flattenTransform",
+        "transforms.castTransform.type": "org.apache.kafka.connect.transforms.Cast$Value",
+        "transforms.castTransform.spec": "age:int32,price:float64",
+        "transforms.flattenTransform.type": "org.apache.kafka.connect.transforms.Flatten$Value"
+      }
+    },
+    {
+      "label": "Transform: ExtractField and InsertField (no predicates)",
+      "description": "Simple example showing multiple transforms without predicates. Replace aliases and values with your own.",
+      "markdownDescription": "**Multiple Transforms (No Predicates)** - Extract a field and add metadata without filtering.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Extracts a single field from the record\n2. Inserts timestamp and topic metadata\n\n**Use case:** Simplify records and add tracking information. All records are processed without filtering.\n\n**Note:** Use predicates with Filter transform if you need to process only specific records.",
+      "body": {
+        "transforms": "extractTransform,insertTransform",
+        "transforms.extractTransform.type": "org.apache.kafka.connect.transforms.ExtractField$Value",
+        "transforms.extractTransform.field": "id",
+        "transforms.insertTransform.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+        "transforms.insertTransform.timestamp.field": "processed_at",
+        "transforms.insertTransform.topic.field": "source"
+      }
+    },
+    {
+      "label": "Transform: ReplaceField and MaskField (no predicates)",
+      "description": "Simple example showing multiple transforms without predicates. Replace aliases and values with your own.",
+      "markdownDescription": "**Multiple Transforms (No Predicates)** - Rename fields and mask sensitive data without filtering.\n\nReplace aliases and values with your own.\n\n**What it does:**\n1. Renames fields to match downstream system requirements\n2. Masks sensitive fields\n\n**Use case:** Standardize field names and remove sensitive data. All records are processed without filtering.\n\n**Security:** Masks sensitive data before sending to downstream systems.\n\n**Note:** Use predicates with Filter transform if you need to process only specific records.",
+      "body": {
+        "transforms": "renameTransform,maskTransform",
+        "transforms.renameTransform.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "transforms.renameTransform.renames": "oldField1:newField1,oldField2:newField2",
+        "transforms.maskTransform.type": "org.apache.kafka.connect.transforms.MaskField$Value",
+        "transforms.maskTransform.fields": "password,ssn"
       }
     }
   ]
