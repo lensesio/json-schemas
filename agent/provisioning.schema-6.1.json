@@ -33,10 +33,10 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9.-]+:[0-9]{1,5}$",
-            "description": "Enter the bootstrap server URL (e.g., 'broker:9092', 'broker:9092'). Protocol Prefix set in protocol setting."
+            "pattern": "^((SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://)?[a-zA-Z0-9.-]+:[0-9]{1,5}$",
+            "description": "Enter the bootstrap server URL (e.g., 'broker:9092', 'SASL_SSL://broker:9092'). Protocol prefix is optional and can be included in the URL or set separately in the protocol setting."
           },
-          "description": "List of bootstrap servers with protocol prefixes."
+          "description": "List of bootstrap servers. Protocol prefixes are optional."
         }
       },
       "required": ["value"]
