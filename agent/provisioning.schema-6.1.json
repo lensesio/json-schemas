@@ -104,7 +104,11 @@
         "value": {
           "type": "string",
           "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
-          "minLength": 1
+          "x-secret": true,
+          "anyOf": [
+            { "minLength": 1 },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"],
@@ -128,7 +132,12 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter a password for the keystore."
+          "description": "Enter a password for the keystore.",
+          "x-secret": true,
+          "anyOf": [
+            { "type": "string" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -139,7 +148,12 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter key password (can be empty)."
+          "description": "Enter key password (can be empty).",
+          "x-secret": true,
+          "anyOf": [
+            { "type": "string" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -162,7 +176,12 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter a password for the truststore."
+          "description": "Enter a password for the truststore.",
+          "x-secret": true,
+          "anyOf": [
+            { "type": "string" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -229,7 +248,16 @@
     "metricsPassword": {
       "type": "object",
       "description": "Password for metrics authentication.",
-      "properties": { "value": { "type": "string" } },
+      "properties": {
+        "value": {
+          "type": "string",
+          "x-secret": true,
+          "anyOf": [
+            { "type": "string" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
+        }
+      },
       "required": ["value"]
     },
     "metricsHttpSuffix": {
@@ -291,7 +319,11 @@
         "value": {
           "type": "string",
           "description": "Enter the password (non empty).",
-          "pattern": "^.+$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -314,7 +346,11 @@
         "value": {
           "description": "Enter the basic auth user information (non empty).",
           "type": "string",
-          "pattern": "^.+$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       }
     },
@@ -384,7 +420,11 @@
         "value": {
           "type": "string",
           "description": "Enter the session token value (non empty).",
-          "pattern": "^[a-zA-Z0-9-]+$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^[a-zA-Z0-9-]+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -550,7 +590,11 @@
         "value": {
           "type": "string",
           "description": "Enter the token value (non empty).",
-          "pattern": "^[A-Za-z0-9_-]+$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^[A-Za-z0-9_-]+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -574,7 +618,11 @@
         "value": {
           "type": "string",
           "description": "Enter the Slack webhook URL (non empty).",
-          "pattern": "^(https?:\\/\\/.+)$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^(https?:\\/\\/.+)$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -586,8 +634,11 @@
         "value": {
           "type": "string",
           "description": "Enter the integration key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -611,8 +662,11 @@
         "value": {
           "type": "string",
           "description": "Enter the API key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -624,8 +678,11 @@
         "value": {
           "type": "string",
           "description": "Enter the application key value (non empty).",
-          "pattern": "^.+$",
-          "x-secret": true
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
@@ -636,10 +693,14 @@
       "properties": {
         "value": {
           "type": "array",
+          "x-secret": true,
           "items": {
             "type": "string",
             "description": "Enter the credential string (non empty).",
-            "pattern": "^.+$"
+            "anyOf": [
+              { "pattern": "^.+$" },
+              { "const": "[secret hidden by Lenses]" }
+            ]
           },
           "description": "Array of credential strings."
         }
@@ -712,7 +773,11 @@
         "value": {
           "type": "string",
           "description": "Enter the Agent key value (non empty).",
-          "pattern": "^.+$"
+          "x-secret": true,
+          "anyOf": [
+            { "pattern": "^.+$" },
+            { "const": "[secret hidden by Lenses]" }
+          ]
         }
       },
       "required": ["value"]
