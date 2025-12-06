@@ -1,68 +1,14 @@
-# yaml-language-server: $schema=./agent/provisioning.schema.json
+# yaml-language-server: #$schema=./agent/provisioning.schema-6.1.json
 
-# Lenses Agent Provisioning Configuration
-# This file uses the local JSON schema for validation and autocompletion
-
-# Example configuration structure - uncomment and modify as needed:
-
-lensesHq:
-  - name: "lenses-hq"
-    version: 1
-    tags:
-      - "hq"
-    configuration:
-      server:
-        value: "<YOUR LENSES HQ SERVER URL>"
-      port:
-        value: 10000
-      agentKey:
-        value: "<LENSES_HQ_AGENT_KEY>"
 
 kafka:
-  - name: "kafka"
+  - name: kafka
     version: 1
-    tags: []
+    editorTag: 
     configuration:
       kafkaBootstrapServers:
         value:
-          - "PLAINTEXT://demo-kafka:9092"
-      protocol:
-        value: "PLAINTEXT"
-      # Uncomment below to enable JMX metrics:
-      # metricsPort:
-      #   value: 9581
-      # metricsType:
-      #   value: "JMX"
-      # metricsSsl:
-      #   value: false
-      # metricsUsername:
-      #   value: "jmxuser"
-      # metricsPassword:
-      #   value: "jmxpass"
+          - 
 
-zookeeper:
-  - name: "zookeeper"
-    version: 1
-    tags: []
-    configuration:
-      zookeeperUrls:
-        value:
-          - "localhost:2181"
 
-connect:
-  - name: "connect"
-    version: 1
-    tags: []
-    configuration:
-      workers:
-        value:
-          - "http://localhost:8083"
 
-confluentSchemaRegistry:
-  - name: "schema-registry"
-    version: 1
-    tags: []
-    configuration:
-      schemaRegistryUrls:
-        value:
-          - "http://localhost:8081"

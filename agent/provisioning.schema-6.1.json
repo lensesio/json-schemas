@@ -906,6 +906,107 @@
       },
       "title": "LensesHQ Max Jitter Window Milliseconds",
       "description": "The maximum duration of jitter window in milliseconds for retries in communication with the LensesHQ server."
+    },
+    "editorTagLensesHq": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Lenses HQ connection).",
+      "enum": ["Lenses HQ", "Lenses HQ TLS"]
+    },
+    "editorTagKafka": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Kafka connection).",
+      "enum": [
+        "Aiven",
+        "AWS MSK, SSL/TLS",
+        "AWS MSK, mutal SSL/TLS",
+        "AWS MSK, IAM",
+        "Azure Eventhubs",
+        "Confluent Cloud, SASL_SSL, PLAIN",
+        "IBM Event Streams",
+        "Redpanda",
+        "PLAINTEXT",
+        "SASL_PLAINTEXT, PLAIN",
+        "SASL_PLAINTEXT, SCRAM-SHA-256",
+        "SASL_PLAINTEXT, SCRAM-SHA-512",
+        "SASL_SSL, PLAIN",
+        "SASL_SSL, SCRAM-SHA-256",
+        "SASL_SSL, SCRAM-SHA-512",
+        "SSL/TLS",
+        "Mutual SSL/TLS"
+      ]
+    },
+    "editorTagZookeeper": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Zookeeper connection).",
+      "enum": ["Zookeeper"]
+    },
+    "editorTagConnect": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Kafka Connect connection).",
+      "enum": ["No Auth", "HTTP Basic Auth", "HTTP Basic Auth, SSL/TLS", "HTTP Basic Auth, Mutual SSL/TLS"]
+    },
+    "editorTagSchemaRegistry": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Schema Registry connection).",
+      "enum": [
+        "Confluent No Auth",
+        "Confluent Basic Auth",
+        "Confluent Basic Auth, SSL/TLS",
+        "Confluent Basic Auth, Mutual SSL/TLS",
+        "Aiven (Karpace)",
+        "AWS Glue (Access Keys)",
+        "AWS Glue (Credentials chain)",
+        "AWS Glue (Assume Role)",
+        "IBM Event Streams Registry",
+        "ApiCurio"
+      ]
+    },
+    "editorTagAws": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (AWS connection).",
+      "enum": ["AWS Connection for Glue & CloudWatch"]
+    },
+    "editorTagWebhook": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Webhook connection).",
+      "enum": ["Webhook"]
+    },
+    "editorTagDatadog": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (DataDog connection).",
+      "enum": ["DataDog"]
+    },
+    "editorTagPagerduty": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (PagerDuty connection).",
+      "enum": ["PagerDuty"]
+    },
+    "editorTagSlack": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Slack connection).",
+      "enum": ["Slack"]
+    },
+    "editorTagSplunk": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Splunk connection).",
+      "enum": ["Splunk"]
+    },
+    "editorTagAlertmanager": {
+      "type": "string",
+      "title": "Editor Tag",
+      "description": "Editor tag for Lenses UX (Alert Manager connection).",
+      "enum": ["Alert Manager"]
     }
   },
   "properties": {
@@ -922,7 +1023,7 @@
             "enum": ["lenses-hq"],
             "default": "lenses-hq"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagLensesHq" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -972,7 +1073,7 @@
             "enum": ["kafka"],
             "default": "kafka"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagKafka" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1220,7 +1321,7 @@
             "enum": ["zookeeper"],
             "default": "zookeeper"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagZookeeper" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1278,7 +1379,7 @@
             "enum": ["schema-registry"],
             "default": "schema-registry"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagSchemaRegistry" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1436,7 +1537,7 @@
             "enum": ["schema-registry"],
             "default": "schema-registry"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagSchemaRegistry" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1481,7 +1582,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "connect"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagConnect" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1612,7 +1713,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "aws"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagAws" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1648,7 +1749,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "webhook"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagWebhook" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1679,7 +1780,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "datadog"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagDatadog" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1708,7 +1809,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "pagerduty"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagPagerduty" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1735,7 +1836,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "slack"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagSlack" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1763,7 +1864,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "splunk"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagSplunk" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -1794,7 +1895,7 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "my-alertmanager-connection"
           },
-          "editorTag": { "$ref": "#/definitions/editorTag" },
+          "editorTag": { "$ref": "#/definitions/editorTagAlertmanager" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
