@@ -1,85 +1,344 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "Kafka Connector Consumer Overrides",
-    "type": "object",
-    "properties": {
-      "consumer.override.security.protocol": {
-        "type": "string",
-        "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
-        "description": "Kafka client security protocol"
-      },
-      "consumer.override.sasl.mechanism": {
-        "type": "string",
-        "enum": ["PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512", "GSSAPI", "OAUTHBEARER"],
-        "description": "SASL authentication mechanism"
-      },
-      "consumer.override.sasl.jaas.config": {
-        "type": "string",
-        "description": "JAAS configuration string for SASL authentication"
-      },
-      "consumer.override.ssl.truststore.location": {
-        "type": "string",
-        "description": "Path to the truststore file"
-      },
-      "consumer.override.ssl.truststore.password": {
-        "type": "string",
-        "description": "Password for the truststore file"
-      },
-      "consumer.override.ssl.keystore.location": {
-        "type": "string",
-        "description": "Path to the keystore file"
-      },
-      "consumer.override.ssl.keystore.password": {
-        "type": "string",
-        "description": "Password for the keystore"
-      },
-      "consumer.override.ssl.key.password": {
-        "type": "string",
-        "description": "Password for the private key in the keystore"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Kafka Connector Consumer Overrides",
+  "type": "object",
+  "properties": {
+    "consumer.override.bootstrap.servers": {
+      "type": "string",
+      "description": "Kafka bootstrap servers for the connector's consumer"
+    },
+    "consumer.override.client.id": {
+      "type": "string",
+      "description": "An id string to pass to the server when making requests for tracking and logging purposes"
+    },
+    "consumer.override.group.id": {
+      "type": "string",
+      "description": "Consumer group identifier. Usually managed by Connect, but can be overridden"
+    },
+    "consumer.override.group.instance.id": {
+      "type": "string",
+      "description": "Static member identifier for static group membership"
+    },
+    "consumer.override.key.deserializer": {
+      "type": "string",
+      "description": "Fully qualified class name for key deserializer"
+    },
+    "consumer.override.value.deserializer": {
+      "type": "string",
+      "description": "Fully qualified class name for value deserializer"
+    },
+    "consumer.override.auto.offset.reset": {
+      "type": "string",
+      "enum": ["earliest", "latest", "none"],
+      "default": "latest",
+      "description": "What to do when there is no initial offset or current offset no longer exists. Default: latest"
+    },
+    "consumer.override.enable.auto.commit": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, consumer's offset will be periodically committed in the background. Default: true"
+    },
+    "consumer.override.auto.commit.interval.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 5000,
+      "description": "Frequency of auto-commit if enable.auto.commit is true. Default: 5000"
+    },
+    "consumer.override.max.poll.records": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 500,
+      "description": "Maximum number of records returned in a single poll(). Default: 500"
+    },
+    "consumer.override.max.poll.interval.ms": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 300000,
+      "description": "Maximum delay between poll() invocations when using group management. Default: 300000 (5 min)"
+    },
+    "consumer.override.session.timeout.ms": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 45000,
+      "description": "Timeout used to detect consumer failures with group management. Default: 45000"
+    },
+    "consumer.override.heartbeat.interval.ms": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 3000,
+      "description": "Expected time between heartbeats to the consumer coordinator. Default: 3000"
+    },
+    "consumer.override.fetch.min.bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Minimum data the server should return for a fetch request. Default: 1"
+    },
+    "consumer.override.fetch.max.bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 52428800,
+      "description": "Maximum data the server should return for a fetch request. Default: 52428800 (50MB)"
+    },
+    "consumer.override.fetch.max.wait.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 500,
+      "description": "Maximum time server blocks before answering fetch if there isn't sufficient data. Default: 500"
+    },
+    "consumer.override.max.partition.fetch.bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1048576,
+      "description": "Maximum data per partition the server returns. Default: 1048576 (1MB)"
+    },
+    "consumer.override.isolation.level": {
+      "type": "string",
+      "enum": ["read_uncommitted", "read_committed"],
+      "default": "read_uncommitted",
+      "description": "Controls how to read messages written transactionally. Default: read_uncommitted"
+    },
+    "consumer.override.request.timeout.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 30000,
+      "description": "Maximum time client waits for response of a request. Default: 30000"
+    },
+    "consumer.override.retry.backoff.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 100,
+      "description": "Time to wait before retrying a failed request. Default: 100"
+    },
+    "consumer.override.metadata.max.age.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 300000,
+      "description": "Period after which metadata is force-refreshed. Default: 300000 (5 min)"
+    },
+    "consumer.override.connections.max.idle.ms": {
+      "type": "integer",
+      "default": 540000,
+      "description": "Close idle connections after this time. Default: 540000 (9 min)"
+    },
+    "consumer.override.reconnect.backoff.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 50,
+      "description": "Base time to wait before reconnecting to a broker. Default: 50"
+    },
+    "consumer.override.reconnect.backoff.max.ms": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 1000,
+      "description": "Maximum time to wait when reconnecting to a broker. Default: 1000"
+    },
+    "consumer.override.receive.buffer.bytes": {
+      "type": "integer",
+      "default": 65536,
+      "description": "Size of TCP receive buffer (SO_RCVBUF). Use -1 for OS default. Default: 65536"
+    },
+    "consumer.override.send.buffer.bytes": {
+      "type": "integer",
+      "default": 131072,
+      "description": "Size of TCP send buffer (SO_SNDBUF). Use -1 for OS default. Default: 131072"
+    },
+    "consumer.override.check.crcs": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically check CRC32 of consumed records. Default: true"
+    },
+    "consumer.override.interceptor.classes": {
+      "type": "string",
+      "description": "Comma-separated list of consumer interceptor classes"
+    },
+    "consumer.override.exclude.internal.topics": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether internal topics (like __consumer_offsets) should be excluded from subscription. Default: true"
+    },
+    "consumer.override.allow.auto.create.topics": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allow automatic topic creation when subscribing/assigning. Default: true"
+    },
+    "consumer.override.client.rack": {
+      "type": "string",
+      "description": "Rack identifier for this client used for rack-aware fetch"
+    },
+    "consumer.override.partition.assignment.strategy": {
+      "type": "string",
+      "description": "Comma-separated list of partition assignment strategy class names"
+    },
+    "consumer.override.security.protocol": {
+      "type": "string",
+      "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
+      "description": "Kafka client security protocol"
+    },
+    "consumer.override.sasl.mechanism": {
+      "type": "string",
+      "enum": ["PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512", "GSSAPI", "OAUTHBEARER", "AWS_MSK_IAM"],
+      "description": "SASL authentication mechanism"
+    },
+    "consumer.override.sasl.jaas.config": {
+      "type": "string",
+      "description": "JAAS configuration string for SASL authentication"
+    },
+    "consumer.override.sasl.client.callback.handler.class": {
+      "type": "string",
+      "description": "Fully qualified class name of SASL client callback handler (required for AWS_MSK_IAM)"
+    },
+    "consumer.override.ssl.truststore.location": {
+      "type": "string",
+      "description": "Path to the truststore file"
+    },
+    "consumer.override.ssl.truststore.password": {
+      "type": "string",
+      "description": "Password for the truststore file"
+    },
+    "consumer.override.ssl.truststore.type": {
+      "type": "string",
+      "enum": ["JKS", "PKCS12", "PEM"],
+      "default": "JKS",
+      "description": "Truststore file format. Default: JKS"
+    },
+    "consumer.override.ssl.keystore.location": {
+      "type": "string",
+      "description": "Path to the keystore file"
+    },
+    "consumer.override.ssl.keystore.password": {
+      "type": "string",
+      "description": "Password for the keystore"
+    },
+    "consumer.override.ssl.keystore.type": {
+      "type": "string",
+      "enum": ["JKS", "PKCS12", "PEM"],
+      "default": "JKS",
+      "description": "Keystore file format. Default: JKS"
+    },
+    "consumer.override.ssl.key.password": {
+      "type": "string",
+      "description": "Password for the private key in the keystore"
+    },
+    "consumer.override.ssl.enabled.protocols": {
+      "type": "string",
+      "default": "TLSv1.2,TLSv1.3",
+      "description": "Comma-separated list of enabled SSL protocols. Default: TLSv1.2,TLSv1.3"
+    },
+    "consumer.override.ssl.protocol": {
+      "type": "string",
+      "enum": ["TLSv1.2", "TLSv1.3", "TLS"],
+      "default": "TLSv1.3",
+      "description": "SSL protocol used to generate SSLContext. Default: TLSv1.3"
+    },
+    "consumer.override.ssl.cipher.suites": {
+      "type": "string",
+      "description": "Comma-separated list of cipher suites. Null uses default"
+    },
+    "consumer.override.ssl.endpoint.identification.algorithm": {
+      "type": "string",
+      "enum": ["https", ""],
+      "default": "https",
+      "description": "Endpoint identification algorithm for hostname verification. Use 'https' or empty to disable. Default: https"
+    }
+  },
+  "additionalProperties": true,
+
+  "defaultSnippets": [
+    {
+      "label": "Consumer Overrides: High Throughput",
+      "description": "Optimized for high throughput with large fetches",
+      "body": {
+        "consumer.override.fetch.min.bytes": 1048576,
+        "consumer.override.fetch.max.bytes": 104857600,
+        "consumer.override.fetch.max.wait.ms": 500,
+        "consumer.override.max.poll.records": 1000,
+        "consumer.override.max.partition.fetch.bytes": 10485760
       }
     },
-    "additionalProperties": true,
-  
-    "defaultSnippets": [
-      {
-        "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
-        "description": "SASL/PLAIN authentication using SASL_SSL protocol",
-        "body": {
-          "consumer.override.security.protocol": "SASL_SSL",
-          "consumer.override.sasl.mechanism": "PLAIN",
-          "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
-        }
-      },
-      {
-        "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
-        "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
-        "body": {
-          "consumer.override.security.protocol": "SASL_SSL",
-          "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
-          "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
-        }
-      },
-      {
-        "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
-        "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
-        "body": {
-          "consumer.override.security.protocol": "SASL_PLAINTEXT",
-          "consumer.override.sasl.mechanism": "GSSAPI",
-          "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
-        }
-      },
-      {
-        "label": "Consumer Overrides: SSL Only",
-        "description": "SSL encryption without SASL authentication",
-        "body": {
-          "consumer.override.security.protocol": "SSL",
-          "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
-          "consumer.override.ssl.truststore.password": "changeit",
-          "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
-          "consumer.override.ssl.keystore.password": "changeit",
-          "consumer.override.ssl.key.password": "changeit"
-        }
+    {
+      "label": "Consumer Overrides: Low Latency",
+      "description": "Optimized for low latency with minimal fetch delays",
+      "body": {
+        "consumer.override.fetch.min.bytes": 1,
+        "consumer.override.fetch.max.wait.ms": 100,
+        "consumer.override.max.poll.records": 100
       }
-    ]
-  }
-  
+    },
+    {
+      "label": "Consumer Overrides: Transactional Read (Read Committed)",
+      "description": "Only read committed transactional messages",
+      "body": {
+        "consumer.override.isolation.level": "read_committed",
+        "consumer.override.enable.auto.commit": false
+      }
+    },
+    {
+      "label": "Consumer Overrides: Long Processing",
+      "description": "For consumers that need more time to process batches",
+      "body": {
+        "consumer.override.max.poll.interval.ms": 600000,
+        "consumer.override.session.timeout.ms": 60000,
+        "consumer.override.heartbeat.interval.ms": 10000,
+        "consumer.override.max.poll.records": 100
+      }
+    },
+    {
+      "label": "Consumer Overrides: Read from Beginning",
+      "description": "Start reading from the beginning of topics",
+      "body": {
+        "consumer.override.auto.offset.reset": "earliest"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/PLAIN over SASL_SSL",
+      "description": "SASL/PLAIN authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "PLAIN",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SASL/SCRAM-SHA-512 over SASL_SSL",
+      "description": "SCRAM-SHA-512 authentication using SASL_SSL protocol",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "SCRAM-SHA-512",
+        "consumer.override.sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user\" password=\"pass\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: AWS MSK IAM",
+      "description": "AWS MSK IAM authentication",
+      "body": {
+        "consumer.override.security.protocol": "SASL_SSL",
+        "consumer.override.sasl.mechanism": "AWS_MSK_IAM",
+        "consumer.override.sasl.jaas.config": "software.amazon.msk.auth.iam.IAMLoginModule required;",
+        "consumer.override.sasl.client.callback.handler.class": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
+      }
+    },
+    {
+      "label": "Consumer Overrides: Kerberos (GSSAPI) with SASL_PLAINTEXT",
+      "description": "GSSAPI/Kerberos authentication using SASL_PLAINTEXT",
+      "body": {
+        "consumer.override.security.protocol": "SASL_PLAINTEXT",
+        "consumer.override.sasl.mechanism": "GSSAPI",
+        "consumer.override.sasl.jaas.config": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"/path/to/keytab\" principal=\"user@REALM.COM\";"
+      }
+    },
+    {
+      "label": "Consumer Overrides: SSL Only (Mutual TLS)",
+      "description": "SSL encryption with mutual TLS authentication",
+      "body": {
+        "consumer.override.security.protocol": "SSL",
+        "consumer.override.ssl.truststore.location": "/etc/kafka/secrets/kafka.truststore.jks",
+        "consumer.override.ssl.truststore.password": "changeit",
+        "consumer.override.ssl.keystore.location": "/etc/kafka/secrets/kafka.keystore.jks",
+        "consumer.override.ssl.keystore.password": "changeit",
+        "consumer.override.ssl.key.password": "changeit",
+        "consumer.override.ssl.endpoint.identification.algorithm": "https"
+      }
+    }
+  ]
+}
