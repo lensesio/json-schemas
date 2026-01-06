@@ -984,7 +984,7 @@
       "description": "Editor tag for Lenses UX (DataDog connection).",
       "enum": ["DataDog"]
     },
-    "editorTagPagerduty": {
+    "editorTagPagerDuty": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (PagerDuty connection).",
@@ -1002,7 +1002,7 @@
       "description": "Editor tag for Lenses UX (Splunk connection).",
       "enum": ["Splunk"]
     },
-    "editorTagAlertmanager": {
+    "editorTagAlertManager": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Alert Manager connection).",
@@ -1796,7 +1796,7 @@
         "required": ["name", "version", "configuration"]
       }
     },
-    "pagerduty": {
+    "pagerDuty": {
       "type": "array",
       "description": "Array of PagerDuty integration for alerts and audits.",
       "default": [],
@@ -1807,9 +1807,9 @@
             "type": "string",
             "description": "PagerDuty connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
-            "default": "pagerduty"
+            "default": "pagerDuty"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagPagerduty" },
+          "editorTag": { "$ref": "#/definitions/editorTagPagerDuty" },
           "version": {
             "type": "integer",
             "description": "Lenses connection version.",
@@ -1889,7 +1889,7 @@
         "required": ["name", "version", "configuration"]
       }
     },
-    "alertmanager": {
+    "alertManager": {
       "type": "array",
       "description": "Array of Alert Manager integration for alerts.",
       "default": [],
@@ -1900,9 +1900,9 @@
             "type": "string",
             "description": "Alert Manager connection name. Must start with a letter or number and contain only alphanumeric characters or hyphens.",
             "pattern": "^[a-zA-Z0-9-]+$",
-            "default": "my-alertmanager-connection"
+            "default": "my-alertManager-connection"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagAlertmanager" },
+          "editorTag": { "$ref": "#/definitions/editorTagAlertManager" },
           "version": { "$ref": "#/definitions/version" },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
@@ -4054,10 +4054,10 @@
       "label": "Alerts, PagerDuty",
       "body": {
         "## Template": "Alerts, PagerDuty",
-        "pagerduty": [
+        "pagerDuty": [
           {
             "## Repeat": "for more connections",
-            "name": "pagerduty",
+            "name": "pagerDuty",
             "editorTag": "PagerDuty",
             "version": 2,
             "tags": "[]",
@@ -4126,10 +4126,10 @@
       "label": "Alerts, Alert Manager",
       "body": {
         "## Template": "Alerts, Alert Manager",
-        "alertmanager": [
+        "alertManager": [
           {
             "## Repeat": "for more connections",
-            "name": "my-alertmanager-connection",
+            "name": "my-alertManager-connection",
             "editorTag": "Alert Manager",
             "version": 1,
             "tags": "[]",

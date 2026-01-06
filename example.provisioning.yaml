@@ -1,14 +1,16 @@
 # yaml-language-server: #$schema=./agent/provisioning.schema-6.1.json
 
-
-kafka:
-  - name: kafka
+## Template: HQ Connection
+lensesHq:
+  - name: lenses-hq
     version: 1
-    editorTag: 
+    editorTag: Lenses HQ
+    tags:
+      - hq
     configuration:
-      kafkaBootstrapServers:
-        value:
-          - 
-
-
-
+      server:
+        value: <YOUR_LENSES_HQ_SERVER_URL>
+      port:
+        value: 10000
+      agentKey:
+        value: <LENSES_HQ_AGENT_KEY>
