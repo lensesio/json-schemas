@@ -1810,7 +1810,14 @@
             "default": "pagerduty"
           },
           "editorTag": { "$ref": "#/definitions/editorTagPagerduty" },
-          "version": { "$ref": "#/definitions/version" },
+          "version": {
+            "type": "integer",
+            "description": "Lenses connection version.",
+            "default": 2,
+            "const": 2,
+            "readOnly": true,
+            "title": "Version"
+          },
           "tags": { "$ref": "#/definitions/tags" },
           "configuration": {
             "type": "object",
@@ -4052,7 +4059,7 @@
             "## Repeat": "for more connections",
             "name": "pagerduty",
             "editorTag": "PagerDuty",
-            "version": 1,
+            "version": 2,
             "tags": "[]",
             "configuration": {
               "integrationKey": {
