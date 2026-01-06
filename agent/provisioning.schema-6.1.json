@@ -4135,7 +4135,8 @@
             "tags": "[]",
             "configuration": {
               "endpoints": {
-                "value": ""
+                "value": 
+                  ["https://ENDPOINT1", "https://ENDPOINT2"]
               }
             }
           }
