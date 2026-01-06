@@ -692,8 +692,8 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter the site value (non empty).",
-          "pattern": "^.+$"
+          "description": "Select the DataDog site region.",
+          "enum": ["EU", "US"]
         }
       },
       "required": ["value"]
