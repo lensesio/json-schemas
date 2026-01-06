@@ -567,13 +567,16 @@
     },
     "endpoints": {
       "type": "object",
-      "description": "Comma separated list of Alert Manager endpoints.",
+      "description": "Array of Alert Manager endpoints.",
       "properties": {
         "value": {
-          "type": "string",
-          "description": "Enter the Alert Manager endpoints (non empty).",
-          "pattern": "^(https?:\\/\\/.+)$",
-          "minLength": 1
+          "type": "array",
+          "description": "Enter the Alert Manager endpoints (at least one required).",
+          "items": {
+            "type": "string",
+            "pattern": "^(https?:\\/\\/.+)$"
+          },
+          "minItems": 1
         }
       },
       "required": ["value"]
@@ -4135,7 +4138,8 @@
             "tags": "[]",
             "configuration": {
               "endpoints": {
-                "value": ""
+                "value": 
+                  ["ENDPOINT1", "ENDPOINT2"]
               }
             }
           }

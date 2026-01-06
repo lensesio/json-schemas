@@ -1,16 +1,14 @@
 # yaml-language-server: #$schema=./agent/provisioning.schema-6.1.json
 
-## Template: HQ Connection
-lensesHq:
-  - name: lenses-hq
+## Template: Alerts, Alert Manager
+alertManager:
+  - ## Repeat: for more connections
+    name: my-alertManager-connection
+    editorTag: Alert Manager
     version: 1
-    editorTag: Lenses HQ
-    tags:
-      - hq
+    tags: []
     configuration:
-      server:
-        value: <YOUR_LENSES_HQ_SERVER_URL>
-      port:
-        value: 10000
-      agentKey:
-        value: <LENSES_HQ_AGENT_KEY>
+      endpoints:
+        value:
+          - ENDPOINT1
+          - ENDPOINT2
