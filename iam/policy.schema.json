@@ -76,9 +76,13 @@
                 "environments:AccessEnvironment",
                 "environments:CreateEnvironment",
                 "environments:DeleteEnvironment",
+                "environments:DeleteKafkaConnection",
                 "environments:GetEnvironmentDetails",
+                "environments:GetKafkaConnectionDetails",
                 "environments:ListEnvironments",
+                "environments:ListKafkaConnections",
                 "environments:UpdateEnvironment",
+                "environments:UpsertKafkaConnection",
                 "governance:ApproveRequest",
                 "governance:CreateRequest",
                 "governance:DenyRequest",
@@ -142,6 +146,13 @@
                 "kafka-connect:StartConnector",
                 "kafka-connect:StopConnector",
                 "kafka-connect:UpdateConnectorConfiguration",
+                "k2k:CreateApp",
+                "k2k:DeleteApp",
+                "k2k:GetApp",
+                "k2k:ListApps",
+                "k2k:ManageOffsets",
+                "k2k:UpdateApp",
+                "k2k:UpsertApp",
                 "kubernetes:GetClusterDetails",
                 "kubernetes:ListClusters",
                 "kubernetes:DeployApps",
@@ -172,7 +183,7 @@
             "description": "List of resources that the policy applies to",
             "items": {
               "type": "string",
-              "pattern": "^(administration:(connection|license|lenses-logs|lenses-configuration|setting|agent)|applications:(external-application)|alerts:(alert|rule|alert-event|alert-channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment)|governance:(request|rule)|iam:(user|group|role|service-account)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group)|kubernetes:(cluster|namespace)|registry:(registry)|schemas:(schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+)$",
+              "pattern": "^(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+)$",
               "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed in the resource-id part or as a complete resource-id. Environment names can be any valid string."
             }
           }
@@ -367,8 +378,8 @@
         "policy": [
           {
             "action": [
-              "audit:ListLogEvents",
-              "audit:GetLogEventDetails"
+              "audit:ListLogs",
+              "audit:DeleteLogs"
             ],
             "resource": [
               "audit:log:${1:environment}"
@@ -407,7 +418,7 @@
           {
             "action": [
               "environments:CreateEnvironment",
-              "environments:DeleteEvironment",
+              "environments:DeleteEnvironment",
               "environments:ListEnvironments",
               "environments:UpdateEnvironment",
               "environments:AccessEnvironment"
@@ -531,8 +542,8 @@
         "policy": [
           {
             "action": [
-              "registry:GetRegistryConfiguration",
-              "registry:UpdateRegistryConfiguration"
+              "schemas:GetRegistryConfiguration",
+              "schemas:UpdateRegistryConfiguration"
             ],
             "resource": [
               "schemas:registry:${1:environment}/${2:registry}"
