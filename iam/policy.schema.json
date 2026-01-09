@@ -8,7 +8,6 @@
     "policy": {
       "type": "array",
       "description": "List of policy statements",
-      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["effect", "action", "resource"],
@@ -28,6 +27,7 @@
             "items": {
               "type": "string",
               "enum": [
+                "'*'",
                 "administration:CreateConnection",
                 "administration:DeleteConnection",
                 "administration:GetConnectionDetails",
@@ -179,19 +179,19 @@
             }
           },
           "resource": {
-            "description": "Resource(s) that the policy applies to. Can be a single string or an array of strings.",
+            "description": "Resource(s) that the policy applies to. Can be a single string or an array of strings, or '*' for all",
             "oneOf": [
               {
                 "type": "string",
                 "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
-                "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed."
+                "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
               },
               {
                 "type": "array",
                 "items": {
                   "type": "string",
                   "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
-                  "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed."
+                  "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
                 }
               }
             ]
@@ -329,8 +329,8 @@
         "policy": [
           {
             "effect": "allow",
-            "action": ["*"],
-            "resource": ["*"]
+            "action": ["'*'"],
+            "resource": ["'*'"]
           }
         ]
       }
