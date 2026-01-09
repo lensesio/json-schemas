@@ -32,7 +32,7 @@
             "items": {
               "type": "string",
               "enum": [
-                "'*'",
+                "*",
                 "administration:CreateConnection",
                 "administration:DeleteConnection",
                 "administration:GetConnectionDetails",
