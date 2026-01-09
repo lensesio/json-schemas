@@ -38,5 +38,127 @@
       "description": "Custom string key/values for the role."
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "defaultSnippets": [
+    {
+      "label": "Read-Only Role",
+      "description": "Can view topics, schemas, and consumer groups across all environments",
+      "body": {
+        "name": "read-only",
+        "display_name": "Read-Only",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ReadTopicData"
+            ],
+            "resource": ["kafka:topic:*/kafka/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails"
+            ],
+            "resource": ["schemas:schema:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails"
+            ],
+            "resource": ["kafka:consumer-group:*/kafka/*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Data Engineer Role",
+      "description": "Can manage topics and schemas, run SQL queries, and view connectors",
+      "body": {
+        "name": "data-engineer",
+        "display_name": "Data Engineer",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ReadTopicData",
+              "kafka:CreateTopic",
+              "kafka:UpdateTopicDetails"
+            ],
+            "resource": ["kafka:topic:*/kafka/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails",
+              "schemas:CreateSchema",
+              "schemas:UpdateSchema"
+            ],
+            "resource": ["schemas:schema:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails"
+            ],
+            "resource": ["kafka-connect:cluster:*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails"
+            ],
+            "resource": ["kafka-connect:connector:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": ["governance:GetRuleDetails"],
+            "resource": ["governance:rule:*/*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Administrator Role",
+      "description": "Full access to all resources and IAM management",
+      "body": {
+        "name": "admin",
+        "display_name": "Administrator",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": ["*"],
+            "resource": ["*"]
+          }
+        ]
+      }
+    }
+  ]
 } 
