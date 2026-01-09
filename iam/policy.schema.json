@@ -2,28 +2,33 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Lenses IAM Policy Schema",
   "description": "Schema for defining Lenses IAM policies that control access to resources and operations",
+  "markdownDescription": "Schema for defining Lenses IAM policies that control access to resources and operations. [Learn more about IAM policies](https://docs.lenses.io/latest/user-guide/iam)",
   "type": "object",
   "required": ["policy"],
   "properties": {
     "policy": {
       "type": "array",
       "description": "List of policy statements",
+      "markdownDescription": "List of policy statements. [View policy documentation](https://docs.lenses.io/latest/user-guide/iam)",
       "items": {
         "type": "object",
         "required": ["effect", "action", "resource"],
         "properties": {
           "sid": {
             "type": "string",
-            "description": "Statement identifier"
+            "description": "Statement identifier",
+            "markdownDescription": "Statement identifier - optional unique name for this policy statement"
           },
           "effect": {
             "type": "string",
             "enum": ["allow", "deny"],
-            "description": "Whether the statement allows or denies access"
+            "description": "Whether the statement allows or denies access",
+            "markdownDescription": "Whether the statement allows or denies access. [Read more about effects](https://docs.lenses.io/latest/user-guide/iam)"
           },
           "action": {
             "type": "array",
             "description": "List of actions that are allowed or denied",
+            "markdownDescription": "List of actions that are allowed or denied. Use `*` for all actions. [View available actions](https://docs.lenses.io/latest/user-guide/iam)",
             "items": {
               "type": "string",
               "enum": [
@@ -180,6 +185,7 @@
           },
           "resource": {
             "description": "Resource(s) that the policy applies to. Can be a single string or an array of strings, or '*' for all",
+            "markdownDescription": "Resource(s) that the policy applies to. Can be a single string or an array of strings, or '*' for all. Format: `service:resource-type:resource-id`. [Learn about LRNs](https://docs.lenses.io/latest/user-guide/iam)",
             "oneOf": [
               {
                 "type": "string",
