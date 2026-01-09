@@ -2,32 +2,37 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Lenses IAM Policy Schema",
   "description": "Schema for defining Lenses IAM policies that control access to resources and operations",
+  "markdownDescription": "Schema for defining Lenses IAM policies that control access to resources and operations. [Learn more about IAM policies](https://docs.lenses.io/latest/user-guide/iam)",
   "type": "object",
   "required": ["policy"],
   "properties": {
     "policy": {
       "type": "array",
       "description": "List of policy statements",
-      "minItems": 1,
+      "markdownDescription": "List of policy statements. [View policy documentation](https://docs.lenses.io/latest/user-guide/iam)",
       "items": {
         "type": "object",
         "required": ["effect", "action", "resource"],
         "properties": {
           "sid": {
             "type": "string",
-            "description": "Statement identifier"
+            "description": "Statement identifier",
+            "markdownDescription": "Statement identifier - optional unique name for this policy statement"
           },
           "effect": {
             "type": "string",
             "enum": ["allow", "deny"],
-            "description": "Whether the statement allows or denies access"
+            "description": "Whether the statement allows or denies access",
+            "markdownDescription": "Whether the statement allows or denies access. [Read more about effects](https://docs.lenses.io/latest/user-guide/iam)"
           },
           "action": {
             "type": "array",
             "description": "List of actions that are allowed or denied",
+            "markdownDescription": "List of actions that are allowed or denied. Use `*` for all actions. [View available actions](https://docs.lenses.io/latest/user-guide/iam)",
             "items": {
               "type": "string",
               "enum": [
+                "'*'",
                 "administration:CreateConnection",
                 "administration:DeleteConnection",
                 "administration:GetConnectionDetails",
@@ -179,13 +184,23 @@
             }
           },
           "resource": {
-            "type": "array",
-            "description": "List of resources that the policy applies to",
-            "items": {
-              "type": "string",
-              "pattern": "^(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+)$",
-              "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed in the resource-id part or as a complete resource-id. Environment names can be any valid string."
-            }
+            "description": "Resource(s) that the policy applies to. Can be a single string or an array of strings, or '*' for all",
+            "markdownDescription": "Resource(s) that the policy applies to. Can be a single string or an array of strings, or '*' for all. Format: `service:resource-type:resource-id`. [Learn about LRNs](https://docs.lenses.io/latest/user-guide/iam)",
+            "oneOf": [
+              {
+                "type": "string",
+                "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
+                "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
+                  "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
+                }
+              }
+            ]
           }
         }
       }
@@ -210,391 +225,118 @@
   ],
   "defaultSnippets": [
     {
-      "label": "Allow all actions on all resources",
+      "label": "Read-Only Policy",
+      "description": "Can view topics, schemas, and consumer groups across all environments",
       "body": {
-        "Version": "2023-01-01",
-        "Statement": [
+        "## Template": "Read-Only Policy",
+        "policy": [
           {
-            "Effect": "Allow",
-            "Action": ["*"],
-            "Resource": ["*"]
-          }
-        ]
-      }
-    },
-    {
-      "label": "Deny all actions on all resources",
-      "body": {
-        "Version": "2023-01-01",
-        "Statement": [
-          {
-            "Effect": "Deny",
-            "Action": ["*"],
-            "Resource": ["*"]
-          }
-        ]
-      }
-    },
-    {
-      "label": "Allow specific actions on specific resources",
-      "body": {
-        "Version": "2023-01-01",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": [
-              "kafka:ListTopics",
-              "kafka:GetTopicDetails"
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
             ],
-            "Resource": [
-              "kafka:topic:prod/kafka/my-topic"
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "label": "Allow actions with conditions",
-      "body": {
-        "Version": "2023-01-01",
-        "Statement": [
+            "resource": ["environments:environment:*"]
+          },
           {
-            "Effect": "Allow",
-            "Action": [
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
               "kafka:ReadTopicData"
             ],
-            "Resource": [
-              "kafka:topic:prod/kafka/my-topic"
-            ]
+            "resource": ["kafka:topic:*/kafka/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails"
+            ],
+            "resource": ["schemas:schema:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails"
+            ],
+            "resource": ["kafka:consumer-group:*/kafka/*"]
           }
         ]
       }
     },
     {
-      "label": "Global Connector Operator",
-      "description": "Allow connector operations across all environments",
+      "label": "Data Engineer Policy",
+      "description": "Can manage topics and schemas, run SQL queries, and view connectors",
       "body": {
+        "## Template": "Data Engineer Policy",
         "policy": [
           {
+            "effect": "allow",
             "action": [
-              "iam:List*",
-              "iam:Get*"
-            ],
-            "resource": "iam:*",
-            "effect": "allow"
-          },
-          {
-            "action": [
-              "environments:Get*",
-              "environments:List*",
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
               "environments:AccessEnvironment"
             ],
-            "resource": "environments:*",
-            "effect": "allow"
+            "resource": ["environments:environment:*"]
           },
           {
-            "action": [
-              "kafka-connect:List*",
-              "kafka-connect:GetClusterDetails",
-              "kafka-connect:GetConnectorDetails",
-              "kafka-connect:StartConnector",
-              "kafka-connect:StopConnector"
-            ],
-            "resource": [
-              "kafka-connect:cluster:*/*",
-              "kafka-connect:connector:*/*/*"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Topic Access",
-      "description": "Allow access to specific topics",
-      "body": {
-        "policy": [
-          {
+            "effect": "allow",
             "action": [
               "kafka:ListTopics",
-              "kafka:GetTopicDetails"
+              "kafka:GetTopicDetails",
+              "kafka:ReadTopicData",
+              "kafka:CreateTopic",
+              "kafka:UpdateTopicDetails"
             ],
-            "resource": [
-              "kafka:topic:${1:environment}/${2:cluster}/${3:topic}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Administration Access",
-      "description": "Allow administration operations",
-      "body": {
-        "policy": [
+            "resource": ["kafka:topic:*/kafka/*"]
+          },
           {
+            "effect": "allow",
             "action": [
-              "administration:CreateConnection",
-              "administration:ListConnections",
-              "administration:GetConnectionDetails",
-              "administration:UpdateConnection",
-              "administration:DeleteConnection"
-            ],
-            "resource": [
-              "administration:connection:${1:environment}/${2:connectionType}/${3:connection}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Alert Management",
-      "description": "Allow alert rule management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "alerts:CreateAlertRule",
-              "alerts:DeleteAlertRule",
-              "alerts:UpdateAlertRule",
-              "alerts:ListAlertRules",
-              "alerts:GetAlertRuleDetails",
-              "alerts:ToggleAlertRule"
-            ],
-            "resource": [
-              "alerts:rule:${1:environment}/Infrastructure/KafkaBrokerDown",
-              "alerts:rule:${1:environment}/DataProduced/red-app-going-slow"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Audit Management",
-      "description": "Allow audit log management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "audit:ListLogs",
-              "audit:DeleteLogs"
-            ],
-            "resource": [
-              "audit:log:${1:environment}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Data Policy Management",
-      "description": "Allow data policy management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "data-policies:CreatePolicy",
-              "data-policies:ListPolicies",
-              "data-policies:GetPolicyDetails",
-              "data-policies:UpdatePolicy",
-              "data-policies:DeletePolicy"
-            ],
-            "resource": [
-              "data-policies:policy:${1:environment}/${2:policy}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Environment Management",
-      "description": "Allow environment management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "environments:CreateEnvironment",
-              "environments:DeleteEnvironment",
-              "environments:ListEnvironments",
-              "environments:UpdateEnvironment",
-              "environments:AccessEnvironment"
-            ],
-            "resource": [
-              "environments:environment:${1:environment}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Governance Management",
-      "description": "Allow governance request management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "governance:CreateRequest",
-              "governance:ListRequests",
-              "governance:GetRequestDetails",
-              "governance:ApproveRequest",
-              "governance:DenyRequest"
-            ],
-            "resource": [
-              "governance:request:${1:environment}/${2:actionType}/*"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "IAM Management",
-      "description": "Allow IAM role management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "iam:CreateRole",
-              "iam:DeleteRole",
-              "iam:UpdateRole",
-              "iam:ListRoles",
-              "iam:GetRoleDetails"
-            ],
-            "resource": [
-              "iam:role:${1:role}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka Connect Management",
-      "description": "Allow Kafka Connect management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "kafka-connect:CreateConnector",
-              "kafka-connect:ListConnectors",
-              "kafka-connect:GetConnectorConfiguration",
-              "kafka-connect:UpdateConnectorConfiguration",
-              "kafka-connect:DeleteConnector"
-            ],
-            "resource": [
-              "kafka-connect:connector:${1:environment}/${2:cluster}/${3:connector}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kafka ACL Management",
-      "description": "Allow Kafka ACL management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "kafka:CreateAcl",
-              "kafka:GetAclDetails",
-              "kafka:UpdateAcl",
-              "kafka:DeleteAcl"
-            ],
-            "resource": [
-              "kafka:acl:${1:environment}/${2:cluster}/${3:resourceType}/*"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Kubernetes Management",
-      "description": "Allow Kubernetes cluster management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "kubernetes:ListClusters",
-              "kubernetes:GetClusterDetails",
-              "kubernetes:ListNamespaces",
-              "kubernetes:DeployApps"
-            ],
-            "resource": [
-              "kubernetes:cluster:${1:environment}/${2:cluster}",
-              "kubernetes:namespace:${1:environment}/${2:cluster}/${3:namespace}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Schema Registry Management",
-      "description": "Allow Schema Registry management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "schemas:GetRegistryConfiguration",
-              "schemas:UpdateRegistryConfiguration"
-            ],
-            "resource": [
-              "schemas:registry:${1:environment}/${2:registry}"
-            ],
-            "effect": "allow"
-          }
-        ]
-      }
-    },
-    {
-      "label": "Schema Management",
-      "description": "Allow schema management",
-      "body": {
-        "policy": [
-          {
-            "action": [
-              "schemas:CreateSchema",
-              "schemas:DeleteSchema",
-              "schemas:UpdateSchema",
+              "schemas:ListSchemas",
               "schemas:GetSchemaDetails",
-              "schemas:ListSchemas"
+              "schemas:CreateSchema",
+              "schemas:UpdateSchema"
             ],
-            "resource": [
-              "schemas:schema:${1:environment}/${2:registry}/${3:schema}"
+            "resource": ["schemas:schema:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails"
             ],
-            "effect": "allow"
+            "resource": ["kafka-connect:cluster:*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails"
+            ],
+            "resource": ["kafka-connect:connector:*/*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": ["governance:GetRuleDetails"],
+            "resource": ["governance:rule:*/*"]
           }
         ]
       }
     },
     {
-      "label": "SQL Streaming Management",
-      "description": "Allow SQL processor management",
+      "label": "Administrator Policy",
+      "description": "Full access to all resources and IAM management",
       "body": {
+        "## Template": "Administrator Policy",
         "policy": [
           {
-            "action": [
-              "sql-streaming:CreateProcessor",
-              "sql-streaming:ListProcessors",
-              "sql-streaming:GetProcessorDetails",
-              "sql-streaming:GetProcessorSql",
-              "sql-streaming:UpdateProcessorSql",
-              "sql-streaming:DeleteProcessor",
-              "sql-streaming:StartProcessor",
-              "sql-streaming:StopProcessor",
-              "sql-streaming:ScaleProcessor"
-            ],
-            "resource": [
-              "sql-streaming:sql-processor:${1:environment}/${2:cluster}/${3:namespace}/${4:processor}"
-            ],
-            "effect": "allow"
+            "effect": "allow",
+            "action": ["'*'"],
+            "resource": ["'*'"]
           }
         ]
       }
