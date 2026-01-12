@@ -148,10 +148,7 @@
           "type": "string",
           "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
           "x-secret": true,
-          "anyOf": [
-            { "minLength": 1 },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "minLength": 1 }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"],
@@ -177,10 +174,7 @@
           "type": "string",
           "description": "Enter a password for the keystore.",
           "x-secret": true,
-          "anyOf": [
-            { "type": "string" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -193,10 +187,7 @@
           "type": "string",
           "description": "Enter key password (can be empty).",
           "x-secret": true,
-          "anyOf": [
-            { "type": "string" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -221,10 +212,7 @@
           "type": "string",
           "description": "Enter a password for the truststore.",
           "x-secret": true,
-          "anyOf": [
-            { "type": "string" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -295,10 +283,7 @@
         "value": {
           "type": "string",
           "x-secret": true,
-          "anyOf": [
-            { "type": "string" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -363,10 +348,7 @@
           "type": "string",
           "description": "Enter the password (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -390,10 +372,7 @@
           "description": "Enter the basic auth user information (non empty).",
           "type": "string",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       }
     },
@@ -464,10 +443,7 @@
           "type": "string",
           "description": "Enter the session token value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^[a-zA-Z0-9-]+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^[a-zA-Z0-9-]+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -552,15 +528,7 @@
         "value": {
           "type": "string",
           "description": "Enter the registry default compatibility (non empty).",
-          "enum": [
-            "BACKWARD",
-            "BACKWARD_ALL",
-            "FORWARD",
-            "FORWARD_ALL",
-            "FULL",
-            "FULL_ALL",
-            "NONE"
-          ]
+          "enum": ["BACKWARD", "BACKWARD_ALL", "FORWARD", "FORWARD_ALL", "FULL", "FULL_ALL", "NONE"]
         }
       },
       "required": ["value"]
@@ -637,10 +605,7 @@
           "type": "string",
           "description": "Enter the token value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^[A-Za-z0-9_-]+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^[A-Za-z0-9_-]+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -665,10 +630,7 @@
           "type": "string",
           "description": "Enter the Slack webhook URL (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^(https?:\\/\\/.+)$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^(https?:\\/\\/.+)$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -681,10 +643,7 @@
           "type": "string",
           "description": "Enter the integration key value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -709,10 +668,7 @@
           "type": "string",
           "description": "Enter the API key value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -725,10 +681,7 @@
           "type": "string",
           "description": "Enter the application key value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -743,10 +696,7 @@
           "items": {
             "type": "string",
             "description": "Enter the credential string (non empty).",
-            "anyOf": [
-              { "pattern": "^.+$" },
-              { "const": "[secret hidden by Lenses]" }
-            ]
+            "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
           },
           "description": "Array of credential strings."
         }
@@ -820,10 +770,7 @@
           "type": "string",
           "description": "Enter the Agent key value (non empty).",
           "x-secret": true,
-          "anyOf": [
-            { "pattern": "^.+$" },
-            { "const": "[secret hidden by Lenses]" }
-          ]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -950,7 +897,12 @@
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Kafka Connect connection).",
-      "enum": ["No Auth", "HTTP Basic Auth", "HTTP Basic Auth, SSL/TLS", "HTTP Basic Auth, Mutual SSL/TLS"]
+      "enum": [
+        "No Auth",
+        "HTTP Basic Auth",
+        "HTTP Basic Auth, SSL/TLS",
+        "HTTP Basic Auth, Mutual SSL/TLS"
+      ]
     },
     "editorTagSchemaRegistry": {
       "type": "string",
@@ -1356,7 +1308,7 @@
                 "$ref": "#/definitions/metricsCustomUrlMappings"
               },
               "metricsRateLimitingMaxRetries": {
-                " $ref": "#/definitions/metricsRateLimitingMaxRetries"
+                "$ref": "#/definitions/metricsRateLimitingMaxRetries"
               },
               "metricsRateLimitingBackoff": {
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
@@ -1627,6 +1579,7 @@
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
               }
             },
+            "required": ["workers"],
             "allOf": [
               {
                 "title": "SSL Truststore Password Requirement",
@@ -4138,8 +4091,7 @@
             "tags": "[]",
             "configuration": {
               "endpoints": {
-                "value": 
-                  ["ENDPOINT1", "ENDPOINT2"]
+                "value": ["ENDPOINT1", "ENDPOINT2"]
               }
             }
           }
