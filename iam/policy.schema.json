@@ -651,19 +651,46 @@
               {
                 "type": "string",
                 "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
-                "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
+                "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all.",
+                "examples": [
+                  "*",
+                  "kafka:topic:*",
+                  "kafka:topic:env/kafka/my-topic",
+                  "environments:environment:*",
+                  "schemas:schema:*/*/*"
+                ]
               },
               {
                 "type": "array",
                 "items": {
                   "type": "string",
                   "pattern": "^(\\*|(administration:(connection|license|lenses-logs|lenses-configuration|setting)|applications:(external-application)|alerts:(rule|event|channel)|audit:(log|channel)|data-policies:(policy)|environments:(environment|kafka-connection)|governance:(request|rule)|iam:(user|group|role|service-account)|k2k:(app)|kafka-connect:(connector|cluster)|kafka:(topic|acl|quota|consumer-group|cluster)|kubernetes:(cluster|namespace)|schemas:(registry|schema)|sql-streaming:(sql-processor)):(\\*|[a-zA-Z0-9-/*]+))$",
-                  "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all."
-                }
+                  "description": "Lenses Resource Name (LRN) in the format service:resource-type:resource-id. Wildcards (*) are allowed, or '*' for all.",
+                  "examples": [
+                    "kafka:topic:*",
+                    "environments:environment:*"
+                  ]
+                },
+                "examples": [
+                  ["kafka:topic:*"],
+                  ["environments:environment:*", "schemas:schema:*/*/*"]
+                ]
               }
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "effect": "allow",
+            "action": ["kafka:ListTopics", "kafka:GetTopicDetails"],
+            "resource": ["kafka:topic:*"]
+          },
+          {
+            "effect": "allow",
+            "action": "*",
+            "resource": ["environments:environment:*"]
+          }
+        ]
       }
     }
   },
