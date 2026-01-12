@@ -667,23 +667,6 @@
       }
     }
   },
-  "examples": [
-    {
-      "policy": [
-        {
-          "sid": "AllowKafkaReadAccess",
-          "effect": "Allow",
-          "actions": [
-            "kafka:ReadTopicData",
-            "kafka:ListTopics"
-          ],
-          "resource": [
-            "arn:lenses:kafka:cluster1:topic/*"
-          ]
-        }
-      ]
-    }
-  ],
   "defaultSnippets": [
     {
       "label": "Read-Only Policy",
