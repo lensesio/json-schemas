@@ -1418,6 +1418,7 @@
                 "required": ["value"]
               }
             },
+            "required": ["workers"],
             "allOf": [
               {
                 "if": {
