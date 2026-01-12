@@ -1117,7 +1117,7 @@
                 "$ref": "#/definitions/metricsCustomUrlMappings"
               },
               "metricsRateLimitingMaxRetries": {
-                " $ref": "#/definitions/metricsRateLimitingMaxRetries"
+                "$ref": "#/definitions/metricsRateLimitingMaxRetries"
               },
               "metricsRateLimitingBackoff": {
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
