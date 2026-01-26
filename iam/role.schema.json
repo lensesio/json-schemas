@@ -21,7 +21,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "policy.schema.json"
+        "$ref": "statement.schema.json"
       },
       "description": "List of permission statements for this role."
     },
@@ -38,5 +38,633 @@
       "description": "Custom string key/values for the role."
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "defaultSnippets": [
+    {
+      "label": "Administrator Role",
+      "description": "Full system access with all permissions. This role should be granted sparingly.",
+      "body": {
+        "name": "admin",
+        "display_name": "Administrator",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": ["*"],
+            "resource": ["*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Developer Role",
+      "description": "Create and manage data infrastructure including topics, connectors, processors, and schemas. Cannot manage users or delete topics.",
+      "body": {
+        "name": "developer",
+        "display_name": "Developer",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:CreateTopic",
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:UpdateTopicDetails",
+              "kafka:ReadTopicData",
+              "kafka:WriteTopicData",
+              "kafka:ListTopicDependants"
+            ],
+            "resource": ["kafka:topic:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails",
+              "kafka:ListConsumerGroupDependants"
+            ],
+            "resource": ["kafka:consumer-group:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:CreateSchema",
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails",
+              "schemas:UpdateSchema",
+              "schemas:GetRegistryConfiguration"
+            ],
+            "resource": ["schemas:schema:*", "schemas:registry:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:CreateConnector",
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails",
+              "kafka-connect:GetConnectorConfiguration",
+              "kafka-connect:UpdateConnectorConfiguration",
+              "kafka-connect:StartConnector",
+              "kafka-connect:StopConnector",
+              "kafka-connect:ListConnectorDependants",
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails",
+              "kafka-connect:DeployConnector"
+            ],
+            "resource": ["kafka-connect:connector:*", "kafka-connect:cluster:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "sql-streaming:CreateProcessor",
+              "sql-streaming:ListProcessors",
+              "sql-streaming:GetProcessorDetails",
+              "sql-streaming:GetProcessorSql",
+              "sql-streaming:UpdateProcessorSql",
+              "sql-streaming:StartProcessor",
+              "sql-streaming:StopProcessor",
+              "sql-streaming:GetProcessorLogs",
+              "sql-streaming:ListProcessorDependants"
+            ],
+            "resource": ["sql-streaming:sql-processor:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kubernetes:ListClusters",
+              "kubernetes:GetClusterDetails",
+              "kubernetes:ListNamespaces",
+              "kubernetes:DeployApps"
+            ],
+            "resource": ["kubernetes:cluster:*", "kubernetes:namespace:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "applications:RegisterApplication",
+              "applications:ListApplications",
+              "applications:GetApplicationDetails",
+              "applications:ListApplicationDependants"
+            ],
+            "resource": ["applications:external-application:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "k2k:CreateApp",
+              "k2k:UpdateApp",
+              "k2k:UpsertApp",
+              "k2k:GetApp",
+              "k2k:ListApps"
+            ],
+            "resource": ["k2k:app:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "governance:CreateRequest",
+              "governance:ListRequests",
+              "governance:GetRequestDetails"
+            ],
+            "resource": ["governance:request:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "alerts:ListAlertRules",
+              "alerts:GetAlertRuleDetails",
+              "alerts:ListAlertEvents",
+              "alerts:ListChannels"
+            ],
+            "resource": ["alerts:rule:*", "alerts:event:*", "alerts:channel:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "data-policies:ListPolicies",
+              "data-policies:GetPolicyDetails"
+            ],
+            "resource": ["data-policies:policy:*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Data Engineer Role",
+      "description": "Read and write topic data, manage schemas, and create SQL processors. Limited infrastructure management.",
+      "body": {
+        "name": "data-engineer",
+        "display_name": "Data Engineer",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ReadTopicData",
+              "kafka:WriteTopicData",
+              "kafka:ListTopicDependants"
+            ],
+            "resource": ["kafka:topic:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails",
+              "kafka:ListConsumerGroupDependants"
+            ],
+            "resource": ["kafka:consumer-group:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:CreateSchema",
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails",
+              "schemas:UpdateSchema",
+              "schemas:GetRegistryConfiguration"
+            ],
+            "resource": ["schemas:schema:*", "schemas:registry:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:CreateConnector",
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails",
+              "kafka-connect:GetConnectorConfiguration",
+              "kafka-connect:UpdateConnectorConfiguration",
+              "kafka-connect:StartConnector",
+              "kafka-connect:StopConnector",
+              "kafka-connect:ListConnectorDependants",
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails"
+            ],
+            "resource": ["kafka-connect:connector:*", "kafka-connect:cluster:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "sql-streaming:CreateProcessor",
+              "sql-streaming:ListProcessors",
+              "sql-streaming:GetProcessorDetails",
+              "sql-streaming:GetProcessorSql",
+              "sql-streaming:UpdateProcessorSql",
+              "sql-streaming:StartProcessor",
+              "sql-streaming:StopProcessor",
+              "sql-streaming:GetProcessorLogs",
+              "sql-streaming:ListProcessorDependants"
+            ],
+            "resource": ["sql-streaming:sql-processor:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kubernetes:ListClusters",
+              "kubernetes:GetClusterDetails",
+              "kubernetes:ListNamespaces",
+              "kubernetes:DeployApps"
+            ],
+            "resource": ["kubernetes:cluster:*", "kubernetes:namespace:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "data-policies:ListPolicies",
+              "data-policies:GetPolicyDetails"
+            ],
+            "resource": ["data-policies:policy:*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Viewer Role",
+      "description": "Read-only access across all resources. Cannot make any changes. Ideal for stakeholders needing visibility.",
+      "body": {
+        "name": "viewer",
+        "display_name": "Viewer",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ListTopicDependants",
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails",
+              "kafka:ListConsumerGroupDependants",
+              "kafka:ListAcls",
+              "kafka:GetAclDetails",
+              "kafka:ListQuotas",
+              "kafka:GetQuotaDetails"
+            ],
+            "resource": ["kafka:topic:*", "kafka:consumer-group:*", "kafka:acl:*", "kafka:quota:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "schemas:ListSchemas",
+              "schemas:GetSchemaDetails",
+              "schemas:GetRegistryConfiguration"
+            ],
+            "resource": ["schemas:schema:*", "schemas:registry:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails",
+              "kafka-connect:ListConnectorDependants",
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails"
+            ],
+            "resource": ["kafka-connect:connector:*", "kafka-connect:cluster:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "sql-streaming:ListProcessors",
+              "sql-streaming:GetProcessorDetails",
+              "sql-streaming:GetProcessorSql",
+              "sql-streaming:ListProcessorDependants"
+            ],
+            "resource": ["sql-streaming:sql-processor:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kubernetes:ListClusters",
+              "kubernetes:GetClusterDetails",
+              "kubernetes:ListNamespaces"
+            ],
+            "resource": ["kubernetes:cluster:*", "kubernetes:namespace:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "applications:ListApplications",
+              "applications:GetApplicationDetails",
+              "applications:ListApplicationDependants"
+            ],
+            "resource": ["applications:external-application:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "k2k:GetApp",
+              "k2k:ListApps"
+            ],
+            "resource": ["k2k:app:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "alerts:ListAlertRules",
+              "alerts:GetAlertRuleDetails",
+              "alerts:ListAlertEvents",
+              "alerts:ListChannels",
+              "alerts:GetChannelRoutes"
+            ],
+            "resource": ["alerts:rule:*", "alerts:event:*", "alerts:channel:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "data-policies:ListPolicies",
+              "data-policies:GetPolicyDetails"
+            ],
+            "resource": ["data-policies:policy:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "governance:ListRequests",
+              "governance:GetRequestDetails"
+            ],
+            "resource": ["governance:request:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "iam:ListRoles",
+              "iam:GetRoleDetails",
+              "iam:ListGroups",
+              "iam:GetGroupDetails",
+              "iam:ListUsers",
+              "iam:GetUserDetails"
+            ],
+            "resource": ["iam:role:*", "iam:group:*", "iam:user:*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Operator Role",
+      "description": "Operational management without create/delete. Can start, stop, scale, and monitor resources.",
+      "body": {
+        "name": "operator",
+        "display_name": "Operator",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ListTopicDependants",
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails",
+              "kafka:UpdateConsumerGroup",
+              "kafka:ListConsumerGroupDependants",
+              "kafka:ListQuotas",
+              "kafka:GetQuotaDetails",
+              "kafka:CreateQuota",
+              "kafka:UpdateQuota"
+            ],
+            "resource": ["kafka:topic:*", "kafka:consumer-group:*", "kafka:quota:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka-connect:ListConnectors",
+              "kafka-connect:GetConnectorDetails",
+              "kafka-connect:GetConnectorConfiguration",
+              "kafka-connect:StartConnector",
+              "kafka-connect:StopConnector",
+              "kafka-connect:ListConnectorDependants",
+              "kafka-connect:ListClusters",
+              "kafka-connect:GetClusterDetails"
+            ],
+            "resource": ["kafka-connect:connector:*", "kafka-connect:cluster:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "sql-streaming:ListProcessors",
+              "sql-streaming:GetProcessorDetails",
+              "sql-streaming:GetProcessorSql",
+              "sql-streaming:StartProcessor",
+              "sql-streaming:StopProcessor",
+              "sql-streaming:ScaleProcessor",
+              "sql-streaming:GetProcessorLogs",
+              "sql-streaming:ListProcessorDependants"
+            ],
+            "resource": ["sql-streaming:sql-processor:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kubernetes:ListClusters",
+              "kubernetes:GetClusterDetails",
+              "kubernetes:ListNamespaces"
+            ],
+            "resource": ["kubernetes:cluster:*", "kubernetes:namespace:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "k2k:GetApp",
+              "k2k:ListApps",
+              "k2k:ManageOffsets"
+            ],
+            "resource": ["k2k:app:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "alerts:CreateAlertRule",
+              "alerts:UpdateAlertRule",
+              "alerts:ListAlertRules",
+              "alerts:GetAlertRuleDetails",
+              "alerts:ToggleAlertRule",
+              "alerts:GetChannelRoutes",
+              "alerts:UpdateChannelRoutes",
+              "alerts:ListAlertEvents",
+              "alerts:ListChannels",
+              "alerts:GetChannelDetails",
+              "alerts:ToggleChannel"
+            ],
+            "resource": ["alerts:rule:*", "alerts:event:*", "alerts:channel:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Security Administrator Role",
+      "description": "IAM and security management without data access. Manages users, roles, groups, service accounts, ACLs, and audit logs.",
+      "body": {
+        "name": "security-admin",
+        "display_name": "Security Administrator",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "iam:CreateRole",
+              "iam:DeleteRole",
+              "iam:UpdateRole",
+              "iam:ListRoles",
+              "iam:GetRoleDetails",
+              "iam:CreateGroup",
+              "iam:DeleteGroup",
+              "iam:UpdateGroup",
+              "iam:ListGroups",
+              "iam:GetGroupDetails",
+              "iam:CreateUser",
+              "iam:DeleteUser",
+              "iam:UpdateUser",
+              "iam:ListUsers",
+              "iam:GetUserDetails",
+              "iam:CreateServiceAccount",
+              "iam:DeleteServiceAccount",
+              "iam:UpdateServiceAccount",
+              "iam:ListServiceAccounts",
+              "iam:GetServiceAccountDetails"
+            ],
+            "resource": ["iam:role:*", "iam:group:*", "iam:user:*", "iam:service-account:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:CreateAcl",
+              "kafka:ListAcls",
+              "kafka:GetAclDetails",
+              "kafka:UpdateAcl",
+              "kafka:DeleteAcl"
+            ],
+            "resource": ["kafka:acl:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ListConsumerGroups",
+              "kafka:GetConsumerGroupDetails"
+            ],
+            "resource": ["kafka:topic:*", "kafka:consumer-group:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "audit:ListLogs",
+              "audit:CreateChannel",
+              "audit:ListChannels",
+              "audit:GetChannelDetails",
+              "audit:UpdateChannel",
+              "audit:ToggleChannel"
+            ],
+            "resource": ["audit:log:*", "audit:channel:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "data-policies:CreatePolicy",
+              "data-policies:ListPolicies",
+              "data-policies:GetPolicyDetails",
+              "data-policies:UpdatePolicy",
+              "data-policies:DeletePolicy"
+            ],
+            "resource": ["data-policies:policy:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Governance Administrator Role",
+      "description": "Approve governance requests and manage data policies. Reviews and approves/denies self-service requests.",
+      "body": {
+        "name": "governance-admin",
+        "display_name": "Governance Administrator",
+        "policy": [
+          {
+            "effect": "allow",
+            "action": [
+              "governance:ListRequests",
+              "governance:GetRequestDetails",
+              "governance:ApproveRequest",
+              "governance:DenyRequest",
+              "governance:GetRuleDetails",
+              "governance:UpdateRule"
+            ],
+            "resource": ["governance:request:*", "governance:rule:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "data-policies:CreatePolicy",
+              "data-policies:ListPolicies",
+              "data-policies:GetPolicyDetails",
+              "data-policies:UpdatePolicy",
+              "data-policies:DeletePolicy"
+            ],
+            "resource": ["data-policies:policy:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "kafka:ListTopics",
+              "kafka:GetTopicDetails",
+              "kafka:ListAcls",
+              "kafka:GetAclDetails"
+            ],
+            "resource": ["kafka:topic:*", "kafka:acl:*"]
+          },
+          {
+            "effect": "allow",
+            "action": [
+              "environments:ListEnvironments",
+              "environments:GetEnvironmentDetails",
+              "environments:AccessEnvironment"
+            ],
+            "resource": ["environments:environment:*"]
+          }
+        ]
+      }
+    }
+  ]
 } 
