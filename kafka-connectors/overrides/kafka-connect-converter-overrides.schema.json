@@ -59,17 +59,17 @@
     "header.max.schemas.per.subject": {
       "type": "integer",
       "description": "Maximum number of schemas to create or cache locally.",
-      "default": true
+      "default": 1000
     },
     "key.max.schemas.per.subject": {
       "type": "integer",
       "description": "Maximum number of schemas to create or cache locally.",
-      "default": true
+      "default": 1000
     },
     "value.max.schemas.per.subject": {
       "type": "integer",
       "description": "Maximum number of schemas to create or cache locally.",
-      "default": true
+      "default": 1000
     },
     "key.subject.name.strategy": {
       "type": "string",
