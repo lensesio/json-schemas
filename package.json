@@ -5,7 +5,7 @@
   "scripts": {
     "validate": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false --all-errors",
     "validate-agent": "ajv compile -s agent/provisioning.schema.json --spec=draft7 --strict=false --all-errors",
-    "validate-iam": "ajv compile -s iam/group.schema.json -s iam/policy.schema.json -s iam/service-account.schema.json -s iam/user.schema.json --spec=draft7 --strict=false --all-errors",
+    "validate-iam": "ajv compile -s iam/statement.schema.json -s iam/group.schema.json -s iam/policy.schema.json -s iam/role.schema.json -s iam/service-account.schema.json -s iam/user.schema.json -r iam/statement.schema.json --spec=draft7 --strict=false --all-errors",
     "validate-yaml-example": "js-yaml example.provisioning.yaml > temp.json && if [ -s temp.json ] && [ \"$(cat temp.json)\" != \"null\" ]; then ajv validate -s agent/provisioning.schema.json -d temp.json --spec=draft7 --strict=false; else echo 'ℹ️  example.provisioning.yaml contains only comments, skipping validation'; fi && rm temp.json",
     "format-check": "find . -name '*.schema.json' -exec python3 -m json.tool {} \\; > /dev/null",
     "test": "npm run validate-agent && npm run validate-iam && npm run format-check && npm run validate-yaml-example"
