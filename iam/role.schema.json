@@ -43,6 +43,5 @@
       },
       "description": "Custom string key/values for the role."
     }
-  },
-  "additionalProperties": false
-} 
+  }
+}
