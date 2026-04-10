@@ -10,7 +10,11 @@
       "type": "array",
       "description": "List of policy statements",
       "markdownDescription": "List of policy statements. [View policy documentation](https://docs.lenses.io/latest/user-guide/iam)",
-      "items": {
+      "items": { "$ref": "#/definitions/PermissionStatement" }
+    }
+  },
+  "definitions": {
+    "PermissionStatement": {
         "type": "object",
         "required": ["effect", "action", "resource"],
         "properties": {
@@ -665,7 +669,6 @@
           }
         }        
       }
-    }
   },
   "defaultSnippets": [
     {

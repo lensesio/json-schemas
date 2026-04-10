@@ -27,7 +27,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "policy.schema.json"
+        "$ref": "policy.schema.json#/definitions/PermissionStatement"
       },
       "description": "List of permission statements for this role."
     },
@@ -43,6 +43,5 @@
       },
       "description": "Custom string key/values for the role."
     }
-  },
-  "additionalProperties": false
-} 
+  }
+}
