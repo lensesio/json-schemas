@@ -8,6 +8,7 @@
     "name": {
       "type": "string",
       "pattern": "^[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?$",
+      "minLength": 1,
       "maxLength": 63,
       "description": "The unique name of the group. Lowercase alphanumeric or hyphens, not starting/ending with hyphen, max 63 chars."
     },
@@ -16,6 +17,12 @@
       "minLength": 1,
       "maxLength": 150,
       "description": "Display name for the group. If not provided, the value of 'name' will be used."
+    },
+    "sso_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150,
+      "description": "SSO name used to map SSO-provided groups onto HQ groups. Useful when SAML assertions carry group UUIDs (e.g. from Active Directory). If not provided, the value of 'name' will be used."
     },
     "description": {
       "type": "string",

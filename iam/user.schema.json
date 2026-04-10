@@ -7,9 +7,9 @@
   "properties": {
     "name": {
       "type": "string",
-      "pattern": "^[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?$",
-      "maxLength": 63,
-      "description": "The unique name of the user. Lowercase alphanumeric or hyphens, not starting/ending with hyphen, max 63 chars."
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "The unique name of the user. Free-form string (commonly an email address for SSO-provisioned users), 1-100 chars."
     },
     "display_name": {
       "type": "string",
