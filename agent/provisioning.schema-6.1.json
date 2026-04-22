@@ -174,7 +174,7 @@
           "type": "string",
           "description": "Enter a password for the keystore.",
           "x-secret": true,
-          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -212,7 +212,7 @@
           "type": "string",
           "description": "Enter a password for the truststore.",
           "x-secret": true,
-          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -283,7 +283,7 @@
         "value": {
           "type": "string",
           "x-secret": true,
-          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
         }
       },
       "required": ["value"]
@@ -3033,8 +3033,8 @@
               },
               "# metricsCustomUrlMappings": {
                 "# value": {
-                  "kafka1:9092": "kafka1_jmx_metrics:9581",
-                  "kafka2:9092": "kafka2_jmx_metrics:9581"
+                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
+                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
                 }
               },
               "# metricsRateLimitingMaxRetries": {
