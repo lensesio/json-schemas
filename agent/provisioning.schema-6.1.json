@@ -703,9 +703,9 @@
           "type": "string",
           "description": "Enter the AWS authentication mode (non empty).",
           "enum": [
-            "access-keys",
-            "credentials-chain",
-            "assume-role"
+            "Access Keys",
+            "Credentials Chain",
+            "Assume Role"
           ]
         }
       },
