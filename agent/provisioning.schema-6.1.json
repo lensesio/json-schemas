@@ -73,16 +73,27 @@
       "description": "Kafka bootstrap servers.",
       "properties": {
         "value": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^((SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://)?[a-zA-Z0-9.-]+:[0-9]{1,5}$",
-            "description": "Enter the bootstrap server URL (e.g., 'broker:9092', 'SASL_SSL://broker:9092'). Protocol prefix is optional and can be included in the URL or set separately in the protocol setting."
-          },
-          "description": "List of bootstrap servers. Protocol prefixes are optional."
+          "description": "List of bootstrap servers. Protocol prefixes are optional. Can be an array or a comma-separated string.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^((SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://)?[a-zA-Z0-9.-]+:[0-9]{1,5}$",
+                "description": "Enter the bootstrap server URL (e.g., 'broker:9092', 'SASL_SSL://broker:9092'). Protocol prefix is optional and can be included in the URL or set separately in the protocol setting."
+              }
+            },
+            {
+              "type": "string",
+              "pattern": "^((SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://)?[a-zA-Z0-9.-]+:[0-9]{1,5}(,\\s*((SASL_PLAINTEXT|SASL_SSL|PLAINTEXT|SSL)://)?[a-zA-Z0-9.-]+:[0-9]{1,5})*$",
+              "description": "Comma-separated list of bootstrap servers (e.g., 'broker1:9092,broker2:9092' or 'SASL_SSL://broker1:9092, SASL_SSL://broker2:9092')."
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "schemaRegistryUrls": {
       "type": "object",
@@ -98,7 +109,9 @@
           "description": "Enter the Schema Registry URLs. Must include scheme (http/https) and valid hostname. Port is optional. Format: http(s)://hostname[:port][/path]"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "workers": {
       "type": "object",
@@ -114,7 +127,9 @@
           "description": "Enter the Connect worker URLs"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "protocol": {
       "type": "object",
@@ -123,10 +138,17 @@
         "value": {
           "type": "string",
           "description": "Enter the Protocol value (e.g. SASL_SSL, PLAINTEXT, etc.)",
-          "enum": ["SASL_PLAINTEXT", "SASL_SSL", "PLAINTEXT", "SSL"]
+          "enum": [
+            "SASL_PLAINTEXT",
+            "SASL_SSL",
+            "PLAINTEXT",
+            "SSL"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "saslMechanism": {
       "type": "object",
@@ -135,10 +157,17 @@
         "value": {
           "type": "string",
           "description": "Enter the SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
-          "enum": ["AWS_MSK_IAM", "PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512"]
+          "enum": [
+            "AWS_MSK_IAM",
+            "PLAIN",
+            "SCRAM-SHA-256",
+            "SCRAM-SHA-512"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "saslJaasConfig": {
       "type": "object",
@@ -148,10 +177,19 @@
           "type": "string",
           "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
           "x-secret": true,
-          "anyOf": [{ "minLength": 1 }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "minLength": 1
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"],
+      "required": [
+        "value"
+      ],
       "multiline": true
     },
     "sslKeystore": {
@@ -164,7 +202,9 @@
           "pattern": "^.*\\.jks$"
         }
       },
-      "required": ["file"]
+      "required": [
+        "file"
+      ]
     },
     "sslKeystorePassword": {
       "type": "object",
@@ -174,10 +214,19 @@
           "type": "string",
           "description": "Enter a password for the keystore.",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "sslKeyPassword": {
       "type": "object",
@@ -187,10 +236,19 @@
           "type": "string",
           "description": "Enter key password (can be empty).",
           "x-secret": true,
-          "anyOf": [{ "type": "string" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "sslTruststore": {
       "type": "object",
@@ -202,7 +260,9 @@
           "pattern": "^.*\\.jks$"
         }
       },
-      "required": ["file"]
+      "required": [
+        "file"
+      ]
     },
     "sslTruststorePassword": {
       "type": "object",
@@ -212,10 +272,19 @@
           "type": "string",
           "description": "Enter a password for the truststore.",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "sslAlgorthrim": {
       "type": "object",
@@ -228,7 +297,9 @@
         }
       },
       "default": "X509",
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "additionalProperties": {
       "type": "object",
@@ -245,7 +316,9 @@
           }
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "metricsType": {
       "type": "object",
@@ -253,28 +326,53 @@
       "properties": {
         "value": {
           "type": "string",
-          "enum": ["JOLOKIAG", "JOLOKIAP", "JMX", "AWS"]
+          "enum": [
+            "JOLOKIAG",
+            "JOLOKIAP",
+            "JMX",
+            "AWS"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "metricsPort": {
       "type": "object",
       "description": "Port for metrics collection.",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsSsl": {
       "type": "object",
       "description": "Enable SSL for metrics collection.",
-      "properties": { "value": { "type": "boolean" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsUsername": {
       "type": "object",
       "description": "Username for metrics authentication.",
-      "properties": { "value": { "type": "string" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsPassword": {
       "type": "object",
@@ -283,22 +381,43 @@
         "value": {
           "type": "string",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "metricsHttpSuffix": {
       "type": "object",
       "description": "Custom HTTP suffix for metrics endpoint.",
-      "properties": { "value": { "type": "string" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsHttpTimeout": {
       "type": "object",
       "description": "HTTP request timeout in milliseconds for metrics collection.",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsCustomUrlMappings": {
       "type": "object",
@@ -315,19 +434,33 @@
           }
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "metricsRateLimitingMaxRetries": {
       "type": "object",
       "description": "HTTP retries when 429 is returned for Jolokia metrics",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "metricsRateLimitingBackoff": {
       "type": "object",
       "description": "Backoff interval (ms) when 429 is returned for Jolokia metrics",
-      "properties": { "value": { "type": "integer" } },
-      "required": ["value"]
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ]
     },
     "username": {
       "type": "object",
@@ -348,10 +481,19 @@
           "type": "string",
           "description": "Enter the password (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "basicAuthCredentialsSource": {
       "type": "object",
@@ -360,7 +502,11 @@
         "value": {
           "type": "string",
           "description": "Enter source for the basic auth credentials.",
-          "enum": ["URL", "USER_INFO", "SASL_INHERIT"]
+          "enum": [
+            "URL",
+            "USER_INFO",
+            "SASL_INHERIT"
+          ]
         }
       }
     },
@@ -372,7 +518,14 @@
           "description": "Enter the basic auth user information (non empty).",
           "type": "string",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       }
     },
@@ -386,7 +539,9 @@
           "pattern": "^[a-zA-Z0-9-]+$"
         }
       },
-      "required": ["reference"]
+      "required": [
+        "reference"
+      ]
     },
     "region": {
       "type": "object",
@@ -421,7 +576,9 @@
           ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "secretAccessKey": {
       "type": "object",
@@ -433,7 +590,9 @@
           "pattern": "^[a-zA-Z0-9-]+$"
         }
       },
-      "required": ["reference"]
+      "required": [
+        "reference"
+      ]
     },
     "sessionToken": {
       "type": "object",
@@ -443,10 +602,19 @@
           "type": "string",
           "description": "Enter the session token value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^[a-zA-Z0-9-]+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9-]+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "authMode": {
       "type": "object",
@@ -458,7 +626,9 @@
           "pattern": "^.+$"
         }
       },
-      "required": ["reference"]
+      "required": [
+        "reference"
+      ]
     },
     "assumeRoleArn": {
       "type": "object",
@@ -470,7 +640,9 @@
           "pattern": "^.+$"
         }
       },
-      "required": ["reference"]
+      "required": [
+        "reference"
+      ]
     },
     "assumeRoleSessionName": {
       "type": "object",
@@ -482,7 +654,9 @@
           "pattern": "^.+$"
         }
       },
-      "required": ["reference"]
+      "required": [
+        "reference"
+      ]
     },
     "awsAccessKeyId": {
       "type": "object",
@@ -495,7 +669,9 @@
           "x-secret": false
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "awsSecretAccessKey": {
       "type": "object",
@@ -505,10 +681,19 @@
           "type": "string",
           "description": "Enter the AWS secret access key (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "awsAuthMode": {
       "type": "object",
@@ -517,10 +702,16 @@
         "value": {
           "type": "string",
           "description": "Enter the AWS authentication mode (non empty).",
-          "enum": ["access-keys", "credentials-chain", "assume-role"]
+          "enum": [
+            "access-keys",
+            "credentials-chain",
+            "assume-role"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "awsAssumeRoleArn": {
       "type": "object",
@@ -532,7 +723,9 @@
           "pattern": "^arn:aws:iam::[0-9]{12}:role/.+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "awsAssumeRoleSessionName": {
       "type": "object",
@@ -544,7 +737,9 @@
           "pattern": "^[a-zA-Z0-9-]+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "glueRegistryArn": {
       "type": "object",
@@ -556,7 +751,9 @@
           "pattern": "^arn:aws:glue:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9._/-]+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "glueRegistryCacheTtl": {
       "type": "object",
@@ -568,7 +765,9 @@
           "pattern": "^[0-9]+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "glueRegistryCacheSize": {
       "type": "object",
@@ -581,7 +780,9 @@
           "default": 200
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "glueRegistryDefaultCompatibility": {
       "type": "object",
@@ -590,10 +791,20 @@
         "value": {
           "type": "string",
           "description": "Enter the registry default compatibility (non empty).",
-          "enum": ["BACKWARD", "BACKWARD_ALL", "FORWARD", "FORWARD_ALL", "FULL", "FULL_ALL", "NONE"]
+          "enum": [
+            "BACKWARD",
+            "BACKWARD_ALL",
+            "FORWARD",
+            "FORWARD_ALL",
+            "FULL",
+            "FULL_ALL",
+            "NONE"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "endpoints": {
       "type": "object",
@@ -609,7 +820,9 @@
           "minItems": 1
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "host": {
       "type": "object",
@@ -621,7 +834,9 @@
           "pattern": "^.+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "port": {
       "type": "object",
@@ -633,7 +848,9 @@
           "pattern": "^[0-9]+$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "useHttps": {
       "type": "object",
@@ -645,7 +862,9 @@
           "pattern": "^true|false$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "insecure": {
       "type": "object",
@@ -657,7 +876,9 @@
           "pattern": "^true|false$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "token": {
       "type": "object",
@@ -667,10 +888,19 @@
           "type": "string",
           "description": "Enter the token value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^[A-Za-z0-9_-]+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "hardDelete": {
       "type": "object",
@@ -682,7 +912,9 @@
           "pattern": "^true|false$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "webhookUrl": {
       "type": "object",
@@ -692,10 +924,19 @@
           "type": "string",
           "description": "Enter the Slack webhook URL (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^(https?:\\/\\/.+)$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^(https?:\\/\\/.+)$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "integrationKey": {
       "type": "object",
@@ -705,10 +946,19 @@
           "type": "string",
           "description": "Enter the integration key value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "site": {
       "type": "object",
@@ -717,10 +967,15 @@
         "value": {
           "type": "string",
           "description": "Select the DataDog site region.",
-          "enum": ["EU", "US"]
+          "enum": [
+            "EU",
+            "US"
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "apiKey": {
       "type": "object",
@@ -730,10 +985,19 @@
           "type": "string",
           "description": "Enter the API key value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "applicationKey": {
       "type": "object",
@@ -743,10 +1007,19 @@
           "type": "string",
           "description": "Enter the application key value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "creds": {
       "type": "object",
@@ -758,12 +1031,21 @@
           "items": {
             "type": "string",
             "description": "Enter the credential string (non empty).",
-            "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+            "anyOf": [
+              {
+                "pattern": "^.+$"
+              },
+              {
+                "const": "[secret hidden by Lenses]"
+              }
+            ]
           },
           "description": "Array of credential strings."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "zookeeperUrls": {
       "type": "object",
@@ -778,7 +1060,9 @@
           "description": "List of Zookeeper URLs in host:port format."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "zookeeperChrootPath": {
       "type": "object",
@@ -789,7 +1073,9 @@
           "description": "Enter the Chroot path value."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "zookeeperSessionTimeout": {
       "type": "object",
@@ -800,7 +1086,9 @@
           "description": "Enter the Timeout value in milliseconds."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "zookeeperConnectionTimeout": {
       "type": "object",
@@ -811,7 +1099,9 @@
           "description": "Enter the Timeout value in milliseconds."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "server": {
       "type": "object",
@@ -822,7 +1112,9 @@
           "description": "Server address."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "agentKey": {
       "type": "object",
@@ -832,10 +1124,19 @@
           "type": "string",
           "description": "Enter the Agent key value (non empty).",
           "x-secret": true,
-          "anyOf": [{ "pattern": "^.+$" }, { "const": "[secret hidden by Lenses]" }]
+          "anyOf": [
+            {
+              "pattern": "^.+$"
+            },
+            {
+              "const": "[secret hidden by Lenses]"
+            }
+          ]
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "sslEnabled": {
       "type": "object",
@@ -847,7 +1148,9 @@
           "pattern": "^true|false$"
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     },
     "sslEnabledProtocols": {
       "type": "object",
@@ -923,7 +1226,10 @@
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Lenses HQ connection).",
-      "enum": ["Lenses HQ", "Lenses HQ TLS"]
+      "enum": [
+        "Lenses HQ",
+        "Lenses HQ TLS"
+      ]
     },
     "editorTagKafka": {
       "type": "string",
@@ -953,7 +1259,9 @@
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Zookeeper connection).",
-      "enum": ["Zookeeper"]
+      "enum": [
+        "Zookeeper"
+      ]
     },
     "editorTagConnect": {
       "type": "string",
@@ -987,43 +1295,57 @@
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (AWS connection).",
-      "enum": ["AWS Connection for Glue & CloudWatch"]
+      "enum": [
+        "AWS Connection for Glue & CloudWatch"
+      ]
     },
     "editorTagWebhook": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Webhook connection).",
-      "enum": ["Webhook"]
+      "enum": [
+        "Webhook"
+      ]
     },
     "editorTagDatadog": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (DataDog connection).",
-      "enum": ["DataDog"]
+      "enum": [
+        "DataDog"
+      ]
     },
     "editorTagPagerDuty": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (PagerDuty connection).",
-      "enum": ["PagerDuty"]
+      "enum": [
+        "PagerDuty"
+      ]
     },
     "editorTagSlack": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Slack connection).",
-      "enum": ["Slack"]
+      "enum": [
+        "Slack"
+      ]
     },
     "editorTagSplunk": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Splunk connection).",
-      "enum": ["Splunk"]
+      "enum": [
+        "Splunk"
+      ]
     },
     "editorTagAlertManager": {
       "type": "string",
       "title": "Editor Tag",
       "description": "Editor tag for Lenses UX (Alert Manager connection).",
-      "enum": ["Alert Manager"]
+      "enum": [
+        "Alert Manager"
+      ]
     }
   },
   "properties": {
@@ -1037,21 +1359,39 @@
           "name": {
             "type": "string",
             "description": "Lenses HQ connection name.",
-            "enum": ["lenses-hq"],
+            "enum": [
+              "lenses-hq"
+            ],
             "default": "lenses-hq"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagLensesHq" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagLensesHq"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Lenses HQ connection configuration.",
             "properties": {
-              "server": { "$ref": "#/definitions/server" },
-              "port": { "$ref": "#/definitions/port" },
-              "agentKey": { "$ref": "#/definitions/agentKey" },
-              "sslEnabled": { "$ref": "#/definitions/sslEnabled" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "server": {
+                "$ref": "#/definitions/server"
+              },
+              "port": {
+                "$ref": "#/definitions/port"
+              },
+              "agentKey": {
+                "$ref": "#/definitions/agentKey"
+              },
+              "sslEnabled": {
+                "$ref": "#/definitions/sslEnabled"
+              },
+              "sslTruststore": {
+                "$ref": "#/definitions/sslTruststore"
+              },
               "sslTruststorePassword": {
                 "$ref": "#/definitions/sslTruststorePassword"
               },
@@ -1061,20 +1401,34 @@
               "isShutDownInterval": {
                 "$ref": "#/definitions/isShutDownInterval"
               },
-              "connectTimeout": { "$ref": "#/definitions/connectTimeout" },
+              "connectTimeout": {
+                "$ref": "#/definitions/connectTimeout"
+              },
               "maxJitterWindowMilliseconds": {
                 "$ref": "#/definitions/maxJitterWindowMilliseconds"
               },
               "sslEnabledProtocols": {
                 "$ref": "#/definitions/sslEnabledProtocols"
               },
-              "algorithm": { "$ref": "#/definitions/algorithm" },
-              "cipherSuites": { "$ref": "#/definitions/cipherSuites" }
+              "algorithm": {
+                "$ref": "#/definitions/algorithm"
+              },
+              "cipherSuites": {
+                "$ref": "#/definitions/cipherSuites"
+              }
             },
-            "required": ["server", "port", "agentKey"]
+            "required": [
+              "server",
+              "port",
+              "agentKey"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "kafka": {
@@ -1087,12 +1441,20 @@
           "name": {
             "type": "string",
             "description": "Cluster name.",
-            "enum": ["kafka"],
+            "enum": [
+              "kafka"
+            ],
             "default": "kafka"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagKafka" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagKafka"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "title": "Kafka Configuration",
@@ -1101,26 +1463,48 @@
               "kafkaBootstrapServers": {
                 "$ref": "#/definitions/kafkaBootstrapServers"
               },
-              "protocol": { "$ref": "#/definitions/protocol" },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
+              "protocol": {
+                "$ref": "#/definitions/protocol"
+              },
+              "sslKeystore": {
+                "$ref": "#/definitions/sslKeystore"
+              },
               "sslKeystorePassword": {
                 "$ref": "#/definitions/sslKeystorePassword"
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "sslKeyPassword": {
+                "$ref": "#/definitions/sslKeyPassword"
+              },
+              "sslTruststore": {
+                "$ref": "#/definitions/sslTruststore"
+              },
               "sslTruststorePassword": {
                 "$ref": "#/definitions/sslTruststorePassword"
               },
-              "saslMechanism": { "$ref": "#/definitions/saslMechanism" },
-              "saslJaasConfig": { "$ref": "#/definitions/saslJaasConfig" },
+              "saslMechanism": {
+                "$ref": "#/definitions/saslMechanism"
+              },
+              "saslJaasConfig": {
+                "$ref": "#/definitions/saslJaasConfig"
+              },
               "additionalProperties": {
                 "$ref": "#/definitions/additionalProperties"
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsType": {
+                "$ref": "#/definitions/metricsType"
+              },
+              "metricsPort": {
+                "$ref": "#/definitions/metricsPort"
+              },
+              "metricsSsl": {
+                "$ref": "#/definitions/metricsSsl"
+              },
+              "metricsUsername": {
+                "$ref": "#/definitions/metricsUsername"
+              },
+              "metricsPassword": {
+                "$ref": "#/definitions/metricsPassword"
+              },
               "metricsHttpSuffix": {
                 "$ref": "#/definitions/metricsHttpSuffix"
               },
@@ -1137,7 +1521,9 @@
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
               }
             },
-            "required": ["kafkaBootstrapServers"],
+            "required": [
+              "kafkaBootstrapServers"
+            ],
             "allOf": [
               {
                 "title": "SASL PLAIN Mechanism Validation",
@@ -1152,7 +1538,10 @@
                       }
                     }
                   },
-                  "required": ["saslMechanism", "saslJaasConfig"]
+                  "required": [
+                    "saslMechanism",
+                    "saslJaasConfig"
+                  ]
                 },
                 "then": {
                   "properties": {
@@ -1166,12 +1555,15 @@
                             {
                               "const": "[secret hidden by Lenses]"
                             }
-                          ]
+                          ],
+                          "errorMessage": "For SASL PLAIN, saslJaasConfig must be: org.apache.kafka.common.security.plain.PlainLoginModule required username=\"<user>\" password=\"<pass>\";"
                         }
                       }
                     }
                   },
-                  "required": ["saslJaasConfig"]
+                  "required": [
+                    "saslJaasConfig"
+                  ]
                 }
               },
               {
@@ -1187,10 +1579,14 @@
                       }
                     }
                   },
-                  "required": ["saslMechanism"]
+                  "required": [
+                    "saslMechanism"
+                  ]
                 },
                 "then": {
-                  "required": ["additionalProperties"],
+                  "required": [
+                    "additionalProperties"
+                  ],
                   "properties": {
                     "additionalProperties": {
                       "properties": {
@@ -1202,7 +1598,9 @@
                               "const": "software.amazon.msk.auth.iam.IAMClientCallbackHandler"
                             }
                           },
-                          "required": ["sasl.client.callback.handler.class"]
+                          "required": [
+                            "sasl.client.callback.handler.class"
+                          ]
                         }
                       }
                     }
@@ -1217,12 +1615,18 @@
                     "saslMechanism": {
                       "properties": {
                         "value": {
-                          "enum": ["SCRAM-SHA-256", "SCRAM-SHA-512"]
+                          "enum": [
+                            "SCRAM-SHA-256",
+                            "SCRAM-SHA-512"
+                          ]
                         }
                       }
                     }
                   },
-                  "required": ["saslMechanism", "saslJaasConfig"]
+                  "required": [
+                    "saslMechanism",
+                    "saslJaasConfig"
+                  ]
                 },
                 "then": {
                   "properties": {
@@ -1236,12 +1640,15 @@
                             {
                               "const": "[secret hidden by Lenses]"
                             }
-                          ]
+                          ],
+                          "errorMessage": "For SASL SCRAM, saslJaasConfig must be: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\";"
                         }
                       }
                     }
                   },
-                  "required": ["saslJaasConfig"]
+                  "required": [
+                    "saslJaasConfig"
+                  ]
                 }
               },
               {
@@ -1257,7 +1664,10 @@
                       }
                     }
                   },
-                  "required": ["saslMechanism", "saslJaasConfig"]
+                  "required": [
+                    "saslMechanism",
+                    "saslJaasConfig"
+                  ]
                 },
                 "then": {
                   "properties": {
@@ -1271,58 +1681,273 @@
                             {
                               "const": "[secret hidden by Lenses]"
                             }
-                          ]
+                          ],
+                          "errorMessage": "For AWS MSK IAM, saslJaasConfig must be exactly: software.amazon.msk.auth.iam.IAMLoginModule required;"
                         }
                       }
                     }
                   },
-                  "required": ["saslJaasConfig"]
+                  "required": [
+                    "saslJaasConfig"
+                  ]
                 }
               },
               {
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 }
               },
               {
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
+                }
+              },
+              {
+                "title": "Bootstrap Server Prefix and Protocol miss match (SASL_SSL)",
+                "description": "When protocol is SASL_SSL, any explicit protocol prefix in bootstrap server URLs must be SASL_SSL, not SASL_PLAINTEXT, PLAINTEXT, or SSL",
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": {
+                          "const": "SASL_SSL"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "protocol"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "if": {
+                            "type": "array"
+                          },
+                          "then": {
+                            "items": {
+                              "not": {
+                                "pattern": "^(SASL_PLAINTEXT|PLAINTEXT|SSL)://"
+                              },
+                              "errorMessage": "Bootstrap server prefix must match the protocol. Use SASL_SSL:// or omit the prefix when protocol is SASL_SSL."
+                            }
+                          },
+                          "else": {
+                            "not": {
+                              "pattern": "(^|,\\s*)(SASL_PLAINTEXT|PLAINTEXT|SSL)://"
+                            },
+                            "errorMessage": "Bootstrap server prefix must match the protocol. Use SASL_SSL:// or omit the prefix when protocol is SASL_SSL."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "title": "Bootstrap Server Prefix and Protocol Consistency (SASL_PLAINTEXT)",
+                "description": "When protocol is SASL_PLAINTEXT, any explicit protocol prefix in bootstrap server URLs must be SASL_PLAINTEXT, not SASL_SSL, PLAINTEXT, or SSL",
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": {
+                          "const": "SASL_PLAINTEXT"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "protocol"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "if": {
+                            "type": "array"
+                          },
+                          "then": {
+                            "items": {
+                              "not": {
+                                "pattern": "^(SASL_SSL|PLAINTEXT|SSL)://"
+                              },
+                              "errorMessage": "Bootstrap server prefix must match the protocol. Use SASL_PLAINTEXT:// or omit the prefix when protocol is SASL_PLAINTEXT."
+                            }
+                          },
+                          "else": {
+                            "not": {
+                              "pattern": "(^|,\\s*)(SASL_SSL|PLAINTEXT|SSL)://"
+                            },
+                            "errorMessage": "Bootstrap server prefix must match the protocol. Use SASL_PLAINTEXT:// or omit the prefix when protocol is SASL_PLAINTEXT."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "title": "Bootstrap Server Prefix and Protocol Consistency (PLAINTEXT)",
+                "description": "When protocol is PLAINTEXT, any explicit protocol prefix in bootstrap server URLs must be PLAINTEXT, not SASL_SSL, SASL_PLAINTEXT, or SSL",
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": {
+                          "const": "PLAINTEXT"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "protocol"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "if": {
+                            "type": "array"
+                          },
+                          "then": {
+                            "items": {
+                              "not": {
+                                "pattern": "^(SASL_SSL|SASL_PLAINTEXT|SSL)://"
+                              },
+                              "errorMessage": "Bootstrap server prefix must match the protocol. Use PLAINTEXT:// or omit the prefix when protocol is PLAINTEXT."
+                            }
+                          },
+                          "else": {
+                            "not": {
+                              "pattern": "(^|,\\s*)(SASL_SSL|SASL_PLAINTEXT|SSL)://"
+                            },
+                            "errorMessage": "Bootstrap server prefix must match the protocol. Use PLAINTEXT:// or omit the prefix when protocol is PLAINTEXT."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "title": "Bootstrap Server Prefix and Protocol Consistency (SSL)",
+                "description": "When protocol is SSL, any explicit protocol prefix in bootstrap server URLs must be SSL, not SASL_SSL, SASL_PLAINTEXT, or PLAINTEXT",
+                "if": {
+                  "properties": {
+                    "protocol": {
+                      "properties": {
+                        "value": {
+                          "const": "SSL"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "protocol"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "kafkaBootstrapServers": {
+                      "properties": {
+                        "value": {
+                          "if": {
+                            "type": "array"
+                          },
+                          "then": {
+                            "items": {
+                              "not": {
+                                "pattern": "^(SASL_SSL|SASL_PLAINTEXT|PLAINTEXT)://"
+                              },
+                              "errorMessage": "Bootstrap server prefix must match the protocol. Use SSL:// or omit the prefix when protocol is SSL."
+                            }
+                          },
+                          "else": {
+                            "not": {
+                              "pattern": "(^|,\\s*)(SASL_SSL|SASL_PLAINTEXT|PLAINTEXT)://"
+                            },
+                            "errorMessage": "Bootstrap server prefix must match the protocol. Use SSL:// or omit the prefix when protocol is SSL."
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "zookeeper": {
@@ -1335,17 +1960,27 @@
           "name": {
             "type": "string",
             "description": "Zookeeper name.",
-            "enum": ["zookeeper"],
+            "enum": [
+              "zookeeper"
+            ],
             "default": "zookeeper"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagZookeeper" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagZookeeper"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Zookeeper connection configuration.",
             "properties": {
-              "zookeeperUrls": { "$ref": "#/definitions/zookeeperUrls" },
+              "zookeeperUrls": {
+                "$ref": "#/definitions/zookeeperUrls"
+              },
               "zookeeperChrootPath": {
                 "$ref": "#/definitions/zookeeperChrootPath"
               },
@@ -1355,11 +1990,21 @@
               "zookeeperConnectionTimeout": {
                 "$ref": "#/definitions/zookeeperConnectionTimeout"
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsType": {
+                "$ref": "#/definitions/metricsType"
+              },
+              "metricsPort": {
+                "$ref": "#/definitions/metricsPort"
+              },
+              "metricsSsl": {
+                "$ref": "#/definitions/metricsSsl"
+              },
+              "metricsUsername": {
+                "$ref": "#/definitions/metricsUsername"
+              },
+              "metricsPassword": {
+                "$ref": "#/definitions/metricsPassword"
+              },
               "metricsHttpSuffix": {
                 "$ref": "#/definitions/metricsHttpSuffix"
               },
@@ -1376,10 +2021,16 @@
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
               }
             },
-            "required": ["zookeeperUrls"]
+            "required": [
+              "zookeeperUrls"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "confluentSchemaRegistry": {
@@ -1393,12 +2044,20 @@
           "name": {
             "type": "string",
             "description": "Schema Registry name.",
-            "enum": ["schema-registry"],
+            "enum": [
+              "schema-registry"
+            ],
             "default": "schema-registry"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagSchemaRegistry" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagSchemaRegistry"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "title": "Schema Registry Configuration",
@@ -1407,31 +2066,51 @@
               "schemaRegistryUrls": {
                 "$ref": "#/definitions/schemaRegistryUrls"
               },
-              "username": { "$ref": "#/definitions/username" },
-              "password": { "$ref": "#/definitions/password" },
+              "username": {
+                "$ref": "#/definitions/username"
+              },
+              "password": {
+                "$ref": "#/definitions/password"
+              },
               "basicAuthCredentialsSource": {
                 "$ref": "#/definitions/basicAuthCredentialsSource"
               },
               "basicAuthUserInfo": {
                 "$ref": "#/definitions/basicAuthUserInfo"
               },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
+              "sslKeystore": {
+                "$ref": "#/definitions/sslKeystore"
+              },
               "sslKeystorePassword": {
                 "$ref": "#/definitions/sslKeystorePassword"
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "sslKeyPassword": {
+                "$ref": "#/definitions/sslKeyPassword"
+              },
+              "sslTruststore": {
+                "$ref": "#/definitions/sslTruststore"
+              },
               "sslTruststorePassword": {
                 "$ref": "#/definitions/sslTruststorePassword"
               },
               "additionalProperties": {
                 "$ref": "#/definitions/additionalProperties"
               },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "metricsType": {
+                "$ref": "#/definitions/metricsType"
+              },
+              "metricsPort": {
+                "$ref": "#/definitions/metricsPort"
+              },
+              "metricsSsl": {
+                "$ref": "#/definitions/metricsSsl"
+              },
+              "metricsUsername": {
+                "$ref": "#/definitions/metricsUsername"
+              },
+              "metricsPassword": {
+                "$ref": "#/definitions/metricsPassword"
+              },
               "metricsHttpSuffix": {
                 "$ref": "#/definitions/metricsHttpSuffix"
               },
@@ -1447,48 +2126,68 @@
               "metricsRateLimitingBackoff": {
                 "$ref": "#/definitions/metricsRateLimitingBackoff"
               },
-              "hardDelete": { "$ref": "#/definitions/hardDelete" }
+              "hardDelete": {
+                "$ref": "#/definitions/hardDelete"
+              }
             },
-            "required": ["schemaRegistryUrls"],
+            "required": [
+              "schemaRegistryUrls"
+            ],
             "allOf": [
               {
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 }
               },
               {
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
                 }
               },
               {
@@ -1496,11 +2195,31 @@
                 "description": "When SSL configuration is provided, schema registry URLs must use HTTPS protocol",
                 "if": {
                   "anyOf": [
-                    { "required": ["sslKeystore"] },
-                    { "required": ["sslKeystorePassword"] },
-                    { "required": ["sslKeyPassword"] },
-                    { "required": ["sslTruststore"] },
-                    { "required": ["sslTruststorePassword"] }
+                    {
+                      "required": [
+                        "sslKeystore"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslKeystorePassword"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslKeyPassword"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslTruststore"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslTruststorePassword"
+                      ]
+                    }
                   ]
                 },
                 "then": {
@@ -1511,7 +2230,8 @@
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "pattern": "^https://"
+                            "pattern": "^https://",
+                            "errorMessage": "When SSL is configured, all Schema Registry URLs must use HTTPS (e.g., https://registry:8081)."
                           }
                         }
                       }
@@ -1525,19 +2245,30 @@
                 "basicAuthCredentialsSource": {
                   "properties": {
                     "value": {
-                      "enum": ["USER_INFO", "URL"]
+                      "enum": [
+                        "USER_INFO",
+                        "URL"
+                      ]
                     }
                   }
                 }
               },
-              "required": ["basicAuthCredentialsSource"]
+              "required": [
+                "basicAuthCredentialsSource"
+              ]
             },
             "then": {
-              "required": ["basicAuthUserInfo"]
+              "required": [
+                "basicAuthUserInfo"
+              ]
             }
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "glueSchemaRegistry": {
@@ -1551,25 +2282,45 @@
           "name": {
             "type": "string",
             "description": "Glue Schema Registry connection name.",
-            "enum": ["schema-registry"],
+            "enum": [
+              "schema-registry"
+            ],
             "default": "schema-registry"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagSchemaRegistry" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagSchemaRegistry"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Glue Schema Registry connection configuration.",
             "properties": {
-              "accessKeyId": { "$ref": "#/definitions/accessKeyId" },
-              "secretAccessKey": { "$ref": "#/definitions/secretAccessKey" },
-              "sessionToken": { "$ref": "#/definitions/sessionToken" },
-              "authMode": { "$ref": "#/definitions/authMode" },
-              "assumeRoleArn": { "$ref": "#/definitions/assumeRoleArn" },
+              "accessKeyId": {
+                "$ref": "#/definitions/accessKeyId"
+              },
+              "secretAccessKey": {
+                "$ref": "#/definitions/secretAccessKey"
+              },
+              "sessionToken": {
+                "$ref": "#/definitions/sessionToken"
+              },
+              "authMode": {
+                "$ref": "#/definitions/authMode"
+              },
+              "assumeRoleArn": {
+                "$ref": "#/definitions/assumeRoleArn"
+              },
               "assumeRoleSessionName": {
                 "$ref": "#/definitions/assumeRoleSessionName"
               },
-              "glueRegistryArn": { "$ref": "#/definitions/glueRegistryArn" },
+              "glueRegistryArn": {
+                "$ref": "#/definitions/glueRegistryArn"
+              },
               "glueRegistryCacheTtl": {
                 "$ref": "#/definitions/glueRegistryCacheTtl"
               },
@@ -1580,10 +2331,17 @@
                 "$ref": "#/definitions/glueRegistryDefaultCompatibility"
               }
             },
-            "required": ["authMode", "glueRegistryArn"]
+            "required": [
+              "authMode",
+              "glueRegistryArn"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "connect": {
@@ -1599,32 +2357,62 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "connect"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagConnect" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagConnect"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "title": "Kafka Connect Configuration",
             "description": "Kafka Connect connection configuration with SSL validation rules.",
             "properties": {
-              "workers": { "$ref": "#/definitions/workers" },
-              "username": { "$ref": "#/definitions/username" },
-              "password": { "$ref": "#/definitions/password" },
-              "sslKeystore": { "$ref": "#/definitions/sslKeystore" },
+              "workers": {
+                "$ref": "#/definitions/workers"
+              },
+              "username": {
+                "$ref": "#/definitions/username"
+              },
+              "password": {
+                "$ref": "#/definitions/password"
+              },
+              "sslKeystore": {
+                "$ref": "#/definitions/sslKeystore"
+              },
               "sslKeystorePassword": {
                 "$ref": "#/definitions/sslKeystorePassword"
               },
-              "sslKeyPassword": { "$ref": "#/definitions/sslKeyPassword" },
-              "sslTruststore": { "$ref": "#/definitions/sslTruststore" },
+              "sslKeyPassword": {
+                "$ref": "#/definitions/sslKeyPassword"
+              },
+              "sslTruststore": {
+                "$ref": "#/definitions/sslTruststore"
+              },
               "sslTruststorePassword": {
                 "$ref": "#/definitions/sslTruststorePassword"
               },
-              "sslAlgorthrim": { "$ref": "#/definitions/sslAlgorthrim" },
-              "metricsType": { "$ref": "#/definitions/metricsType" },
-              "metricsPort": { "$ref": "#/definitions/metricsPort" },
-              "metricsSsl": { "$ref": "#/definitions/metricsSsl" },
-              "metricsUsername": { "$ref": "#/definitions/metricsUsername" },
-              "metricsPassword": { "$ref": "#/definitions/metricsPassword" },
+              "sslAlgorthrim": {
+                "$ref": "#/definitions/sslAlgorthrim"
+              },
+              "metricsType": {
+                "$ref": "#/definitions/metricsType"
+              },
+              "metricsPort": {
+                "$ref": "#/definitions/metricsPort"
+              },
+              "metricsSsl": {
+                "$ref": "#/definitions/metricsSsl"
+              },
+              "metricsUsername": {
+                "$ref": "#/definitions/metricsUsername"
+              },
+              "metricsPassword": {
+                "$ref": "#/definitions/metricsPassword"
+              },
               "metricsHttpSuffix": {
                 "$ref": "#/definitions/metricsHttpSuffix"
               },
@@ -1646,40 +2434,56 @@
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststorePassword is provided, sslTruststore must also be provided",
                 "if": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 }
               },
               {
                 "title": "SSL Truststore Password Requirement",
                 "description": "If sslTruststore is provided, sslTruststorePassword must also be provided",
                 "if": {
-                  "required": ["sslTruststore"]
+                  "required": [
+                    "sslTruststore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslTruststorePassword"]
+                  "required": [
+                    "sslTruststorePassword"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystorePassword is provided, sslKeystore must also be provided",
                 "if": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 }
               },
               {
                 "title": "SSL Keystore Password Requirement",
                 "description": "If sslKeystore is provided, sslKeystorePassword must also be provided",
                 "if": {
-                  "required": ["sslKeystore"]
+                  "required": [
+                    "sslKeystore"
+                  ]
                 },
                 "then": {
-                  "required": ["sslKeystorePassword"]
+                  "required": [
+                    "sslKeystorePassword"
+                  ]
                 }
               },
               {
@@ -1687,12 +2491,36 @@
                 "description": "When SSL configuration is provided, Connect worker URLs must use HTTPS protocol",
                 "if": {
                   "anyOf": [
-                    { "required": ["sslKeystore"] },
-                    { "required": ["sslKeystorePassword"] },
-                    { "required": ["sslKeyPassword"] },
-                    { "required": ["sslTruststore"] },
-                    { "required": ["sslTruststorePassword"] },
-                    { "required": ["sslAlgorthrim"] }
+                    {
+                      "required": [
+                        "sslKeystore"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslKeystorePassword"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslKeyPassword"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslTruststore"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslTruststorePassword"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "sslAlgorthrim"
+                      ]
+                    }
                   ]
                 },
                 "then": {
@@ -1703,7 +2531,8 @@
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "pattern": "^https://"
+                            "pattern": "^https://",
+                            "errorMessage": "When SSL is configured, all Connect worker URLs must use HTTPS (e.g., https://connect:8083)."
                           }
                         }
                       }
@@ -1714,7 +2543,11 @@
             ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "aws": {
@@ -1730,27 +2563,51 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "aws"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagAws" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagAws"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "AWS connection configuration.",
             "properties": {
-              "accessKeyId": { "$ref": "#/definitions/awsAccessKeyId" },
-              "secretAccessKey": { "$ref": "#/definitions/awsSecretAccessKey" },
-              "region": { "$ref": "#/definitions/region" },
-              "sessionToken": { "$ref": "#/definitions/sessionToken" },
-              "authMode": { "$ref": "#/definitions/awsAuthMode" },
-              "assumeRoleArn": { "$ref": "#/definitions/awsAssumeRoleArn" },
+              "accessKeyId": {
+                "$ref": "#/definitions/awsAccessKeyId"
+              },
+              "secretAccessKey": {
+                "$ref": "#/definitions/awsSecretAccessKey"
+              },
+              "region": {
+                "$ref": "#/definitions/region"
+              },
+              "sessionToken": {
+                "$ref": "#/definitions/sessionToken"
+              },
+              "authMode": {
+                "$ref": "#/definitions/awsAuthMode"
+              },
+              "assumeRoleArn": {
+                "$ref": "#/definitions/awsAssumeRoleArn"
+              },
               "assumeRoleSessionName": {
                 "$ref": "#/definitions/awsAssumeRoleSessionName"
               }
             },
-            "required": ["authMode"]
+            "required": [
+              "authMode"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "webhook": {
@@ -1766,22 +2623,43 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "webhook"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagWebhook" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagWebhook"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Webhook connection configuration.",
             "properties": {
-              "host": { "$ref": "#/definitions/host" },
-              "port": { "$ref": "#/definitions/port" },
-              "useHttps": { "$ref": "#/definitions/useHttps" },
-              "creds": { "$ref": "#/definitions/creds" }
+              "host": {
+                "$ref": "#/definitions/host"
+              },
+              "port": {
+                "$ref": "#/definitions/port"
+              },
+              "useHttps": {
+                "$ref": "#/definitions/useHttps"
+              },
+              "creds": {
+                "$ref": "#/definitions/creds"
+              }
             },
-            "required": ["host", "useHttps"]
+            "required": [
+              "host",
+              "useHttps"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "datadog": {
@@ -1797,20 +2675,36 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "datadog"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagDatadog" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagDatadog"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "DataDog connection configuration.",
             "properties": {
-              "site": { "$ref": "#/definitions/site" },
-              "apiKey": { "$ref": "#/definitions/apiKey" },
-              "applicationKey": { "$ref": "#/definitions/applicationKey" }
+              "site": {
+                "$ref": "#/definitions/site"
+              },
+              "apiKey": {
+                "$ref": "#/definitions/apiKey"
+              },
+              "applicationKey": {
+                "$ref": "#/definitions/applicationKey"
+              }
             }
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "pagerDuty": {
@@ -1826,7 +2720,9 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "pagerDuty"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagPagerDuty" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagPagerDuty"
+          },
           "version": {
             "type": "integer",
             "description": "Lenses connection version.",
@@ -1835,16 +2731,24 @@
             "readOnly": true,
             "title": "Version"
           },
-          "tags": { "$ref": "#/definitions/tags" },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "PagerDuty connection configuration.",
             "properties": {
-              "integrationKey": { "$ref": "#/definitions/integrationKey" }
+              "integrationKey": {
+                "$ref": "#/definitions/integrationKey"
+              }
             }
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "slack": {
@@ -1860,19 +2764,33 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "slack"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagSlack" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagSlack"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Slack connection configuration.",
             "properties": {
-              "webhookUrl": { "$ref": "#/definitions/webhookUrl" }
+              "webhookUrl": {
+                "$ref": "#/definitions/webhookUrl"
+              }
             },
-            "required": ["webhookUrl"]
+            "required": [
+              "webhookUrl"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "splunk": {
@@ -1888,22 +2806,42 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "splunk"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagSplunk" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagSplunk"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Splunk connection configuration.",
             "properties": {
-              "host": { "$ref": "#/definitions/host" },
-              "port": { "$ref": "#/definitions/port" },
-              "useHttps": { "$ref": "#/definitions/useHttps" },
-              "insecure": { "$ref": "#/definitions/insecure" },
-              "token": { "$ref": "#/definitions/token" }
+              "host": {
+                "$ref": "#/definitions/host"
+              },
+              "port": {
+                "$ref": "#/definitions/port"
+              },
+              "useHttps": {
+                "$ref": "#/definitions/useHttps"
+              },
+              "insecure": {
+                "$ref": "#/definitions/insecure"
+              },
+              "token": {
+                "$ref": "#/definitions/token"
+              }
             }
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     },
     "alertManager": {
@@ -1919,19 +2857,33 @@
             "pattern": "^[a-zA-Z0-9-]+$",
             "default": "my-alertManager-connection"
           },
-          "editorTag": { "$ref": "#/definitions/editorTagAlertManager" },
-          "version": { "$ref": "#/definitions/version" },
-          "tags": { "$ref": "#/definitions/tags" },
+          "editorTag": {
+            "$ref": "#/definitions/editorTagAlertManager"
+          },
+          "version": {
+            "$ref": "#/definitions/version"
+          },
+          "tags": {
+            "$ref": "#/definitions/tags"
+          },
           "configuration": {
             "type": "object",
             "description": "Alert Manager connection configuration.",
             "properties": {
-              "endpoints": { "$ref": "#/definitions/endpoints" }
+              "endpoints": {
+                "$ref": "#/definitions/endpoints"
+              }
             },
-            "required": ["endpoints"]
+            "required": [
+              "endpoints"
+            ]
           }
         },
-        "required": ["name", "version", "configuration"]
+        "required": [
+          "name",
+          "version",
+          "configuration"
+        ]
       }
     }
   },
@@ -1945,7 +2897,9 @@
             "name": "lenses-hq",
             "version": 1,
             "editorTag": "Lenses HQ",
-            "tags": ["hq"],
+            "tags": [
+              "hq"
+            ],
             "configuration": {
               "server": {
                 "value": "<YOUR_LENSES_HQ_SERVER_URL>"
@@ -1970,7 +2924,9 @@
             "name": "lenses-hq",
             "version": 1,
             "editorTag": "Lenses HQ TLS",
-            "tags": ["hq"],
+            "tags": [
+              "hq"
+            ],
             "configuration": {
               "server": {
                 "value": "<YOUR_LENSES_HQ_SERVER_URL>"
@@ -2007,7 +2963,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2087,7 +3046,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SSL"
@@ -2097,6 +3059,9 @@
               },
               "sslTruststorePassword": {
                 "value": ""
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2149,7 +3114,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SSL"
@@ -2168,6 +3136,9 @@
               },
               "sslTruststorePassword": {
                 "value": ""
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2220,7 +3191,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2284,7 +3258,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2294,6 +3271,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\\$ConnectionString\" password=\"Endpoint=sb://[SB_URL]/;SharedAccessKeyName=[KEY_NAME];SharedAccessKey=[ACCESS_KEY]\";"
+              },
+              "additionalProperties": {
+                "value": {}
               }
             }
           }
@@ -2312,7 +3292,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2334,6 +3317,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2386,7 +3372,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2396,6 +3385,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"token\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2448,7 +3440,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2473,6 +3468,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2525,10 +3523,16 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "PLAINTEXT"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2581,7 +3585,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2591,6 +3598,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2643,7 +3653,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2653,6 +3666,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2705,7 +3721,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_PLAINTEXT"
@@ -2715,6 +3734,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2767,7 +3789,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2792,6 +3817,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2844,7 +3872,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2869,6 +3900,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2921,7 +3955,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SASL_SSL"
@@ -2946,6 +3983,9 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -2998,7 +4038,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SSL"
@@ -3008,6 +4051,9 @@
               },
               "sslTruststorePassword": {
                 "value": ""
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -3060,7 +4106,10 @@
             "tags": "[]",
             "configuration": {
               "kafkaBootstrapServers": {
-                "value": ["<broker1>:9092", "<broker2>:9092"]
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
               },
               "protocol": {
                 "value": "SSL"
@@ -3079,6 +4128,9 @@
               },
               "sslTruststorePassword": {
                 "value": ""
+              },
+              "additionalProperties": {
+                "value": {}
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -3131,7 +4183,10 @@
             "tags": "[]",
             "configuration": {
               "zookeeperUrls": {
-                "value": ["<host1>:8080", "<host2>:8080"]
+                "value": [
+                  "<host1>:8080",
+                  "<host2>:8080"
+                ]
               },
               "# zookeeperChrootPath": {
                 "# value": ""
@@ -3194,7 +4249,10 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["http://<host1>:8083", "http://<host2>:8083"]
+                "value": [
+                  "http://<host1>:8083",
+                  "http://<host2>:8083"
+                ]
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -3248,7 +4306,10 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["http://<host1>:8083", "http://<host2>:8083"]
+                "value": [
+                  "http://<host1>:8083",
+                  "http://<host2>:8083"
+                ]
               },
               "username": {
                 "value": ""
@@ -3308,7 +4369,10 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["https://<host1>:8083", "https://<host2>:8083"]
+                "value": [
+                  "https://<host1>:8083",
+                  "https://<host2>:8083"
+                ]
               },
               "username": {
                 "value": ""
@@ -3374,7 +4438,10 @@
             "tags": "[]",
             "configuration": {
               "workers": {
-                "value": ["https://<host1>:8083", "https://<host2>:8083"]
+                "value": [
+                  "https://<host1>:8083",
+                  "https://<host2>:8083"
+                ]
               },
               "username": {
                 "value": ""
@@ -3448,7 +4515,10 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<host1>:8081", "http://<host2>:8081"]
+                "value": [
+                  "http://<host1>:8081",
+                  "http://<host2>:8081"
+                ]
               },
               "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
               "# metricsType": {
@@ -3501,7 +4571,10 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<host1>:8081", "http://<host2>:8081"]
+                "value": [
+                  "http://<host1>:8081",
+                  "http://<host2>:8081"
+                ]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3561,7 +4634,10 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": [
+                  "https://<host1>:8081",
+                  "https://<host2>:8081"
+                ]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3627,7 +4703,10 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": [
+                  "https://<host1>:8081",
+                  "https://<host2>:8081"
+                ]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3702,7 +4781,10 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://<host1>:8081", "https://<host2>:8081"]
+                "value": [
+                  "https://<host1>:8081",
+                  "https://<host2>:8081"
+                ]
               },
               "## Optional basicAuthUserInfo": "USER_INFO",
               "username": {
@@ -3897,7 +4979,9 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["https://token:<API Key>@<Host>/confluent"]
+                "value": [
+                  "https://token:<API Key>@<Host>/confluent"
+                ]
               }
             }
           }
@@ -3916,7 +5000,9 @@
             "tags": "[]",
             "configuration": {
               "schemaRegistryUrls": {
-                "value": ["http://<hostname>:<port>/apis/compact/v6"]
+                "value": [
+                  "http://<hostname>:<port>/apis/compact/v6"
+                ]
               },
               "## Optional mutual SSL/TLS": "Uncomment the properties below to enable mutual SSL/TLS",
               "# sslKeystore": {
@@ -4152,7 +5238,10 @@
             "tags": "[]",
             "configuration": {
               "endpoints": {
-                "value": ["ENDPOINT1", "ENDPOINT2"]
+                "value": [
+                  "ENDPOINT1",
+                  "ENDPOINT2"
+                ]
               }
             }
           }
@@ -4161,6 +5250,8 @@
     }
   ],
   "dependencies": {
-    "glueSchemaRegistry": ["aws"]
+    "glueSchemaRegistry": [
+      "aws"
+    ]
   }
 }
