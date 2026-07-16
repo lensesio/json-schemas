@@ -780,7 +780,9 @@
               "kafka:GetTopicDetails",
               "kafka:ReadTopicData",
               "kafka:CreateTopic",
-              "kafka:UpdateTopicDetails"
+              "kafka:UpdateTopicDetails",
+              "kafka:UpdateTopicFormat",
+              "kafka:UpdateTopicMetadata"
             ],
             "resource": ["kafka:topic:*/kafka/*"]
           },
