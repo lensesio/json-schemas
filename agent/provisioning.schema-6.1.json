@@ -156,9 +156,10 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter the SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512).",
+          "description": "Enter the SASL mechanism (PLAIN, SCRAM-SHA-256, SCRAM-SHA-512, GSSAPI, AWS_MSK_IAM).",
           "enum": [
             "AWS_MSK_IAM",
+            "GSSAPI",
             "PLAIN",
             "SCRAM-SHA-256",
             "SCRAM-SHA-512"
@@ -175,7 +176,7 @@
       "properties": {
         "value": {
           "type": "string",
-          "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
+          "description": "Enter the JAAS config string. For SCRAM-SHA-256 or SCRAM-SHA-512: org.apache.kafka.common.security.scram.ScramLoginModule required username=\"<user>\" password=\"<pass>\"; \n\nFor GSSAPI (Kerberos): com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true useTicketCache=false serviceName=\"kafka\" principal=\"<user>@<REALM>\"; and provide the keytab via the keytab field.\n\nFor AWS_MSK_IAM: software.amazon.msk.auth.iam.IAMLoginModule required; and additionalProperties sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler",
           "x-secret": true,
           "anyOf": [
             {
@@ -191,6 +192,19 @@
         "value"
       ],
       "multiline": true
+    },
+    "keytab": {
+      "type": "object",
+      "description": "Kerberos keytab file for GSSAPI authentication.",
+      "properties": {
+        "file": {
+          "type": "string",
+          "description": "Enter a unique keytab file name for Kerberos (GSSAPI) authentication."
+        }
+      },
+      "required": [
+        "file"
+      ]
     },
     "sslKeystore": {
       "type": "object",
@@ -1486,6 +1500,9 @@
               },
               "saslJaasConfig": {
                 "$ref": "#/definitions/saslJaasConfig"
+              },
+              "keytab": {
+                "$ref": "#/definitions/keytab"
               },
               "additionalProperties": {
                 "$ref": "#/definitions/additionalProperties"
@@ -3983,6 +4000,83 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
+              },
+              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpSuffix": {
+                "# value": 30000
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              },
+              "# metricsCustomUrlMappings": {
+                "# value": {
+                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
+                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
+                }
+              },
+              "# metricsRateLimitingMaxRetries": {
+                "# value": 5
+              },
+              "# metricsRateLimitingBackoff": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, GSSAPI",
+      "body": {
+        "## Template": "Kafka, SASL_SSL, GSSAPI",
+        "kafka": [
+          {
+            "name": "kafka",
+            "editorTag": "SASL_SSL, GSSAPI",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
+              },
+              "protocol": {
+                "value": "SASL_SSL"
+              },
+              "sslTruststore": {
+                "file": "kafka-truststore.jks"
+              },
+              "sslTruststorePassword": {
+                "value": ""
+              },
+              "saslMechanism": {
+                "value": "GSSAPI"
+              },
+              "saslJaasConfig": {
+                "value": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true useTicketCache=false serviceName=\"kafka\" principal=\"<user>@<REALM>\";"
+              },
+              "keytab": {
+                "file": "kafka.keytab"
               },
               "additionalProperties": {
                 "value": {}
