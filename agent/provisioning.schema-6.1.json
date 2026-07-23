@@ -22,9 +22,11 @@
         "SASL_PLAINTEXT, PLAIN",
         "SASL_PLAINTEXT, SCRAM-SHA-256",
         "SASL_PLAINTEXT, SCRAM-SHA-512",
+        "SASL_PLAINTEXT, GSSAPI",
         "SASL_SSL, PLAIN",
         "SASL_SSL, SCRAM-SHA-256",
         "SASL_SSL, SCRAM-SHA-512",
+        "SASL_SSL, GSSAPI",
         "SSL/TLS",
         "Mutual SSL/TLS",
         "Zookeeper",
@@ -1262,9 +1264,11 @@
         "SASL_PLAINTEXT, PLAIN",
         "SASL_PLAINTEXT, SCRAM-SHA-256",
         "SASL_PLAINTEXT, SCRAM-SHA-512",
+        "SASL_PLAINTEXT, GSSAPI",
         "SASL_SSL, PLAIN",
         "SASL_SSL, SCRAM-SHA-256",
         "SASL_SSL, SCRAM-SHA-512",
+        "SASL_SSL, GSSAPI",
         "SSL/TLS",
         "Mutual SSL/TLS"
       ]
@@ -3751,6 +3755,77 @@
               },
               "saslJaasConfig": {
                 "value": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"\" password=\"\";"
+              },
+              "additionalProperties": {
+                "value": {}
+              },
+              "## Optional JMX metrics": "Uncomment below to enable JMX metrics",
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsSsl": {
+                "# value": true
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpSuffix": {
+                "# value": 30000
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              },
+              "# metricsCustomUrlMappings": {
+                "# value": {
+                  "# kafka1:9092": "kafka1_jmx_metrics:9581",
+                  "# kafka2:9092": "kafka2_jmx_metrics:9581"
+                }
+              },
+              "# metricsRateLimitingMaxRetries": {
+                "# value": 5
+              },
+              "# metricsRateLimitingBackoff": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, GSSAPI",
+      "body": {
+        "## Template": "Kafka, SASL_PLAINTEXT, GSSAPI",
+        "kafka": [
+          {
+            "name": "kafka",
+            "editorTag": "SASL_PLAINTEXT, GSSAPI",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "<broker1>:9092",
+                  "<broker2>:9092"
+                ]
+              },
+              "protocol": {
+                "value": "SASL_PLAINTEXT"
+              },
+              "saslMechanism": {
+                "value": "GSSAPI"
+              },
+              "saslJaasConfig": {
+                "value": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true useTicketCache=false serviceName=\"kafka\" principal=\"<user>@<REALM>\";"
+              },
+              "keytab": {
+                "file": "kafka.keytab"
               },
               "additionalProperties": {
                 "value": {}
