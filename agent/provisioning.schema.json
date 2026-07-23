@@ -2686,6 +2686,59 @@
       }
     },
     {
+      "label": "Kafka, SASL_PLAINTEXT, GSSAPI",
+      "body": {
+        "## Template": "Kafka, SASL_PLAINTEXT, GSSAPI",
+        "kafka": [
+          {
+            "name": "kafka",
+            "editorTag": "SASL_PLAINTEXT, GSSAPI",
+            "version": 1,
+            "tags": "[]",
+            "configuration": {
+              "kafkaBootstrapServers": {
+                "value": [
+                  "SASL_PLAINTEXT://<broker1>:9092",
+                  "SASL_PLAINTEXT://<broker2>:9092"
+                ]
+              },
+              "protocol": {
+                "value": "SASL_PLAINTEXT"
+              },
+              "saslMechanism": {
+                "value": "GSSAPI"
+              },
+              "saslJaasConfig": {
+                "value": "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true useTicketCache=false serviceName=\"kafka\" principal=\"<user>@<REALM>\";"
+              },
+              "keytab": {
+                "file": "kafka.keytab"
+              },
+              "## Optional JMX metrics": "Uncomment the properties below to enable JMX metrics",
+              "# metricsPort": {
+                "# value": 9581
+              },
+              "# metricsType": {
+                "# value": ""
+              },
+              "# metricsSsl": {
+                "# value": false
+              },
+              "# metricsUsername": {
+                "# value": ""
+              },
+              "# metricsPassword": {
+                "# value": ""
+              },
+              "# metricsHttpTimeout": {
+                "# value": 30000
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "label": "Kafka, SASL_SSL, PLAIN",
       "body": {
         "## Template": "Kafka, SASL_SSL, PLAIN",
