@@ -754,6 +754,11 @@
               "kafka:GetConsumerGroupDetails"
             ],
             "resource": ["kafka:consumer-group:*/kafka/*"]
+          },
+          {
+            "effect": "allow",
+            "action": ["administration:ListConnections"],
+            "resource": ["administration:connection:*/*"]
           }
         ]
       }
@@ -816,6 +821,11 @@
             "effect": "allow",
             "action": ["governance:GetRuleDetails"],
             "resource": ["governance:rule:*/*"]
+          },
+          {
+            "effect": "allow",
+            "action": ["administration:ListConnections"],
+            "resource": ["administration:connection:*/*"]
           }
         ]
       }
