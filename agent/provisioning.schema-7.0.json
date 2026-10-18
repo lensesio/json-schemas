@@ -1,0 +1,837 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/agent/provisioning.schema-7.0.json",
+  "title": "Lenses Provisioning (schemaVersion 2)",
+  "description": "provisioning.yaml, schemaVersion 2, as lenses-provisioning parses it: hq, kafka, schemaRegistry, glueSchemaRegistry, aws, kafkaConnect and zookeeper. hq is optional here; the agent requires it. Provisioning holds connections only: any other top-level key is rejected, including the alert-channel sections (webhook, slack, pagerduty, splunk, datadog, alertManager) and top-level tags/monitoring that earlier releases accepted, and leftover environments. schemaRegistry and glueSchemaRegistry are mutually exclusive. kafka.sasl AWS_MSK_IAM prefers awsConnectionName (a named aws connection, same pattern as glue). This schema is an editor aid; the crate's load-time validation is authoritative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion"],
+  "not": {
+    "required": ["schemaRegistry", "glueSchemaRegistry"],
+    "errorMessage": "schemaRegistry and glueSchemaRegistry are mutually exclusive — the agent supports exactly one Schema Registry connection, Confluent or Glue, not both."
+  },
+  "definitions": {
+    "duration": {
+      "type": "string",
+      "pattern": "^\\s*[0-9]+\\s*[a-zA-Z]+(\\s*[0-9]+\\s*[a-zA-Z]+)*\\s*$",
+      "description": "A duration: a number and a unit, e.g. 10s, 500ms, 1m 30s."
+    },
+    "positiveDuration": {
+      "allOf": [
+        { "$ref": "#/definitions/duration" },
+        { "not": { "pattern": "^\\s*0+\\s*[a-zA-Z]+(\\s*0+\\s*[a-zA-Z]+)*\\s*$" } }
+      ],
+      "description": "A duration greater than zero."
+    },
+    "requestTimeout": {
+      "allOf": [{ "$ref": "#/definitions/duration" }],
+      "default": "10s",
+      "description": "How long one request may take."
+    },
+    "proxy": {
+      "type": "string",
+      "minLength": 1,
+      "default": "none",
+      "description": "none connects directly and ignores HTTP_PROXY and friends; system honours them; anything else is a proxy URL every request goes through."
+    },
+    "rateLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A client-side cap on requests, and the retry of an HTTP 429 answer.",
+      "properties": {
+        "maxRequests": { "type": "integer", "minimum": 0, "default": 20, "description": "At most this many requests per interval; 0 acts as 1." },
+        "interval": { "allOf": [{ "$ref": "#/definitions/duration" }], "default": "1s" },
+        "maxRetries": { "type": "integer", "minimum": 0, "default": 3, "description": "Retries of an HTTP 429 answer, per request; 0 disables retrying." },
+        "backoff": { "allOf": [{ "$ref": "#/definitions/duration" }], "default": "1s", "description": "Wait between 429 retries when the answer carries no Retry-After." }
+      }
+    },
+    "monitoringRateLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The retry of an HTTP 429 answer. A Jolokia scrape is a fixed set of reads paced by the metrics interval, so there is no request cap.",
+      "properties": {
+        "maxRetries": { "type": "integer", "minimum": 0, "default": 3, "description": "Retries of an HTTP 429 answer, per call; 0 disables retrying." },
+        "backoff": { "allOf": [{ "$ref": "#/definitions/duration" }], "default": "1s", "description": "Wait between 429 retries when the answer carries no Retry-After." }
+      }
+    },
+    "envSecret": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A literal value, an ${ENV_VAR} placeholder, or ${file:/path} (file contents, one trailing newline stripped). Placeholders are expanded when building a resolved runtime snapshot; serialize-back and masked GET keep the original placeholders. A missing or empty env var, or a missing/empty file, is a load-time error — never a silent blank secret."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form labels for this connection, reported to Lenses HQ verbatim — tags are never masked, so a secret must never be put in one."
+    },
+    "metricsOptIn": {
+      "type": "boolean",
+      "default": false,
+      "description": "Opt this connection into metrics collection. Omitted or false means the agent collects nothing for it and reports that part of GetMetrics as absent rather than zero. On kafka and schemaRegistry, JMX/Jolokia readings additionally need the monitoring block — this flag is the switch, monitoring is the endpoint."
+    },
+    "stringOrStringArray": {
+      "description": "A single value, or a list of them.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "tlsBlock": {
+      "type": "object",
+      "title": "TLS",
+      "description": "CA trust and/or client-certificate (mTLS) material. Every field is independently optional — omit the whole block to trust the system/webpki root store with no client certificate.",
+      "additionalProperties": false,
+      "properties": {
+        "caFile": {
+          "type": "string",
+          "description": "Path to a PEM CA bundle, resolved relative to provisioning.yaml's directory if not absolute. Or an inline PEM block (starting with -----BEGIN), which the host writes under its state directory. Omit to trust the system/webpki root store."
+        },
+        "certFile": {
+          "type": "string",
+          "description": "This client's own certificate (PEM), for mutual TLS: a path, or an inline PEM block."
+        },
+        "keyFile": {
+          "type": "string",
+          "description": "This client's private key (PEM), paired with certFile: a path, or an inline PEM block."
+        },
+        "keyPassword": {
+          "$ref": "#/definitions/envSecret",
+          "description": "Passphrase protecting an encrypted keyFile. Only meaningful under kafka.ssl (librdkafka/OpenSSL) — under schemaRegistry/kafkaConnect's tls block this is accepted for field-naming symmetry only and always rejected at startup, since those HTTP clients use rustls, which cannot decrypt an encrypted private key."
+        }
+      }
+    },
+    "basicAuthBlock": {
+      "type": "object",
+      "title": "HTTP Basic Auth",
+      "additionalProperties": false,
+      "required": ["username", "password"],
+      "properties": {
+        "username": { "type": "string" },
+        "password": { "$ref": "#/definitions/envSecret" }
+      }
+    },
+    "kafkaSasl": {
+      "type": "object",
+      "title": "Kafka SASL",
+      "additionalProperties": false,
+      "required": ["mechanism"],
+      "properties": {
+        "mechanism": {
+          "type": "string",
+          "enum": ["PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512", "AWS_MSK_IAM"]
+        },
+        "username": {
+          "type": "string",
+          "description": "Required for PLAIN/SCRAM-SHA-256/SCRAM-SHA-512."
+        },
+        "password": {
+          "$ref": "#/definitions/envSecret",
+          "description": "Required for PLAIN/SCRAM-SHA-256/SCRAM-SHA-512."
+        },
+        "awsConnectionName": {
+          "type": "string",
+          "description": "Preferred for AWS_MSK_IAM — names an aws connection in the same file (same pattern as glueSchemaRegistry.awsConnectionName). Mutually exclusive with awsRegion."
+        },
+        "awsRegion": {
+          "type": "string",
+          "description": "Legacy inline region for AWS_MSK_IAM when awsConnectionName is absent. Prefer the named aws connection."
+        },
+        "awsAccessKeyId": {
+          "type": "string",
+          "description": "AWS_MSK_IAM only. Must be set together with awsSecretAccessKey, or both omitted to fall back to the ambient AWS credential chain."
+        },
+        "awsSecretAccessKey": {
+          "$ref": "#/definitions/envSecret",
+          "description": "AWS_MSK_IAM only. Must be set together with awsAccessKeyId."
+        },
+        "awsSessionToken": {
+          "$ref": "#/definitions/envSecret",
+          "description": "AWS_MSK_IAM only, for temporary credentials."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["awsAccessKeyId"] },
+          "then": { "required": ["awsSecretAccessKey"] }
+        },
+        {
+          "if": { "required": ["awsSecretAccessKey"] },
+          "then": { "required": ["awsAccessKeyId"] }
+        }
+      ]
+    },
+    "kafkaMonitoring": {
+      "type": "object",
+      "title": "Kafka broker metrics (Jolokia)",
+      "description": "Optional. Omitting this entirely (the default for most deployments) is a normal, non-error state — GetMetrics' broker-throughput fields simply stay absent.",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["jolokia_get", "jolokia_post"],
+          "description": "jolokia_get issues one HTTP GET per MBean read; jolokia_post issues one bulk HTTP POST per broker — prefer this unless your Jolokia deployment has POST disabled."
+        },
+        "defaultPort": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "The Jolokia port every broker is reached on, unless overridden per-broker by customUrlMappings."
+        },
+        "ssl": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use https:// instead of http:// when building a broker's URL from defaultPort. Ignored for brokers resolved via customUrlMappings."
+        },
+        "caFile": {
+          "type": "string",
+          "description": "Custom CA bundle (PEM) verifying a broker's Jolokia HTTPS certificate when ssl is true and it doesn't chain to the system/webpki root store, resolved relative to provisioning.yaml's directory if not absolute. Or an inline PEM block (starting with -----BEGIN), which the host writes under its state directory."
+        },
+        "insecureSkipVerify": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables certificate and hostname verification for Jolokia HTTPS reads. Prefer caFile wherever possible — this accepts a certificate from anyone."
+        },
+        "user": { "type": "string" },
+        "password": { "$ref": "#/definitions/envSecret" },
+        "httpSuffix": {
+          "type": "string",
+          "description": "Path suffix appended after host:port, e.g. /jolokia/. Ignored for customUrlMappings entries."
+        },
+        "customUrlMappings": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Map of a broker's Kafka host:port (as reported by cluster metadata, not the Jolokia port) to a full URL override. Needed when a broker's Jolokia endpoint is reachable at a different host/port, e.g. behind NAT."
+        },
+        "requestTimeout": {
+          "allOf": [{ "$ref": "#/definitions/duration" }],
+          "default": "30s",
+          "description": "How long one Jolokia request may take."
+        },
+        "rateLimit": { "$ref": "#/definitions/monitoringRateLimit" }
+      }
+    },
+    "schemaRegistryMonitoring": {
+      "type": "object",
+      "title": "Schema Registry metrics (Jolokia)",
+      "description": "Optional. Omitting this entirely (the default for most deployments) is a normal, non-error state — GetMetrics' schema registry throughput fields simply stay absent.",
+      "additionalProperties": false,
+      "required": ["type", "port"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["jolokia_get", "jolokia_post"],
+          "description": "jolokia_get issues one HTTP GET per MBean read; jolokia_post issues one bulk HTTP POST — prefer this unless your Jolokia deployment has POST disabled."
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "The Jolokia port on every configured urls host — required, unlike kafka.monitoring's defaultPort, since there is no per-node URL override here to fall back on."
+        },
+        "ssl": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use https:// instead of http:// when building the Jolokia URL from port."
+        },
+        "caFile": {
+          "type": "string",
+          "description": "Custom CA bundle (PEM) verifying the registry's Jolokia HTTPS certificate when ssl is true, resolved relative to provisioning.yaml's directory if not absolute. Or an inline PEM block (starting with -----BEGIN), which the host writes under its state directory."
+        },
+        "insecureSkipVerify": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables certificate and hostname verification for Jolokia HTTPS reads. Prefer caFile wherever possible — this accepts a certificate from anyone."
+        },
+        "user": { "type": "string" },
+        "password": { "$ref": "#/definitions/envSecret" },
+        "httpSuffix": {
+          "type": "string",
+          "description": "Path suffix appended after host:port, e.g. /jolokia/."
+        },
+        "requestTimeout": {
+          "allOf": [{ "$ref": "#/definitions/duration" }],
+          "default": "30s",
+          "description": "How long one Jolokia request may take."
+        },
+        "rateLimit": { "$ref": "#/definitions/monitoringRateLimit" }
+      }
+    },
+    "hqConnection": {
+      "type": "object",
+      "title": "Lenses HQ",
+      "description": "Optional for this subset crate (required by the full agent). Address and agent key the process dials outbound. Engines use this for the reverse tunnel; leftover hqLink on the ops file is rejected.",
+      "additionalProperties": false,
+      "required": ["server", "port", "agentKey"],
+      "properties": {
+        "server": { "type": "string", "description": "HQ hostname the agent dials outbound." },
+        "port": { "type": "integer", "minimum": 0, "maximum": 65535, "description": "HQ port." },
+        "agentKey": {
+          "$ref": "#/definitions/envSecret",
+          "description": "The agent key issued by HQ. Almost always ${ENV_VAR} — never commit this literally."
+        },
+        "tls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": false, "description": "Enables TLS for the outbound HQ connection." },
+            "caFile": { "type": "string", "description": "Path to a PEM CA bundle. Or an inline PEM block (starting with -----BEGIN), which the host writes under its state directory. Omit to trust the system/webpki root store." }
+          }
+        },
+        "tags": { "$ref": "#/definitions/tags" },
+        "keepaliveInterval": {
+          "allOf": [{ "$ref": "#/definitions/duration" }],
+          "description": "How often HQ is expected to call the tunnel's KeepAlive RPC. 0s turns the half-open watchdog off. Omit for the consumer's default (the agent uses 5s)."
+        },
+        "keepaliveLeeway": {
+          "allOf": [
+            { "$ref": "#/definitions/duration" },
+            { "not": { "pattern": "^\\s*0+\\s*[a-zA-Z]+(\\s*0+\\s*[a-zA-Z]+)*\\s*$" } }
+          ],
+          "description": "Silence past keepaliveInterval tolerated before the consumer closes the socket and redials. Must be greater than zero. Omit for the consumer's default (the agent uses 10s)."
+        }
+      }
+    },
+    "kafkaConnection": {
+      "type": "object",
+      "title": "Kafka",
+      "description": "Optional — omit the whole section if you have no Kafka connection to configure yet; the agent still starts and connects to HQ, but Kafka-backed RPCs report unavailable until one is configured, here or pushed from HQ.",
+      "additionalProperties": false,
+      "required": ["bootstrapServers"],
+      "properties": {
+        "bootstrapServers": {
+          "$ref": "#/definitions/stringOrStringArray",
+          "description": "A list (or single string) of host:port broker addresses."
+        },
+        "protocol": {
+          "type": "string",
+          "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"],
+          "default": "PLAINTEXT"
+        },
+        "ssl": { "$ref": "#/definitions/tlsBlock" },
+        "sasl": { "$ref": "#/definitions/kafkaSasl" },
+        "metrics": { "$ref": "#/definitions/metricsOptIn" },
+        "monitoring": { "$ref": "#/definitions/kafkaMonitoring" },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Extra librdkafka client properties, passed through verbatim to every Kafka client the agent builds. Values are strings to librdkafka (a YAML true becomes \"true\"). A key the agent already manages itself (bootstrap servers, security.protocol, the ssl.*/sasl.* material, ...) fails client construction with an error naming it, rather than silently overriding the typed ssl/sasl blocks above."
+        },
+        "tags": { "$ref": "#/definitions/tags" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["sasl"],
+            "properties": { "sasl": { "required": ["mechanism"], "properties": { "mechanism": { "enum": ["PLAIN", "SCRAM-SHA-256", "SCRAM-SHA-512"] } } } }
+          },
+          "then": { "properties": { "sasl": { "required": ["username", "password"] } } }
+        },
+        {
+          "if": {
+            "required": ["sasl"],
+            "properties": { "sasl": { "required": ["mechanism"], "properties": { "mechanism": { "const": "AWS_MSK_IAM" } } } }
+          },
+          "then": {
+            "properties": {
+              "sasl": {
+                "oneOf": [
+                  { "required": ["awsConnectionName"], "not": { "required": ["awsRegion"] } },
+                  { "required": ["awsRegion"], "not": { "required": ["awsConnectionName"] } }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schemaRegistryConnection": {
+      "type": "object",
+      "title": "Schema Registry (Confluent)",
+      "description": "Optional — omit if you don't run one. Mutually exclusive with glueSchemaRegistry.",
+      "additionalProperties": false,
+      "required": ["urls"],
+      "not": { "required": ["basicAuth", "bearerToken"] },
+      "properties": {
+        "urls": { "$ref": "#/definitions/stringOrStringArray" },
+        "basicAuth": { "$ref": "#/definitions/basicAuthBlock" },
+        "bearerToken": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Static bearer token, sent as `Authorization: Bearer <token>`. Accepts ${ENV_VAR} and ${file:/path}. Mutually exclusive with basicAuth."
+        },
+        "tls": { "$ref": "#/definitions/tlsBlock" },
+        "requestTimeout": { "$ref": "#/definitions/requestTimeout" },
+        "proxy": { "$ref": "#/definitions/proxy" },
+        "rateLimit": { "$ref": "#/definitions/rateLimit" },
+        "metrics": { "$ref": "#/definitions/metricsOptIn" },
+        "monitoring": { "$ref": "#/definitions/schemaRegistryMonitoring" },
+        "tags": { "$ref": "#/definitions/tags" }
+      }
+    },
+    "kafkaConnectCluster": {
+      "type": "object",
+      "title": "Kafka Connect cluster",
+      "additionalProperties": false,
+      "required": ["workers"],
+      "properties": {
+        "workers": { "$ref": "#/definitions/stringOrStringArray", "description": "That cluster's REST worker URLs." },
+        "basicAuth": { "$ref": "#/definitions/basicAuthBlock" },
+        "tls": { "$ref": "#/definitions/tlsBlock" },
+        "requestTimeout": { "$ref": "#/definitions/requestTimeout" },
+        "proxy": { "$ref": "#/definitions/proxy" },
+        "rateLimit": { "$ref": "#/definitions/rateLimit" },
+        "metrics": { "$ref": "#/definitions/metricsOptIn" },
+        "tags": { "$ref": "#/definitions/tags" }
+      }
+    },
+    "zookeeperConnection": {
+      "type": "object",
+      "title": "ZooKeeper",
+      "description": "Optional — only needed for Kafka client-quota management (ListQuotas/SetQuota/DeleteQuota), and only reachable for ZK-mode clusters; KRaft-only clusters have no ZooKeeper to write to.",
+      "additionalProperties": false,
+      "required": ["nodes"],
+      "properties": {
+        "nodes": { "$ref": "#/definitions/stringOrStringArray", "description": "ZooKeeper host:port addresses." },
+        "chroot": { "type": "string", "pattern": "^/", "description": "Absolute path prefix every znode path is rooted under, e.g. /kafka." },
+        "sessionTimeout": { "allOf": [{ "$ref": "#/definitions/positiveDuration" }], "default": "30s" },
+        "connectionTimeout": { "allOf": [{ "$ref": "#/definitions/positiveDuration" }], "default": "30s" },
+        "tls": {
+          "type": "object",
+          "title": "ZooKeeper TLS",
+          "description": "The client trusts only caFile (no system roots) and cannot read an encrypted key, so caFile is required and there is no keyPassword. An empty block is refused rather than read as absent.",
+          "additionalProperties": false,
+          "required": ["caFile"],
+          "properties": {
+            "caFile": { "type": "string", "description": "Path to a PEM CA bundle, resolved relative to provisioning.yaml's directory if not absolute, or an inline PEM block, which the host writes under its state directory." },
+            "certFile": { "type": "string", "description": "This client's certificate (PEM) for mutual TLS: a path, or an inline PEM block. Set together with keyFile." },
+            "keyFile": { "type": "string", "description": "This client's unencrypted private key (PEM), paired with certFile: a path, or an inline PEM block." }
+          },
+          "dependencies": { "certFile": ["keyFile"], "keyFile": ["certFile"] }
+        },
+        "sasl": {
+          "type": "object",
+          "title": "ZooKeeper SASL",
+          "description": "DIGEST-MD5 only; Kerberos (GSSAPI) is not supported by this build. An empty block is refused rather than read as absent.",
+          "additionalProperties": false,
+          "required": ["mechanism", "username", "password"],
+          "properties": {
+            "mechanism": { "type": "string", "pattern": "^[Dd][Ii][Gg][Ee][Ss][Tt]-[Mm][Dd]5$", "description": "DIGEST-MD5 (any case)." },
+            "username": { "type": "string" },
+            "password": { "$ref": "#/definitions/envSecret" }
+          }
+        },
+        "metrics": { "$ref": "#/definitions/metricsOptIn" },
+        "tags": { "$ref": "#/definitions/tags" }
+      }
+    },
+    "awsConnection": {
+      "type": "object",
+      "title": "AWS",
+      "description": "Named AWS credentials. Glue and Kafka MSK IAM both reference an entry by awsConnectionName so operators configure AWS once.",
+      "additionalProperties": false,
+      "required": ["authMode"],
+      "properties": {
+        "authMode": { "type": "string", "enum": ["Access Key", "Credentials Chain", "Assume Role"] },
+        "accessKeyId": { "type": "string" },
+        "secretAccessKey": { "$ref": "#/definitions/envSecret" },
+        "region": { "type": "string" },
+        "sessionToken": { "$ref": "#/definitions/envSecret", "description": "For temporary credentials." },
+        "assumeRoleArn": { "type": "string", "description": "e.g. arn:aws:iam::123456789012:role/example." },
+        "assumeRoleSessionName": { "type": "string" },
+        "tags": { "$ref": "#/definitions/tags" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "authMode": { "const": "Access Key" } }, "required": ["authMode"] },
+          "then": { "required": ["accessKeyId", "secretAccessKey"] }
+        },
+        {
+          "if": { "properties": { "authMode": { "const": "Assume Role" } }, "required": ["authMode"] },
+          "then": { "required": ["assumeRoleArn"] }
+        },
+        {
+          "if": { "properties": { "authMode": { "const": "Credentials Chain" } }, "required": ["authMode"] },
+          "then": {
+            "not": { "anyOf": [ { "required": ["accessKeyId"] }, { "required": ["secretAccessKey"] } ] }
+          }
+        },
+        {
+          "if": { "required": ["accessKeyId"] },
+          "then": { "required": ["secretAccessKey"] }
+        },
+        {
+          "if": { "required": ["secretAccessKey"] },
+          "then": { "required": ["accessKeyId"] }
+        }
+      ]
+    },
+    "glueSchemaRegistryConnection": {
+      "type": "object",
+      "title": "AWS Glue Schema Registry",
+      "description": "Single instance, not a map — the agent supports exactly one Schema Registry connection, Confluent or Glue. Client landed, but not yet wired into SchemaRegistryService's gRPC surface (Confluent-shaped end to end today) or the live push/reconcile runtime path — file-only, same as zookeeper.",
+      "additionalProperties": false,
+      "required": ["awsConnectionName", "glueRegistryArn"],
+      "properties": {
+        "awsConnectionName": {
+          "type": "string",
+          "description": "Must name an aws connection configured elsewhere in this file — checked at load time, not statically enforceable by this schema."
+        },
+        "glueRegistryArn": { "type": "string", "description": "e.g. arn:aws:glue:eu-west-1:123456789012:registry/my-registry." },
+        "metrics": { "$ref": "#/definitions/metricsOptIn" }
+      }
+    }
+  },
+  "properties": {
+    "schemaVersion": {
+      "const": 2,
+      "default": 2,
+      "description": "This schema describes schemaVersion 2 only. Absent or 1 is a load-time error — unlike the full agent, this crate does not default a missing version to v1."
+    },
+    "hq": { "$ref": "#/definitions/hqConnection" },
+    "kafka": { "$ref": "#/definitions/kafkaConnection" },
+    "schemaRegistry": { "$ref": "#/definitions/schemaRegistryConnection" },
+    "kafkaConnect": {
+      "type": "object",
+      "description": "Optional — a map keyed by cluster name, not a list. Each key becomes a named cluster the agent manages independently.",
+      "additionalProperties": { "$ref": "#/definitions/kafkaConnectCluster" }
+    },
+    "zookeeper": { "$ref": "#/definitions/zookeeperConnection" },
+    "aws": {
+      "type": "object",
+      "description": "Optional — a map keyed by connection name.",
+      "additionalProperties": { "$ref": "#/definitions/awsConnection" }
+    },
+    "glueSchemaRegistry": { "$ref": "#/definitions/glueSchemaRegistryConnection" }
+  },
+  "defaultSnippets": [
+    {
+      "label": "HQ Connection",
+      "description": "Lenses HQ address and agent key.",
+      "body": {
+        "hq": {
+          "server": "<YOUR_LENSES_HQ_SERVER>",
+          "port": 10000,
+          "agentKey": "${LENSES_AGENT_KEY}"
+        }
+      }
+    },
+    {
+      "label": "HQ Connection, TLS",
+      "body": {
+        "hq": {
+          "server": "<YOUR_LENSES_HQ_SERVER>",
+          "port": 10000,
+          "agentKey": "${LENSES_AGENT_KEY}",
+          "tls": {
+            "enabled": true,
+            "caFile": "<path-to-hq-ca.pem>"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, PLAINTEXT",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "PLAINTEXT"
+        }
+      }
+    },
+    {
+      "label": "Kafka, SSL/TLS",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SSL",
+          "ssl": {
+            "caFile": "<path-to-kafka-ca.pem>"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, Mutual SSL/TLS",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SSL",
+          "ssl": {
+            "caFile": "<path-to-kafka-ca.pem>",
+            "certFile": "<path-to-kafka-client-cert.pem>",
+            "keyFile": "<path-to-kafka-client-key.pem>"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, PLAIN",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_PLAINTEXT",
+          "sasl": {
+            "mechanism": "PLAIN",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-256",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_PLAINTEXT",
+          "sasl": {
+            "mechanism": "SCRAM-SHA-256",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_PLAINTEXT, SCRAM-SHA-512",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_PLAINTEXT",
+          "sasl": {
+            "mechanism": "SCRAM-SHA-512",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, PLAIN",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_SSL",
+          "ssl": { "caFile": "<path-to-kafka-ca.pem>" },
+          "sasl": {
+            "mechanism": "PLAIN",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, SCRAM-SHA-256",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_SSL",
+          "ssl": { "caFile": "<path-to-kafka-ca.pem>" },
+          "sasl": {
+            "mechanism": "SCRAM-SHA-256",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, SASL_SSL, SCRAM-SHA-512",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "protocol": "SASL_SSL",
+          "ssl": { "caFile": "<path-to-kafka-ca.pem>" },
+          "sasl": {
+            "mechanism": "SCRAM-SHA-512",
+            "username": "<kafka-user>",
+            "password": "${KAFKA_SASL_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, AWS MSK, IAM",
+      "body": {
+        "aws": {
+          "my-aws": {
+            "authMode": "Credentials Chain",
+            "region": "<eu-west-1>"
+          }
+        },
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9098", "<broker2>:9098"],
+          "protocol": "SASL_SSL",
+          "sasl": {
+            "mechanism": "AWS_MSK_IAM",
+            "awsConnectionName": "my-aws"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, Confluent Cloud",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<cluster-id>.<region>.aws.confluent.cloud:9092"],
+          "protocol": "SASL_SSL",
+          "sasl": {
+            "mechanism": "PLAIN",
+            "username": "<CONFLUENT_API_KEY>",
+            "password": "${CONFLUENT_API_SECRET}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka, broker metrics (Jolokia)",
+      "description": "Merge the monitoring block into an existing kafka section.",
+      "body": {
+        "kafka": {
+          "bootstrapServers": ["<broker1>:9092", "<broker2>:9092"],
+          "monitoring": {
+            "type": "jolokia_post",
+            "defaultPort": 8778,
+            "ssl": false,
+            "httpSuffix": "/jolokia/"
+          }
+        }
+      }
+    },
+    {
+      "label": "ZooKeeper",
+      "body": {
+        "zookeeper": {
+          "nodes": ["<zk1>:2181", "<zk2>:2181"],
+          "chroot": "/kafka"
+        }
+      }
+    },
+    {
+      "label": "Kafka Connect, No Auth",
+      "body": {
+        "kafkaConnect": {
+          "primary": {
+            "workers": ["http://<host1>:8083", "http://<host2>:8083"]
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka Connect, Basic Auth",
+      "body": {
+        "kafkaConnect": {
+          "primary": {
+            "workers": ["http://<host1>:8083", "http://<host2>:8083"],
+            "basicAuth": {
+              "username": "<connect-user>",
+              "password": "${CONNECT_PASSWORD}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "Kafka Connect, Basic Auth + TLS",
+      "body": {
+        "kafkaConnect": {
+          "primary": {
+            "workers": ["https://<host1>:8083", "https://<host2>:8083"],
+            "basicAuth": {
+              "username": "<connect-user>",
+              "password": "${CONNECT_PASSWORD}"
+            },
+            "tls": { "caFile": "<path-to-connect-ca.pem>" }
+          }
+        }
+      }
+    },
+    {
+      "label": "Schema Registry, Confluent, No Auth",
+      "body": {
+        "schemaRegistry": {
+          "urls": ["http://<host1>:8081", "http://<host2>:8081"]
+        }
+      }
+    },
+    {
+      "label": "Schema Registry, Confluent, Basic Auth",
+      "body": {
+        "schemaRegistry": {
+          "urls": ["http://<host1>:8081"],
+          "basicAuth": {
+            "username": "<sr-user>",
+            "password": "${SCHEMA_REGISTRY_PASSWORD}"
+          }
+        }
+      }
+    },
+    {
+      "label": "Schema Registry, Confluent, Basic Auth + TLS",
+      "body": {
+        "schemaRegistry": {
+          "urls": ["https://<host1>:8081"],
+          "basicAuth": {
+            "username": "<sr-user>",
+            "password": "${SCHEMA_REGISTRY_PASSWORD}"
+          },
+          "tls": { "caFile": "<path-to-sr-ca.pem>" }
+        }
+      }
+    },
+    {
+      "label": "Schema Registry, AWS Glue",
+      "description": "Requires an aws connection — both sections are inserted together.",
+      "body": {
+        "aws": {
+          "my-aws-connection": {
+            "authMode": "Credentials Chain",
+            "region": "<eu-west-1>"
+          }
+        },
+        "glueSchemaRegistry": {
+          "awsConnectionName": "my-aws-connection",
+          "glueRegistryArn": "arn:aws:glue:<region>:<account-id>:registry/<my-registry>"
+        }
+      }
+    },
+    {
+      "label": "AWS Connection, Access Key",
+      "body": {
+        "aws": {
+          "my-aws-connection": {
+            "authMode": "Access Key",
+            "accessKeyId": "<AKIA...>",
+            "secretAccessKey": "${AWS_SECRET_ACCESS_KEY}",
+            "region": "<eu-west-1>"
+          }
+        }
+      }
+    },
+    {
+      "label": "AWS Connection, Credentials Chain",
+      "body": {
+        "aws": {
+          "my-aws-connection": {
+            "authMode": "Credentials Chain",
+            "region": "<eu-west-1>"
+          }
+        }
+      }
+    },
+    {
+      "label": "AWS Connection, Assume Role",
+      "body": {
+        "aws": {
+          "my-aws-connection": {
+            "authMode": "Assume Role",
+            "assumeRoleArn": "arn:aws:iam::<account-id>:role/<role-name>",
+            "region": "<eu-west-1>"
+          }
+        }
+      }
+    }
+  ]
+}

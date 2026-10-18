@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=./agent/provisioning.schema-7.0.json
+# Lenses 7 agent provisioning.yaml (schemaVersion 2). Every section but
+# schemaVersion is optional to this schema; the agent requires hq.
+schemaVersion: 2
+
+hq:
+  server: lenses-hq.internal
+  port: 10000
+  agentKey: ${LENSES_AGENT_KEY}
+
+kafka:
+  bootstrapServers:
+    - broker-1.internal:9092
+  protocol: SASL_SSL
+  sasl:
+    mechanism: SCRAM-SHA-512
+    username: lenses
+    password: ${KAFKA_PASSWORD}
+  ssl:
+    caFile: certs/kafka-ca.pem
+  metrics: true
+
+schemaRegistry:
+  urls:
+    - https://schema-registry.internal:8081
+  basicAuth:
+    username: lenses
+    password: ${SCHEMA_REGISTRY_PASSWORD}
+
+kafkaConnect:
+  primary:
+    workers:
+      - https://connect-1.internal:8083
+    basicAuth:
+      username: lenses
+      password: ${CONNECT_PASSWORD}
+    tls:
+      caFile: certs/connect-ca.pem
+
+zookeeper:
+  nodes:
+    - zk-1.internal:2181
+  chroot: /kafka
+  sessionTimeout: 30s

@@ -61,6 +61,25 @@ To enable schema validation and autocompletion in VS Code for your `yaml` files:
   Such as `lensesAgent.provision.connections.provisioning` (referencing `provisioning.schema.json`).
 - **Provides default values and descriptions** for most fields to help with autocompletion and documentation in your editor.
 
+## Lenses 7 Agent Provisioning Schema
+
+`agent/provisioning.schema-7.0.json` is for the Lenses 7 agent's `provisioning.yaml`, `schemaVersion: 2`. It is copied from `crates/lenses-provisioning/schemas/provisioning.schema.json` in lenses-provisioning, which is the source of truth. Change it there first, then copy it here. The agent's load-time validation is authoritative. This schema helps editors.
+
+Reference it at the top of the file:
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/lensesio/json-schemas/refs/heads/main/agent/provisioning.schema-7.0.json
+schemaVersion: 2
+```
+
+It covers `hq`, `kafka`, `schemaRegistry`, `glueSchemaRegistry`, `aws`, `kafkaConnect` and `zookeeper`, and refuses any other top-level key. The alert channels and top-level `tags` and `monitoring` are not provisioning sections in Lenses 7. See `example.provisioning-7.0.yaml`, and check it with:
+
+```bash
+npm run validate-agent-7 && npm run validate-yaml-example-7
+```
+
+The sections below describe the Lenses 6 schemas (`provisioning.schema.json` and `provisioning.schema-6.1.json`).
+
 ## Provisioning Schema
 
 The `provisioning.schema.json` file defines the structure and validation rules for provisioning configuration files used by Lenses. These provisioning files describe how to connect Lenses to external systems such as Kafka clusters, Schema Registries, Zookeeper, Connect clusters, and alerting/auditing integrations (e.g., Slack, PagerDuty, Splunk, AWS, Webhook, etc).
