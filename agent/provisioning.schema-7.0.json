@@ -260,7 +260,7 @@
     "hqConnection": {
       "type": "object",
       "title": "Lenses HQ",
-      "description": "Optional for this subset crate (required by the full agent). Address and agent key the process dials outbound. Engines use this for the reverse tunnel; leftover hqLink on the ops file is rejected.",
+      "description": "Optional in this schema; the agent requires it. Address and agent key the process dials outbound. Engines use this for the reverse tunnel; leftover hqLink on the ops file is rejected.",
       "additionalProperties": false,
       "required": ["server", "port", "agentKey"],
       "properties": {
@@ -486,7 +486,7 @@
     "schemaVersion": {
       "const": 2,
       "default": 2,
-      "description": "This schema describes schemaVersion 2 only. Absent or 1 is a load-time error — unlike the full agent, this crate does not default a missing version to v1."
+      "description": "This schema describes schemaVersion 2 only. lenses-provisioning refuses an absent version or 1; the agent reads those with its Lenses 6 (v1) parser, which this schema does not cover."
     },
     "hq": { "$ref": "#/definitions/hqConnection" },
     "kafka": { "$ref": "#/definitions/kafkaConnection" },
